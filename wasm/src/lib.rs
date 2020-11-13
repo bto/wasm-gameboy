@@ -66,3 +66,7 @@ impl Registers {
         self.l = (value & 0xFF) as u8;
     }
 }
+
+#[cfg(test)]
+#[path = "./lib_test.rs"]
+mod lib_test;
