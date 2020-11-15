@@ -11,6 +11,7 @@ fn test_new() {
     assert_eq!(registers.h, 0);
     assert_eq!(registers.l, 0);
     assert_eq!(registers.pc, 0);
+    assert_eq!(registers.sp, 0);
     assert_eq!(registers.carry, false);
     assert_eq!(registers.half_carry, false);
     assert_eq!(registers.subtraction, false);
