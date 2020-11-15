@@ -1,8 +1,9 @@
-struct FlagRegister {
-    carry: bool,
-    half_carry: bool,
-    subtraction: bool,
-    zero: bool,
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct FlagRegister {
+    pub carry: bool,
+    pub half_carry: bool,
+    pub subtraction: bool,
+    pub zero: bool,
 }
 
 impl std::convert::From<FlagRegister> for u8 {
@@ -26,7 +27,7 @@ impl std::convert::From<u8> for FlagRegister {
 }
 
 impl FlagRegister {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self {
             carry: false,
             half_carry: false,

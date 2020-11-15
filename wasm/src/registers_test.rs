@@ -8,7 +8,7 @@ fn test_new() {
     assert_eq!(registers.c, 0);
     assert_eq!(registers.d, 0);
     assert_eq!(registers.e, 0);
-    assert_eq!(registers.f, 0);
+    assert_eq!(registers.f, FlagRegister::new());
     assert_eq!(registers.h, 0);
     assert_eq!(registers.l, 0);
 }
@@ -18,16 +18,16 @@ fn test_af() {
     let mut registers = Registers::new();
     assert_eq!(registers.get_af(), 0);
 
-    registers.set_af(0x0102);
-    assert_eq!(registers.get_af(), 0x0102);
+    registers.set_af(0x0110);
+    assert_eq!(registers.get_af(), 0x0110);
     assert_eq!(registers.a, 1);
-    assert_eq!(registers.f, 2);
+    assert_eq!(registers.f.carry, true);
 
     registers.a = 3;
-    assert_eq!(registers.get_af(), 0x0302);
+    assert_eq!(registers.get_af(), 0x0310);
 
-    registers.f = 4;
-    assert_eq!(registers.get_af(), 0x0304);
+    registers.f.subtraction = true;
+    assert_eq!(registers.get_af(), 0x0350);
 }
 
 #[test]
