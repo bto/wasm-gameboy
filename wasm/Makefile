@@ -1,5 +1,3 @@
-RUST_BACKTRACE=1
-
 .PHONY: all
 all: build
 
@@ -19,5 +17,5 @@ lint:
 
 .PHONY: test
 test:
-	cargo test
+	RUST_BACKTRACE=1 cargo test
 	# wasm-pack test --chrome --firefox --headless
