@@ -14,7 +14,6 @@ fn test_new() {
     assert_eq!(registers.half_carry, false);
     assert_eq!(registers.subtraction, false);
     assert_eq!(registers.zero, false);
-
 }
 
 #[test]

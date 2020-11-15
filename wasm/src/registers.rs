@@ -1,4 +1,5 @@
-struct Registers {
+#[derive(Debug, PartialEq)]
+pub struct Registers {
     a: u8,
     b: u8,
     c: u8,
@@ -13,7 +14,7 @@ struct Registers {
 }
 
 impl Registers {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self {
             a: 0,
             b: 0,
