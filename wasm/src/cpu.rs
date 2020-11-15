@@ -21,14 +21,14 @@ impl CPU {
 
     fn execute(&mut self, byte: u8) -> u16 {
         let bits = (
-            byte & 0b00000001,
-            (byte & 0b00000010) >> 1,
-            (byte & 0b00000100) >> 2,
-            (byte & 0b00001000) >> 3,
-            (byte & 0b00010000) >> 4,
-            (byte & 0b00100000) >> 5,
-            (byte & 0b01000000) >> 6,
             (byte & 0b10000000) >> 7,
+            (byte & 0b01000000) >> 6,
+            (byte & 0b00100000) >> 5,
+            (byte & 0b00010000) >> 4,
+            (byte & 0b00001000) >> 3,
+            (byte & 0b00000100) >> 2,
+            (byte & 0b00000010) >> 1,
+            byte & 0b00000001,
         );
 
         let pc = match bits {

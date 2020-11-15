@@ -16,7 +16,7 @@ fn test_op_ld_a_rp() {
     cpu.registers.b = 1;
     cpu.registers.c = 0;
     cpu.bus.set_byte(0x100, 2);
-    assert_eq!(cpu.op_ld_a_rp(0b00001010), 0x101);
+    assert_eq!(cpu.execute(0b00001010), 0x101);
     assert_eq!(cpu.registers.a, 2);
 
     // LD A, (DE)
@@ -24,7 +24,7 @@ fn test_op_ld_a_rp() {
     cpu.registers.d = 2;
     cpu.registers.e = 1;
     cpu.bus.set_byte(0x201, 3);
-    assert_eq!(cpu.op_ld_a_rp(0b00011010), 0x102);
+    assert_eq!(cpu.execute(0b00011010), 0x102);
     assert_eq!(cpu.registers.a, 3);
 }
 
@@ -35,13 +35,13 @@ fn test_op_ld_r_n() {
     // LD B, n
     cpu.registers.pc = 0x100;
     cpu.bus.set_byte(0x101, 2);
-    assert_eq!(cpu.op_ld_r_n(0b00000110), 0x102);
+    assert_eq!(cpu.execute(0b00000110), 0x102);
     assert_eq!(cpu.registers.b, 2);
 
     // LD L, n
     cpu.registers.pc = 0x201;
     cpu.bus.set_byte(0x202, 3);
-    assert_eq!(cpu.op_ld_r_n(0b00101110), 0x203);
+    assert_eq!(cpu.execute(0b00101110), 0x203);
     assert_eq!(cpu.registers.l, 3);
 
     // LD (HL), n
@@ -49,7 +49,7 @@ fn test_op_ld_r_n() {
     cpu.registers.l = 0;
     cpu.registers.pc = 0x302;
     cpu.bus.set_byte(0x303, 4);
-    assert_eq!(cpu.op_ld_r_n(0b00110110), 0x304);
+    assert_eq!(cpu.execute(0b00110110), 0x304);
     assert_eq!(cpu.bus.get_byte(0x100), 4);
 }
 
@@ -61,14 +61,14 @@ fn test_op_ld_r_r() {
     cpu.registers.pc = 0x100;
     cpu.registers.b = 1;
     cpu.registers.c = 2;
-    assert_eq!(cpu.op_ld_r_r(0b01000001), 0x101);
+    assert_eq!(cpu.execute(0b01000001), 0x101);
     assert_eq!(cpu.registers.b, 2);
 
     // LD E, D
     cpu.registers.pc = 0x201;
     cpu.registers.d = 3;
     cpu.registers.e = 4;
-    assert_eq!(cpu.op_ld_r_r(0b01011010), 0x202);
+    assert_eq!(cpu.execute(0b01011010), 0x202);
     assert_eq!(cpu.registers.e, 3);
 
     // LD C, (HL)
@@ -76,7 +76,7 @@ fn test_op_ld_r_r() {
     cpu.registers.h = 1;
     cpu.registers.l = 0;
     cpu.bus.set_byte(0x100, 4);
-    assert_eq!(cpu.op_ld_r_r(0b01001110), 0x303);
+    assert_eq!(cpu.execute(0b01001110), 0x303);
     assert_eq!(cpu.registers.c, 4);
 
     // LD (HL), D
@@ -84,7 +84,7 @@ fn test_op_ld_r_r() {
     cpu.registers.h = 2;
     cpu.registers.l = 1;
     cpu.registers.d = 5;
-    assert_eq!(cpu.op_ld_r_r(0b01110010), 0x404);
+    assert_eq!(cpu.execute(0b01110010), 0x404);
     assert_eq!(cpu.bus.get_byte(0x201), 5);
 }
 
@@ -97,7 +97,7 @@ fn test_op_rp_a() {
     cpu.registers.b = 2;
     cpu.registers.c = 1;
     cpu.registers.a = 3;
-    assert_eq!(cpu.op_ld_rp_a(0b00000010), 0x101);
+    assert_eq!(cpu.execute(0b00000010), 0x101);
     assert_eq!(cpu.bus.get_byte(0x201), 3);
 
     // LD (DE), A
@@ -105,7 +105,7 @@ fn test_op_rp_a() {
     cpu.registers.d = 3;
     cpu.registers.e = 2;
     cpu.registers.a = 4;
-    assert_eq!(cpu.op_ld_rp_a(0b00011010), 0x202);
+    assert_eq!(cpu.execute(0b00010010), 0x202);
     assert_eq!(cpu.bus.get_byte(0x302), 4);
 }
 
