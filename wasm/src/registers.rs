@@ -7,7 +7,7 @@ pub struct Registers {
     e: u8,
     h: u8,
     l: u8,
-    pc: usize,
+    pub pc: usize,
     carry: bool,
     half_carry: bool,
     subtraction: bool,
