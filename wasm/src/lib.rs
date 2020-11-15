@@ -30,6 +30,19 @@ struct Registers {
 }
 
 impl Registers {
+    fn new() -> Self {
+        Self {
+            a: 0,
+            b: 0,
+            c: 0,
+            d: 0,
+            e: 0,
+            f: 0,
+            h: 0,
+            l: 0,
+        }
+    }
+
     fn get_af(&self) -> u16 {
         (self.a as u16) << 8 | self.f as u16
     }
