@@ -1,5 +1,4 @@
 use wasm_bindgen::prelude::*;
-use super::flag_register::FlagRegister;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
@@ -13,9 +12,12 @@ struct Registers {
     c: u8,
     d: u8,
     e: u8,
-    f: FlagRegister,
     h: u8,
     l: u8,
+    carry: bool,
+    half_carry: bool,
+    subtraction: bool,
+    zero: bool,
 }
 
 impl Registers {
@@ -26,14 +28,13 @@ impl Registers {
             c: 0,
             d: 0,
             e: 0,
-            f: FlagRegister::new(),
             h: 0,
             l: 0,
+            carry: false,
+            half_carry: false,
+            subtraction: false,
+            zero: false,
         }
-    }
-
-    fn get_af(&self) -> u16 {
-        (self.a as u16) << 8 | u8::from(self.f) as u16
     }
 
     fn get_bc(&self) -> u16 {
@@ -46,11 +47,6 @@ impl Registers {
 
     fn get_hl(&self) -> u16 {
         (self.h as u16) << 8 | self.l as u16
-    }
-
-    fn set_af(&mut self, value: u16) {
-        self.a = (value >> 8) as u8;
-        self.f = FlagRegister::from((value & 0xFF) as u8);
     }
 
     fn set_bc(&mut self, value: u16) {

@@ -8,26 +8,13 @@ fn test_new() {
     assert_eq!(registers.c, 0);
     assert_eq!(registers.d, 0);
     assert_eq!(registers.e, 0);
-    assert_eq!(registers.f, FlagRegister::new());
     assert_eq!(registers.h, 0);
     assert_eq!(registers.l, 0);
-}
+    assert_eq!(registers.carry, false);
+    assert_eq!(registers.half_carry, false);
+    assert_eq!(registers.subtraction, false);
+    assert_eq!(registers.zero, false);
 
-#[test]
-fn test_af() {
-    let mut registers = Registers::new();
-    assert_eq!(registers.get_af(), 0);
-
-    registers.set_af(0x0110);
-    assert_eq!(registers.get_af(), 0x0110);
-    assert_eq!(registers.a, 1);
-    assert_eq!(registers.f.carry, true);
-
-    registers.a = 3;
-    assert_eq!(registers.get_af(), 0x0310);
-
-    registers.f.subtraction = true;
-    assert_eq!(registers.get_af(), 0x0350);
 }
 
 #[test]
