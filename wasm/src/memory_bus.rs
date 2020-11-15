@@ -10,12 +10,12 @@ impl MemoryBus {
         }
     }
 
-    pub fn get_byte(&self, addr: usize) -> u8 {
-        self.memory[addr]
+    pub fn get_byte(&self, addr: u16) -> u8 {
+        self.memory[addr as usize]
     }
 
-    pub fn set_byte(&mut self, addr: usize, value: u8) {
-        self.memory[addr] = value;
+    pub fn set_byte(&mut self, addr: u16, value: u8) {
+        self.memory[addr as usize] = value;
     }
 }
 
