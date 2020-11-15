@@ -68,6 +68,5 @@ impl Registers {
     }
 }
 
-#[cfg(test)]
 #[path = "./registers_test.rs"]
-mod lib_test;
+mod tests;
