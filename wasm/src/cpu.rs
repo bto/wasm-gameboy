@@ -70,9 +70,9 @@ impl CPU {
 
     fn register_16_get(&self, byte: u8) -> u16 {
         match byte & 0b110000 {
-            0b000000 => self.registers.get_bc(),
-            0b010000 => self.registers.get_de(),
-            0b100000 => self.registers.get_hl(),
+            0b000000 => self.registers.bc_get(),
+            0b010000 => self.registers.de_get(),
+            0b100000 => self.registers.hl_get(),
             0b110000 => self.registers.sp as u16,
             _ => panic!("never reach"),
         }
@@ -80,9 +80,9 @@ impl CPU {
 
     fn register_16_set(&mut self, byte: u8, value: u8) {
         match byte & 0b110000 {
-            0b000000 => self.bus.byte_set(self.registers.get_bc(), value),
-            0b010000 => self.bus.byte_set(self.registers.get_de(), value),
-            0b100000 => self.bus.byte_set(self.registers.get_hl(), value),
+            0b000000 => self.bus.byte_set(self.registers.bc_get(), value),
+            0b010000 => self.bus.byte_set(self.registers.de_get(), value),
+            0b100000 => self.bus.byte_set(self.registers.hl_get(), value),
             0b110000 => self.bus.byte_set(self.registers.sp, value),
             _ => panic!("never reach"),
         }
@@ -96,7 +96,7 @@ impl CPU {
             0b011 => self.registers.e,
             0b100 => self.registers.h,
             0b101 => self.registers.l,
-            0b110 => (self.bus.byte_get(self.registers.get_hl())),
+            0b110 => (self.bus.byte_get(self.registers.hl_get())),
             0b111 => self.registers.a,
             _ => panic!("never reach"),
         }
@@ -110,7 +110,7 @@ impl CPU {
             0b011000 => self.registers.e = value,
             0b100000 => self.registers.h = value,
             0b101000 => self.registers.l = value,
-            0b110000 => self.bus.byte_set(self.registers.get_hl(), value),
+            0b110000 => self.bus.byte_set(self.registers.hl_get(), value),
             0b111000 => self.registers.a = value,
             _ => panic!("invalid destination register"),
         }

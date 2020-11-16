@@ -21,50 +21,50 @@ fn test_new() {
 #[test]
 fn test_bc() {
     let mut registers = Registers::new();
-    assert_eq!(registers.get_bc(), 0);
+    assert_eq!(registers.bc_get(), 0);
 
-    registers.set_bc(0x0102);
-    assert_eq!(registers.get_bc(), 0x0102);
+    registers.bc_set(0x0102);
+    assert_eq!(registers.bc_get(), 0x0102);
     assert_eq!(registers.b, 1);
     assert_eq!(registers.c, 2);
 
     registers.b = 3;
-    assert_eq!(registers.get_bc(), 0x0302);
+    assert_eq!(registers.bc_get(), 0x0302);
 
     registers.c = 4;
-    assert_eq!(registers.get_bc(), 0x0304);
+    assert_eq!(registers.bc_get(), 0x0304);
 }
 
 #[test]
 fn test_de() {
     let mut registers = Registers::new();
-    assert_eq!(registers.get_de(), 0);
+    assert_eq!(registers.de_get(), 0);
 
-    registers.set_de(0x0102);
-    assert_eq!(registers.get_de(), 0x0102);
+    registers.de_set(0x0102);
+    assert_eq!(registers.de_get(), 0x0102);
     assert_eq!(registers.d, 1);
     assert_eq!(registers.e, 2);
 
     registers.d = 3;
-    assert_eq!(registers.get_de(), 0x0302);
+    assert_eq!(registers.de_get(), 0x0302);
 
     registers.e = 4;
-    assert_eq!(registers.get_de(), 0x0304);
+    assert_eq!(registers.de_get(), 0x0304);
 }
 
 #[test]
 fn test_hl() {
     let mut registers = Registers::new();
-    assert_eq!(registers.get_hl(), 0);
+    assert_eq!(registers.hl_get(), 0);
 
-    registers.set_hl(0x0102);
-    assert_eq!(registers.get_hl(), 0x0102);
+    registers.hl_set(0x0102);
+    assert_eq!(registers.hl_get(), 0x0102);
     assert_eq!(registers.h, 1);
     assert_eq!(registers.l, 2);
 
     registers.h = 3;
-    assert_eq!(registers.get_hl(), 0x0302);
+    assert_eq!(registers.hl_get(), 0x0302);
 
     registers.l = 4;
-    assert_eq!(registers.get_hl(), 0x0304);
+    assert_eq!(registers.hl_get(), 0x0304);
 }
