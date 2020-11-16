@@ -8,6 +8,34 @@ fn test_new() {
 }
 
 #[test]
+fn test_op_ld_a_hl_dec() {
+    let mut cpu = CPU::new();
+
+    cpu.registers.pc = 0x100;
+    cpu.registers.h = 2;
+    cpu.registers.l = 3;
+    cpu.bus.byte_set(0x203, 4);
+    assert_eq!(cpu.execute(0b00111010), 0x101);
+    assert_eq!(cpu.registers.a, 4);
+    assert_eq!(cpu.registers.h, 2);
+    assert_eq!(cpu.registers.l, 2);
+}
+
+#[test]
+fn test_op_ld_a_hl_inc() {
+    let mut cpu = CPU::new();
+
+    cpu.registers.pc = 0x100;
+    cpu.registers.h = 2;
+    cpu.registers.l = 3;
+    cpu.bus.byte_set(0x203, 4);
+    assert_eq!(cpu.execute(0b00101010), 0x101);
+    assert_eq!(cpu.registers.a, 4);
+    assert_eq!(cpu.registers.h, 2);
+    assert_eq!(cpu.registers.l, 4);
+}
+
+#[test]
 fn test_op_ld_a_nn() {
     let mut cpu = CPU::new();
 
@@ -38,6 +66,34 @@ fn test_op_ld_a_rp() {
     cpu.bus.byte_set(0x201, 3);
     assert_eq!(cpu.execute(0b00011010), 0x102);
     assert_eq!(cpu.registers.a, 3);
+}
+
+#[test]
+fn test_op_ld_hl_dec_a() {
+    let mut cpu = CPU::new();
+
+    cpu.registers.pc = 0x100;
+    cpu.registers.a = 1;
+    cpu.registers.h = 2;
+    cpu.registers.l = 3;
+    assert_eq!(cpu.execute(0b00110010), 0x101);
+    assert_eq!(cpu.registers.h, 2);
+    assert_eq!(cpu.registers.l, 2);
+    assert_eq!(cpu.bus.byte_get(0x203), 1);
+}
+
+#[test]
+fn test_op_ld_hl_inc_a() {
+    let mut cpu = CPU::new();
+
+    cpu.registers.pc = 0x100;
+    cpu.registers.a = 1;
+    cpu.registers.h = 2;
+    cpu.registers.l = 3;
+    assert_eq!(cpu.execute(0b00100010), 0x101);
+    assert_eq!(cpu.registers.h, 2);
+    assert_eq!(cpu.registers.l, 4);
+    assert_eq!(cpu.bus.byte_get(0x203), 1);
 }
 
 #[test]

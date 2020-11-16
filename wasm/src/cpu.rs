@@ -50,6 +50,10 @@ impl CPU {
         );
 
         let pc = match bits {
+            (0, 0, 1, 0, 0, 0, 1, 0) => self.op_ld_hl_inc_a(),
+            (0, 0, 1, 0, 1, 0, 1, 0) => self.op_ld_a_hl_inc(),
+            (0, 0, 1, 1, 0, 0, 1, 0) => self.op_ld_hl_dec_a(),
+            (0, 0, 1, 1, 1, 0, 1, 0) => self.op_ld_a_hl_dec(),
             (1, 1, 1, 0, 0, 0, 0, 0) => self.op_ldh_n_a(),
             (1, 1, 1, 0, 0, 0, 1, 0) => self.op_ldh_c_a(),
             (1, 1, 1, 0, 1, 0, 1, 0) => self.op_ld_nn_a(),
@@ -72,6 +76,20 @@ impl CPU {
         self.registers.pc + 1
     }
 
+    fn op_ld_a_hl_dec(&mut self) -> u16 {
+        let hl = self.registers.hl_get();
+        self.registers.a = self.bus.byte_get(hl);
+        self.registers.hl_set(hl - 1);
+        self.registers.pc + 1
+    }
+
+    fn op_ld_a_hl_inc(&mut self) -> u16 {
+        let hl = self.registers.hl_get();
+        self.registers.a = self.bus.byte_get(hl);
+        self.registers.hl_set(hl + 1);
+        self.registers.pc + 1
+    }
+
     fn op_ld_a_nn(&mut self) -> u16 {
         self.registers.a = self.lb_hb_get();
         self.registers.pc + 3
@@ -79,6 +97,20 @@ impl CPU {
 
     fn op_ld_a_rp(&mut self, byte: u8) -> u16 {
         self.registers.a = self.bus.byte_get(self.register_16_get(byte));
+        self.registers.pc + 1
+    }
+
+    fn op_ld_hl_dec_a(&mut self) -> u16 {
+        let hl = self.registers.hl_get();
+        self.bus.byte_set(hl, self.registers.a);
+        self.registers.hl_set(hl - 1);
+        self.registers.pc + 1
+    }
+
+    fn op_ld_hl_inc_a(&mut self) -> u16 {
+        let hl = self.registers.hl_get();
+        self.bus.byte_set(hl, self.registers.a);
+        self.registers.hl_set(hl + 1);
         self.registers.pc + 1
     }
 
@@ -154,7 +186,7 @@ impl CPU {
             0b011 => self.registers.e,
             0b100 => self.registers.h,
             0b101 => self.registers.l,
-            0b110 => (self.bus.byte_get(self.registers.hl_get())),
+            0b110 => self.bus.byte_get(self.registers.hl_get()),
             0b111 => self.registers.a,
             _ => panic!("never reach"),
         }
