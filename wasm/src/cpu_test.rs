@@ -288,6 +288,10 @@ fn test_op_ldh_n_a() {
 }
 
 #[test]
+
+fn test_op_push_rr() {}
+
+#[test]
 fn test_register_16_get() {
     let mut cpu = CPU::new();
 

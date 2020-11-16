@@ -60,6 +60,8 @@ impl CPU {
             (1, 1, 1, 1, 0, 0, 1, 0) => self.op_ldh_a_c(),
             (1, 1, 1, 1, 1, 0, 0, 1) => self.op_ld_sp_hl(),
             (1, 1, 1, 1, 1, 0, 1, 0) => self.op_ld_a_nn(),
+            (1, 1, _, _, 0, 0, 0, 1) => self.op_pop_rr(opcode),
+            (1, 1, _, _, 0, 1, 0, 1) => self.op_push_rr(opcode),
             _ => panic!("not implemented"),
         };
 
@@ -169,6 +171,28 @@ impl CPU {
         let addr = 0xFF00 | self.db_get() as u16;
         self.bus.byte_set(addr, self.registers.a);
         self.registers.pc + 2
+    }
+
+    fn op_pop_rr(&mut self, opcode: u8) -> u16 {
+        let lb = self.bus.byte_get(self.registers.sp) as u16;
+        self.registers.sp += 1;
+        let hb = self.bus.byte_get(self.registers.sp) as u16;
+        self.registers.sp += 1;
+
+        self.register_16_set(opcode, hb << 8 | lb);
+
+        self.registers.pc + 1
+    }
+
+    fn op_push_rr(&mut self, opcode: u8) -> u16 {
+        let value = self.register_16_get(opcode);
+
+        self.registers.sp -= 1;
+        self.bus.byte_set(self.registers.sp, (value >> 8) as u8);
+        self.registers.sp -= 1;
+        self.bus.byte_set(self.registers.sp, (value & 0xFF) as u8);
+
+        self.registers.pc + 1
     }
 
     fn register_16_get(&self, opcode: u8) -> u16 {
