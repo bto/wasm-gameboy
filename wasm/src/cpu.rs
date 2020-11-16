@@ -50,11 +50,12 @@ impl CPU {
         );
 
         let pc = match bits {
-            (1, 1, 1, 1, 1, 0, 1, 0) => self.op_ld_a_nn(),
             (1, 1, 1, 0, 1, 0, 1, 0) => self.op_ld_nn_a(),
+            (1, 1, 1, 1, 0, 0, 1, 0) => self.op_ld_a_c(),
+            (1, 1, 1, 1, 1, 0, 1, 0) => self.op_ld_a_nn(),
             (1, 0, 0, 0, 0, _, _, _) => self.op_add(byte),
-            (0, 0, _, _, 1, 0, 1, 0) => self.op_ld_a_rp(byte),
             (0, 0, _, _, 0, 0, 1, 0) => self.op_ld_rp_a(byte),
+            (0, 0, _, _, 1, 0, 1, 0) => self.op_ld_a_rp(byte),
             (0, 0, _, _, _, 1, 1, 0) => self.op_ld_r_n(byte),
             (0, 1, _, _, _, _, _, _) => self.op_ld_r_r(byte),
             _ => panic!("not implemented"),
@@ -65,6 +66,12 @@ impl CPU {
 
     fn op_add(&mut self, byte: u8) -> u16 {
         self.registers.a += self.register_8_get(byte);
+        self.registers.pc + 1
+    }
+
+    fn op_ld_a_c(&mut self) -> u16 {
+        let addr = 0xFF00 | self.registers.c as u16;
+        self.registers.a = self.bus.byte_get(addr);
         self.registers.pc + 1
     }
 
