@@ -15,7 +15,7 @@ fn test_op_ld_a_rp() {
     cpu.registers.pc = 0x100;
     cpu.registers.b = 1;
     cpu.registers.c = 0;
-    cpu.bus.set_byte(0x100, 2);
+    cpu.bus.byte_set(0x100, 2);
     assert_eq!(cpu.execute(0b00001010), 0x101);
     assert_eq!(cpu.registers.a, 2);
 
@@ -23,7 +23,7 @@ fn test_op_ld_a_rp() {
     cpu.registers.pc = 0x101;
     cpu.registers.d = 2;
     cpu.registers.e = 1;
-    cpu.bus.set_byte(0x201, 3);
+    cpu.bus.byte_set(0x201, 3);
     assert_eq!(cpu.execute(0b00011010), 0x102);
     assert_eq!(cpu.registers.a, 3);
 }
@@ -34,13 +34,13 @@ fn test_op_ld_r_n() {
 
     // LD B, n
     cpu.registers.pc = 0x100;
-    cpu.bus.set_byte(0x101, 2);
+    cpu.bus.byte_set(0x101, 2);
     assert_eq!(cpu.execute(0b00000110), 0x102);
     assert_eq!(cpu.registers.b, 2);
 
     // LD L, n
     cpu.registers.pc = 0x201;
-    cpu.bus.set_byte(0x202, 3);
+    cpu.bus.byte_set(0x202, 3);
     assert_eq!(cpu.execute(0b00101110), 0x203);
     assert_eq!(cpu.registers.l, 3);
 
@@ -48,9 +48,9 @@ fn test_op_ld_r_n() {
     cpu.registers.h = 1;
     cpu.registers.l = 0;
     cpu.registers.pc = 0x302;
-    cpu.bus.set_byte(0x303, 4);
+    cpu.bus.byte_set(0x303, 4);
     assert_eq!(cpu.execute(0b00110110), 0x304);
-    assert_eq!(cpu.bus.get_byte(0x100), 4);
+    assert_eq!(cpu.bus.byte_get(0x100), 4);
 }
 
 #[test]
@@ -75,7 +75,7 @@ fn test_op_ld_r_r() {
     cpu.registers.pc = 0x302;
     cpu.registers.h = 1;
     cpu.registers.l = 0;
-    cpu.bus.set_byte(0x100, 4);
+    cpu.bus.byte_set(0x100, 4);
     assert_eq!(cpu.execute(0b01001110), 0x303);
     assert_eq!(cpu.registers.c, 4);
 
@@ -85,7 +85,7 @@ fn test_op_ld_r_r() {
     cpu.registers.l = 1;
     cpu.registers.d = 5;
     assert_eq!(cpu.execute(0b01110010), 0x404);
-    assert_eq!(cpu.bus.get_byte(0x201), 5);
+    assert_eq!(cpu.bus.byte_get(0x201), 5);
 }
 
 #[test]
@@ -98,7 +98,7 @@ fn test_op_rp_a() {
     cpu.registers.c = 1;
     cpu.registers.a = 3;
     assert_eq!(cpu.execute(0b00000010), 0x101);
-    assert_eq!(cpu.bus.get_byte(0x201), 3);
+    assert_eq!(cpu.bus.byte_get(0x201), 3);
 
     // LD (DE), A
     cpu.registers.pc = 0x201;
@@ -106,7 +106,7 @@ fn test_op_rp_a() {
     cpu.registers.e = 2;
     cpu.registers.a = 4;
     assert_eq!(cpu.execute(0b00010010), 0x202);
-    assert_eq!(cpu.bus.get_byte(0x302), 4);
+    assert_eq!(cpu.bus.byte_get(0x302), 4);
 }
 
 #[test]
@@ -141,24 +141,24 @@ fn test_register_16_set() {
     cpu.registers.b = 1;
     cpu.registers.c = 0;
     cpu.register_16_set(0b000000, 2);
-    assert_eq!(cpu.bus.get_byte(0x100), 2);
+    assert_eq!(cpu.bus.byte_get(0x100), 2);
 
     // 01xxxx: DE
     cpu.registers.d = 2;
     cpu.registers.e = 1;
     cpu.register_16_set(0b010000, 3);
-    assert_eq!(cpu.bus.get_byte(0x201), 3);
+    assert_eq!(cpu.bus.byte_get(0x201), 3);
 
     // 10xxxx: HL
     cpu.registers.h = 3;
     cpu.registers.l = 2;
     cpu.register_16_set(0b100000, 4);
-    assert_eq!(cpu.bus.get_byte(0x302), 4);
+    assert_eq!(cpu.bus.byte_get(0x302), 4);
 
     // 11xxxx: SP
     cpu.registers.sp = 0x403;
     cpu.register_16_set(0b110000, 5);
-    assert_eq!(cpu.bus.get_byte(0x403), 5);
+    assert_eq!(cpu.bus.byte_get(0x403), 5);
 }
 
 #[test]
@@ -192,7 +192,7 @@ fn test_register_8_get() {
     // 110: (HL)
     cpu.registers.h = 1;
     cpu.registers.l = 0;
-    cpu.bus.set_byte(0x100, 7);
+    cpu.bus.byte_set(0x100, 7);
     assert_eq!(cpu.register_8_get(0b110), 7);
 
     // 111: A
@@ -232,7 +232,7 @@ fn test_register_8_set() {
     cpu.registers.h = 1;
     cpu.registers.l = 0;
     cpu.register_8_set(0b110000, 7);
-    assert_eq!(cpu.bus.get_byte(0x100), 7);
+    assert_eq!(cpu.bus.byte_get(0x100), 7);
 
     // 111: A
     cpu.register_8_set(0b111000, 8);

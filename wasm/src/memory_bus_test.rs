@@ -9,8 +9,8 @@ fn test_new() {
 #[test]
 fn test_byte() {
     let mut bus = MemoryBus::new();
-    assert_eq!(bus.get_byte(0x100), 0);
+    assert_eq!(bus.byte_get(0x100), 0);
 
-    bus.set_byte(0x100, 10);
-    assert_eq!(bus.get_byte(0x100), 10);
+    bus.byte_set(0x100, 10);
+    assert_eq!(bus.byte_get(0x100), 10);
 }
