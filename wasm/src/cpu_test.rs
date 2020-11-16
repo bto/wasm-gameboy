@@ -3,7 +3,7 @@ use super::*;
 #[test]
 fn test_new() {
     let cpu = CPU::new();
-    assert_eq!(cpu.bus, MemoryBus::new());
+    assert_eq!(cpu.mmu, MMU::new());
     assert_eq!(cpu.registers, Registers::new());
 }
 
@@ -15,7 +15,7 @@ fn test_op_ld_a_hl_dec() {
     cpu.registers.pc = 0x100;
     cpu.registers.h = 2;
     cpu.registers.l = 3;
-    cpu.bus.byte_set(0x203, 4);
+    cpu.mmu.byte_set(0x203, 4);
     assert_eq!(cpu.execute(0b00111010), 0x101);
     assert_eq!(cpu.registers.a, 4);
     assert_eq!(cpu.registers.h, 2);
@@ -30,7 +30,7 @@ fn test_op_ld_a_hl_inc() {
     cpu.registers.pc = 0x100;
     cpu.registers.h = 2;
     cpu.registers.l = 3;
-    cpu.bus.byte_set(0x203, 4);
+    cpu.mmu.byte_set(0x203, 4);
     assert_eq!(cpu.execute(0b00101010), 0x101);
     assert_eq!(cpu.registers.a, 4);
     assert_eq!(cpu.registers.h, 2);
@@ -43,9 +43,9 @@ fn test_op_ld_a_nn() {
 
     // LD A, (nn)
     cpu.registers.pc = 0x100;
-    cpu.bus.byte_set(0x101, 2);
-    cpu.bus.byte_set(0x102, 3);
-    cpu.bus.byte_set(0x302, 4);
+    cpu.mmu.byte_set(0x101, 2);
+    cpu.mmu.byte_set(0x102, 3);
+    cpu.mmu.byte_set(0x302, 4);
     assert_eq!(cpu.execute(0b11111010), 0x103);
     assert_eq!(cpu.registers.a, 4);
 }
@@ -58,7 +58,7 @@ fn test_op_ld_a_rp() {
     cpu.registers.pc = 0x100;
     cpu.registers.b = 1;
     cpu.registers.c = 0;
-    cpu.bus.byte_set(0x100, 2);
+    cpu.mmu.byte_set(0x100, 2);
     assert_eq!(cpu.execute(0b00001010), 0x101);
     assert_eq!(cpu.registers.a, 2);
 
@@ -66,7 +66,7 @@ fn test_op_ld_a_rp() {
     cpu.registers.pc = 0x101;
     cpu.registers.d = 2;
     cpu.registers.e = 1;
-    cpu.bus.byte_set(0x201, 3);
+    cpu.mmu.byte_set(0x201, 3);
     assert_eq!(cpu.execute(0b00011010), 0x102);
     assert_eq!(cpu.registers.a, 3);
 }
@@ -83,7 +83,7 @@ fn test_op_ld_hl_dec_a() {
     assert_eq!(cpu.execute(0b00110010), 0x101);
     assert_eq!(cpu.registers.h, 2);
     assert_eq!(cpu.registers.l, 2);
-    assert_eq!(cpu.bus.byte_get(0x203), 1);
+    assert_eq!(cpu.mmu.byte_get(0x203), 1);
 }
 
 #[test]
@@ -98,7 +98,7 @@ fn test_op_ld_hl_inc_a() {
     assert_eq!(cpu.execute(0b00100010), 0x101);
     assert_eq!(cpu.registers.h, 2);
     assert_eq!(cpu.registers.l, 4);
-    assert_eq!(cpu.bus.byte_get(0x203), 1);
+    assert_eq!(cpu.mmu.byte_get(0x203), 1);
 }
 
 #[test]
@@ -107,11 +107,11 @@ fn test_op_ld_nn_a() {
 
     // LD (nn), A
     cpu.registers.pc = 0x100;
-    cpu.bus.byte_set(0x101, 2);
-    cpu.bus.byte_set(0x102, 3);
+    cpu.mmu.byte_set(0x101, 2);
+    cpu.mmu.byte_set(0x102, 3);
     cpu.registers.a = 4;
     assert_eq!(cpu.execute(0b11101010), 0x103);
-    assert_eq!(cpu.bus.byte_get(0x302), 4);
+    assert_eq!(cpu.mmu.byte_get(0x302), 4);
 }
 
 #[test]
@@ -120,11 +120,11 @@ fn test_op_ld_nn_sp() {
 
     // LD (nn), SP
     cpu.registers.pc = 0x100;
-    cpu.bus.byte_set(0x101, 2);
-    cpu.bus.byte_set(0x102, 3);
+    cpu.mmu.byte_set(0x101, 2);
+    cpu.mmu.byte_set(0x102, 3);
     cpu.registers.sp = 4;
     assert_eq!(cpu.execute(0b00001000), 0x103);
-    assert_eq!(cpu.bus.byte_get(0x302), 4);
+    assert_eq!(cpu.mmu.byte_get(0x302), 4);
 }
 
 #[test]
@@ -133,13 +133,13 @@ fn test_op_ld_r_n() {
 
     // LD B, n
     cpu.registers.pc = 0x100;
-    cpu.bus.byte_set(0x101, 2);
+    cpu.mmu.byte_set(0x101, 2);
     assert_eq!(cpu.execute(0b00000110), 0x102);
     assert_eq!(cpu.registers.b, 2);
 
     // LD L, n
     cpu.registers.pc = 0x201;
-    cpu.bus.byte_set(0x202, 3);
+    cpu.mmu.byte_set(0x202, 3);
     assert_eq!(cpu.execute(0b00101110), 0x203);
     assert_eq!(cpu.registers.l, 3);
 
@@ -147,9 +147,9 @@ fn test_op_ld_r_n() {
     cpu.registers.h = 1;
     cpu.registers.l = 0;
     cpu.registers.pc = 0x302;
-    cpu.bus.byte_set(0x303, 4);
+    cpu.mmu.byte_set(0x303, 4);
     assert_eq!(cpu.execute(0b00110110), 0x304);
-    assert_eq!(cpu.bus.byte_get(0x100), 4);
+    assert_eq!(cpu.mmu.byte_get(0x100), 4);
 }
 
 #[test]
@@ -174,7 +174,7 @@ fn test_op_ld_r_r() {
     cpu.registers.pc = 0x302;
     cpu.registers.h = 1;
     cpu.registers.l = 0;
-    cpu.bus.byte_set(0x100, 4);
+    cpu.mmu.byte_set(0x100, 4);
     assert_eq!(cpu.execute(0b01001110), 0x303);
     assert_eq!(cpu.registers.c, 4);
 
@@ -184,7 +184,7 @@ fn test_op_ld_r_r() {
     cpu.registers.l = 1;
     cpu.registers.d = 5;
     assert_eq!(cpu.execute(0b01110010), 0x404);
-    assert_eq!(cpu.bus.byte_get(0x201), 5);
+    assert_eq!(cpu.mmu.byte_get(0x201), 5);
 }
 
 #[test]
@@ -197,7 +197,7 @@ fn test_op_ld_rp_a() {
     cpu.registers.c = 1;
     cpu.registers.a = 3;
     assert_eq!(cpu.execute(0b00000010), 0x101);
-    assert_eq!(cpu.bus.byte_get(0x201), 3);
+    assert_eq!(cpu.mmu.byte_get(0x201), 3);
 
     // LD (DE), A
     cpu.registers.pc = 0x201;
@@ -205,7 +205,7 @@ fn test_op_ld_rp_a() {
     cpu.registers.e = 2;
     cpu.registers.a = 4;
     assert_eq!(cpu.execute(0b00010010), 0x202);
-    assert_eq!(cpu.bus.byte_get(0x302), 4);
+    assert_eq!(cpu.mmu.byte_get(0x302), 4);
 }
 
 #[test]
@@ -214,16 +214,16 @@ fn test_op_ld_rr_nn() {
 
     // LD BC, nn
     cpu.registers.pc = 0x100;
-    cpu.bus.byte_set(0x101, 1);
-    cpu.bus.byte_set(0x102, 2);
+    cpu.mmu.byte_set(0x101, 1);
+    cpu.mmu.byte_set(0x102, 2);
     assert_eq!(cpu.execute(0b00000001), 0x103);
     assert_eq!(cpu.registers.b, 2);
     assert_eq!(cpu.registers.c, 1);
 
     // LD DE, nn
     cpu.registers.pc = 0x201;
-    cpu.bus.byte_set(0x202, 2);
-    cpu.bus.byte_set(0x203, 3);
+    cpu.mmu.byte_set(0x202, 2);
+    cpu.mmu.byte_set(0x203, 3);
     assert_eq!(cpu.execute(0b00010001), 0x204);
     assert_eq!(cpu.registers.d, 3);
     assert_eq!(cpu.registers.e, 2);
@@ -246,7 +246,7 @@ fn test_op_ldh_a_c() {
     // LDH A, (C)
     cpu.registers.pc = 0x100;
     cpu.registers.c = 1;
-    cpu.bus.byte_set(0xFF01, 2);
+    cpu.mmu.byte_set(0xFF01, 2);
     assert_eq!(cpu.execute(0b11110010), 0x101);
     assert_eq!(cpu.registers.a, 2);
 }
@@ -257,8 +257,8 @@ fn test_op_ldh_a_n() {
 
     // LDH A, (n)
     cpu.registers.pc = 0x100;
-    cpu.bus.byte_set(0x101, 1);
-    cpu.bus.byte_set(0xFF01, 2);
+    cpu.mmu.byte_set(0x101, 1);
+    cpu.mmu.byte_set(0xFF01, 2);
     assert_eq!(cpu.execute(0b11110000), 0x102);
     assert_eq!(cpu.registers.a, 2);
 }
@@ -272,7 +272,7 @@ fn test_op_ldh_c_a() {
     cpu.registers.a = 1;
     cpu.registers.c = 2;
     assert_eq!(cpu.execute(0b11100010), 0x101);
-    assert_eq!(cpu.bus.byte_get(0xFF02), 1);
+    assert_eq!(cpu.mmu.byte_get(0xFF02), 1);
 }
 
 #[test]
@@ -282,9 +282,9 @@ fn test_op_ldh_n_a() {
     // LDH (n), A
     cpu.registers.pc = 0x100;
     cpu.registers.a = 1;
-    cpu.bus.byte_set(0x101, 2);
+    cpu.mmu.byte_set(0x101, 2);
     assert_eq!(cpu.execute(0b11100000), 0x102);
-    assert_eq!(cpu.bus.byte_get(0xFF02), 1);
+    assert_eq!(cpu.mmu.byte_get(0xFF02), 1);
 }
 
 #[test]
@@ -323,24 +323,24 @@ fn test_register_16_set_addr() {
     cpu.registers.b = 1;
     cpu.registers.c = 0;
     cpu.register_16_set_addr(0b000000, 2);
-    assert_eq!(cpu.bus.byte_get(0x100), 2);
+    assert_eq!(cpu.mmu.byte_get(0x100), 2);
 
     // 01xxxx: DE
     cpu.registers.d = 2;
     cpu.registers.e = 1;
     cpu.register_16_set_addr(0b010000, 3);
-    assert_eq!(cpu.bus.byte_get(0x201), 3);
+    assert_eq!(cpu.mmu.byte_get(0x201), 3);
 
     // 10xxxx: HL
     cpu.registers.h = 3;
     cpu.registers.l = 2;
     cpu.register_16_set_addr(0b100000, 4);
-    assert_eq!(cpu.bus.byte_get(0x302), 4);
+    assert_eq!(cpu.mmu.byte_get(0x302), 4);
 
     // 11xxxx: SP
     cpu.registers.sp = 0x403;
     cpu.register_16_set_addr(0b110000, 5);
-    assert_eq!(cpu.bus.byte_get(0x403), 5);
+    assert_eq!(cpu.mmu.byte_get(0x403), 5);
 }
 
 #[test]
@@ -374,7 +374,7 @@ fn test_register_8_get() {
     // 110: (HL)
     cpu.registers.h = 1;
     cpu.registers.l = 0;
-    cpu.bus.byte_set(0x100, 7);
+    cpu.mmu.byte_set(0x100, 7);
     assert_eq!(cpu.register_8_get(0b110), 7);
 
     // 111: A
@@ -414,7 +414,7 @@ fn test_register_8_set() {
     cpu.registers.h = 1;
     cpu.registers.l = 0;
     cpu.register_8_set(0b110000, 7);
-    assert_eq!(cpu.bus.byte_get(0x100), 7);
+    assert_eq!(cpu.mmu.byte_get(0x100), 7);
 
     // 111: A
     cpu.register_8_set(0b111000, 8);

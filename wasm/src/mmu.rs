@@ -1,9 +1,9 @@
 #[derive(Debug, PartialEq)]
-pub struct MemoryBus {
+pub struct MMU {
     memory: [u8; 0xFFFF],
 }
 
-impl MemoryBus {
+impl MMU {
     pub fn new() -> Self {
         Self {
             memory: [0u8; 0xFFFF],
@@ -30,5 +30,5 @@ impl MemoryBus {
     }
 }
 
-#[path = "./memory_bus_test.rs"]
+#[path = "./mmu_test.rs"]
 mod tests;

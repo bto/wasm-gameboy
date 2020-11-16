@@ -1,31 +1,31 @@
-use super::memory_bus::MemoryBus;
+use super::mmu::MMU;
 use super::registers::Registers;
 
 struct CPU {
-    bus: MemoryBus,
+    mmu: MMU,
     registers: Registers,
 }
 
 impl CPU {
     pub fn new() -> Self {
         Self {
-            bus: MemoryBus::new(),
+            mmu: MMU::new(),
             registers: Registers::new(),
         }
     }
 
     pub fn step(&mut self) {
-        let opcode = self.bus.byte_get(self.registers.pc);
+        let opcode = self.mmu.byte_get(self.registers.pc);
         self.execute(opcode);
     }
 
     fn db_get(&self) -> u8 {
-        self.bus.byte_get(self.registers.pc + 1)
+        self.mmu.byte_get(self.registers.pc + 1)
     }
 
     fn lb_hb_get(&self) -> u16 {
-        let lb = self.bus.byte_get(self.registers.pc + 1);
-        let hb = self.bus.byte_get(self.registers.pc + 2);
+        let lb = self.mmu.byte_get(self.registers.pc + 1);
+        let hb = self.mmu.byte_get(self.registers.pc + 2);
         (hb as u16) << 8 | lb as u16
     }
 
@@ -75,49 +75,49 @@ impl CPU {
 
     fn op_ld_a_hl_dec(&mut self) -> u16 {
         let hl = self.registers.hl_get();
-        self.registers.a = self.bus.byte_get(hl);
+        self.registers.a = self.mmu.byte_get(hl);
         self.registers.hl_set(hl - 1);
         self.registers.pc + 1
     }
 
     fn op_ld_a_hl_inc(&mut self) -> u16 {
         let hl = self.registers.hl_get();
-        self.registers.a = self.bus.byte_get(hl);
+        self.registers.a = self.mmu.byte_get(hl);
         self.registers.hl_set(hl + 1);
         self.registers.pc + 1
     }
 
     fn op_ld_a_nn(&mut self) -> u16 {
-        self.registers.a = self.bus.byte_get(self.lb_hb_get());
+        self.registers.a = self.mmu.byte_get(self.lb_hb_get());
         self.registers.pc + 3
     }
 
     fn op_ld_a_rp(&mut self, opcode: u8) -> u16 {
-        self.registers.a = self.bus.byte_get(self.register_16_get(opcode));
+        self.registers.a = self.mmu.byte_get(self.register_16_get(opcode));
         self.registers.pc + 1
     }
 
     fn op_ld_hl_dec_a(&mut self) -> u16 {
         let hl = self.registers.hl_get();
-        self.bus.byte_set(hl, self.registers.a);
+        self.mmu.byte_set(hl, self.registers.a);
         self.registers.hl_set(hl - 1);
         self.registers.pc + 1
     }
 
     fn op_ld_hl_inc_a(&mut self) -> u16 {
         let hl = self.registers.hl_get();
-        self.bus.byte_set(hl, self.registers.a);
+        self.mmu.byte_set(hl, self.registers.a);
         self.registers.hl_set(hl + 1);
         self.registers.pc + 1
     }
 
     fn op_ld_nn_a(&mut self) -> u16 {
-        self.bus.byte_set(self.lb_hb_get(), self.registers.a);
+        self.mmu.byte_set(self.lb_hb_get(), self.registers.a);
         self.registers.pc + 3
     }
 
     fn op_ld_nn_sp(&mut self) -> u16 {
-        self.bus.word_set(self.lb_hb_get(), self.registers.sp);
+        self.mmu.word_set(self.lb_hb_get(), self.registers.sp);
         self.registers.pc + 3
     }
 
@@ -151,32 +151,32 @@ impl CPU {
 
     fn op_ldh_a_c(&mut self) -> u16 {
         let addr = 0xFF00 | self.registers.c as u16;
-        self.registers.a = self.bus.byte_get(addr);
+        self.registers.a = self.mmu.byte_get(addr);
         self.registers.pc + 1
     }
 
     fn op_ldh_a_n(&mut self) -> u16 {
         let addr = 0xFF00 | self.db_get() as u16;
-        self.registers.a = self.bus.byte_get(addr);
+        self.registers.a = self.mmu.byte_get(addr);
         self.registers.pc + 2
     }
 
     fn op_ldh_c_a(&mut self) -> u16 {
         let addr = 0xFF00 | self.registers.c as u16;
-        self.bus.byte_set(addr, self.registers.a);
+        self.mmu.byte_set(addr, self.registers.a);
         self.registers.pc + 1
     }
 
     fn op_ldh_n_a(&mut self) -> u16 {
         let addr = 0xFF00 | self.db_get() as u16;
-        self.bus.byte_set(addr, self.registers.a);
+        self.mmu.byte_set(addr, self.registers.a);
         self.registers.pc + 2
     }
 
     fn op_pop_rr(&mut self, opcode: u8) -> u16 {
-        let lb = self.bus.byte_get(self.registers.sp) as u16;
+        let lb = self.mmu.byte_get(self.registers.sp) as u16;
         self.registers.sp += 1;
-        let hb = self.bus.byte_get(self.registers.sp) as u16;
+        let hb = self.mmu.byte_get(self.registers.sp) as u16;
         self.registers.sp += 1;
 
         self.register_16_set(opcode, hb << 8 | lb);
@@ -188,9 +188,9 @@ impl CPU {
         let value = self.register_16_get(opcode);
 
         self.registers.sp -= 1;
-        self.bus.byte_set(self.registers.sp, (value >> 8) as u8);
+        self.mmu.byte_set(self.registers.sp, (value >> 8) as u8);
         self.registers.sp -= 1;
-        self.bus.byte_set(self.registers.sp, (value & 0xFF) as u8);
+        self.mmu.byte_set(self.registers.sp, (value & 0xFF) as u8);
 
         self.registers.pc + 1
     }
@@ -217,10 +217,10 @@ impl CPU {
 
     fn register_16_set_addr(&mut self, opcode: u8, value: u8) {
         match opcode & 0b110000 {
-            0b000000 => self.bus.byte_set(self.registers.bc_get(), value),
-            0b010000 => self.bus.byte_set(self.registers.de_get(), value),
-            0b100000 => self.bus.byte_set(self.registers.hl_get(), value),
-            0b110000 => self.bus.byte_set(self.registers.sp, value),
+            0b000000 => self.mmu.byte_set(self.registers.bc_get(), value),
+            0b010000 => self.mmu.byte_set(self.registers.de_get(), value),
+            0b100000 => self.mmu.byte_set(self.registers.hl_get(), value),
+            0b110000 => self.mmu.byte_set(self.registers.sp, value),
             _ => panic!("never reach"),
         }
     }
@@ -233,7 +233,7 @@ impl CPU {
             0b011 => self.registers.e,
             0b100 => self.registers.h,
             0b101 => self.registers.l,
-            0b110 => self.bus.byte_get(self.registers.hl_get()),
+            0b110 => self.mmu.byte_get(self.registers.hl_get()),
             0b111 => self.registers.a,
             _ => panic!("never reach"),
         }
@@ -247,7 +247,7 @@ impl CPU {
             0b011000 => self.registers.e = value,
             0b100000 => self.registers.h = value,
             0b101000 => self.registers.l = value,
-            0b110000 => self.bus.byte_set(self.registers.hl_get(), value),
+            0b110000 => self.mmu.byte_set(self.registers.hl_get(), value),
             0b111000 => self.registers.a = value,
             _ => panic!("invalid destination register"),
         }
