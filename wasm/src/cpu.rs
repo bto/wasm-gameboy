@@ -42,6 +42,7 @@ impl CPU {
         );
 
         let pc = match bits {
+            (0, 0, 0, 0, 1, 0, 0, 0) => self.op_ld_nn_sp(),
             (0, 0, 1, 0, 0, 0, 1, 0) => self.op_ld_hl_inc_a(),
             (0, 0, 1, 0, 1, 0, 1, 0) => self.op_ld_a_hl_inc(),
             (0, 0, 1, 1, 0, 0, 1, 0) => self.op_ld_hl_dec_a(),
@@ -109,6 +110,11 @@ impl CPU {
 
     fn op_ld_nn_a(&mut self) -> u16 {
         self.bus.byte_set(self.lb_hb_get(), self.registers.a);
+        self.registers.pc + 3
+    }
+
+    fn op_ld_nn_sp(&mut self) -> u16 {
+        self.bus.word_set(self.lb_hb_get(), self.registers.sp);
         self.registers.pc + 3
     }
 
