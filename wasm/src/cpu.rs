@@ -19,6 +19,17 @@ impl CPU {
         self.execute(byte);
     }
 
+    fn db_get(&self) -> u8 {
+        self.bus.byte_get(self.registers.pc + 1)
+    }
+
+    fn lb_hb_get(&self) -> u8 {
+        let lb = self.bus.byte_get(self.registers.pc + 1);
+        let hb = self.bus.byte_get(self.registers.pc + 2);
+        let addr = (hb as u16) << 8 | lb as u16;
+        self.bus.byte_get(addr)
+    }
+
     fn execute(&mut self, byte: u8) -> u16 {
         let bits = (
             (byte & 0b10000000) >> 7,
@@ -32,6 +43,7 @@ impl CPU {
         );
 
         let pc = match bits {
+            (1, 1, 1, 1, 1, 0, 1, 0) => self.op_ld_a_nn(),
             (1, 0, 0, 0, 0, _, _, _) => self.op_add(byte),
             (0, 0, _, _, 1, 0, 1, 0) => self.op_ld_a_rp(byte),
             (0, 0, _, _, 0, 0, 1, 0) => self.op_ld_rp_a(byte),
@@ -48,13 +60,18 @@ impl CPU {
         self.registers.pc + 1
     }
 
+    fn op_ld_a_nn(&mut self) -> u16 {
+        self.registers.a = self.lb_hb_get();
+        self.registers.pc + 3
+    }
+
     fn op_ld_a_rp(&mut self, byte: u8) -> u16 {
         self.registers.a = self.bus.byte_get(self.register_16_get(byte));
         self.registers.pc + 1
     }
 
     fn op_ld_r_n(&mut self, byte: u8) -> u16 {
-        self.register_8_set(byte, self.bus.byte_get(self.registers.pc + 1));
+        self.register_8_set(byte, self.db_get());
         self.registers.pc + 2
     }
 
