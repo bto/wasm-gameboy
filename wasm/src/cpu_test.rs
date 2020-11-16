@@ -8,17 +8,6 @@ fn test_new() {
 }
 
 #[test]
-fn test_op_ld_a_c() {
-    let mut cpu = CPU::new();
-
-    cpu.registers.pc = 0x100;
-    cpu.registers.c = 1;
-    cpu.bus.byte_set(0xFF01, 2);
-    assert_eq!(cpu.execute(0b11110010), 0x101);
-    assert_eq!(cpu.registers.a, 2);
-}
-
-#[test]
 fn test_op_ld_a_nn() {
     let mut cpu = CPU::new();
 
@@ -124,7 +113,7 @@ fn test_op_ld_r_r() {
 }
 
 #[test]
-fn test_op_rp_a() {
+fn test_op_ld_rp_a() {
     let mut cpu = CPU::new();
 
     // LD (BC), A
@@ -142,6 +131,17 @@ fn test_op_rp_a() {
     cpu.registers.a = 4;
     assert_eq!(cpu.execute(0b00010010), 0x202);
     assert_eq!(cpu.bus.byte_get(0x302), 4);
+}
+
+#[test]
+fn test_op_ldh_a_c() {
+    let mut cpu = CPU::new();
+
+    cpu.registers.pc = 0x100;
+    cpu.registers.c = 1;
+    cpu.bus.byte_set(0xFF01, 2);
+    assert_eq!(cpu.execute(0b11110010), 0x101);
+    assert_eq!(cpu.registers.a, 2);
 }
 
 #[test]
