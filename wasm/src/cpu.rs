@@ -22,12 +22,13 @@ impl CPU {
 
     fn execute(&mut self) {
         match self.fetch_byte() {
-            0x06 => op_ld_r_n!(self, b),
-            0x0E => op_ld_r_n!(self, c),
-            0x16 => op_ld_r_n!(self, d),
-            0x1E => op_ld_r_n!(self, e),
-            0x26 => op_ld_r_n!(self, h),
-            0x2E => op_ld_r_n!(self, l),
+            0b00_000_110 => op_ld_r_n!(self, b),
+            0b00_001_110 => op_ld_r_n!(self, c),
+            0b00_010_110 => op_ld_r_n!(self, d),
+            0b00_011_110 => op_ld_r_n!(self, e),
+            0b00_100_110 => op_ld_r_n!(self, h),
+            0b00_101_110 => op_ld_r_n!(self, l),
+            0b00_111_110 => op_ld_r_n!(self, a),
             _ => panic!("not implemented instruction"),
         }
     }
