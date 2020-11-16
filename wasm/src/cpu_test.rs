@@ -41,6 +41,18 @@ fn test_op_ld_a_rp() {
 }
 
 #[test]
+fn test_op_ld_nn_a() {
+    let mut cpu = CPU::new();
+
+    cpu.registers.pc = 0x100;
+    cpu.bus.byte_set(0x101, 2);
+    cpu.bus.byte_set(0x102, 3);
+    cpu.registers.a = 4;
+    assert_eq!(cpu.execute(0b11101010), 0x103);
+    assert_eq!(cpu.bus.byte_get(0x302), 4);
+}
+
+#[test]
 fn test_op_ld_r_n() {
     let mut cpu = CPU::new();
 
