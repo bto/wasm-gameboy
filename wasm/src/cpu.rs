@@ -52,6 +52,7 @@ impl CPU {
             (1, 1, 1, 0, 1, 0, 1, 0) => self.op_ld_nn_a(),
             (1, 1, 1, 1, 0, 0, 0, 0) => self.op_ldh_a_n(),
             (1, 1, 1, 1, 0, 0, 1, 0) => self.op_ldh_a_c(),
+            (1, 1, 1, 1, 1, 0, 0, 1) => self.op_ld_sp_hl(),
             (1, 1, 1, 1, 1, 0, 1, 0) => self.op_ld_a_nn(),
             (1, 0, 0, 0, 0, _, _, _) => self.op_add(byte),
             (0, 0, _, _, 0, 0, 0, 1) => self.op_ld_rr_nn(byte),
@@ -139,6 +140,11 @@ impl CPU {
         println!("{}", value);
         self.register_16_set(byte, value);
         self.registers.pc + 3
+    }
+
+    fn op_ld_sp_hl(&mut self) -> u16 {
+        self.registers.sp = self.registers.hl_get();
+        self.registers.pc + 1
     }
 
     fn op_ldh_a_c(&mut self) -> u16 {

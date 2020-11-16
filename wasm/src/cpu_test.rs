@@ -230,6 +230,16 @@ fn test_op_ld_rr_nn() {
 }
 
 #[test]
+fn test_op_ld_sp_hl() {
+    let mut cpu = CPU::new();
+
+    cpu.registers.pc = 0x100;
+    cpu.registers.hl_set(0x203);
+    assert_eq!(cpu.execute(0b11111001), 0x101);
+    assert_eq!(cpu.registers.sp, 0x203);
+}
+
+#[test]
 fn test_op_ldh_a_c() {
     let mut cpu = CPU::new();
 
