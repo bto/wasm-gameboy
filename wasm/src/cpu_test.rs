@@ -196,6 +196,27 @@ fn test_op_ld_rp_a() {
 }
 
 #[test]
+fn test_op_ld_rr_nn() {
+    let mut cpu = CPU::new();
+
+    // LD BC, nn
+    cpu.registers.pc = 0x100;
+    cpu.bus.byte_set(0x101, 1);
+    cpu.bus.byte_set(0x102, 2);
+    assert_eq!(cpu.execute(0b00000001), 0x103);
+    assert_eq!(cpu.registers.b, 2);
+    assert_eq!(cpu.registers.c, 1);
+
+    // LD DE, nn
+    cpu.registers.pc = 0x201;
+    cpu.bus.byte_set(0x202, 2);
+    cpu.bus.byte_set(0x203, 3);
+    assert_eq!(cpu.execute(0b00010001), 0x204);
+    assert_eq!(cpu.registers.d, 3);
+    assert_eq!(cpu.registers.e, 2);
+}
+
+#[test]
 fn test_op_ldh_a_c() {
     let mut cpu = CPU::new();
 
@@ -268,30 +289,30 @@ fn test_register_16_get() {
 }
 
 #[test]
-fn test_register_16_set() {
+fn test_register_16_set_addr() {
     let mut cpu = CPU::new();
 
     // 00xxxx: BC
     cpu.registers.b = 1;
     cpu.registers.c = 0;
-    cpu.register_16_set(0b000000, 2);
+    cpu.register_16_set_addr(0b000000, 2);
     assert_eq!(cpu.bus.byte_get(0x100), 2);
 
     // 01xxxx: DE
     cpu.registers.d = 2;
     cpu.registers.e = 1;
-    cpu.register_16_set(0b010000, 3);
+    cpu.register_16_set_addr(0b010000, 3);
     assert_eq!(cpu.bus.byte_get(0x201), 3);
 
     // 10xxxx: HL
     cpu.registers.h = 3;
     cpu.registers.l = 2;
-    cpu.register_16_set(0b100000, 4);
+    cpu.register_16_set_addr(0b100000, 4);
     assert_eq!(cpu.bus.byte_get(0x302), 4);
 
     // 11xxxx: SP
     cpu.registers.sp = 0x403;
-    cpu.register_16_set(0b110000, 5);
+    cpu.register_16_set_addr(0b110000, 5);
     assert_eq!(cpu.bus.byte_get(0x403), 5);
 }
 

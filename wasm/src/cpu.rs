@@ -23,18 +23,10 @@ impl CPU {
         self.bus.byte_get(self.registers.pc + 1)
     }
 
-    fn lb_hb_get(&self) -> u8 {
+    fn lb_hb_get(&self) -> u16 {
         let lb = self.bus.byte_get(self.registers.pc + 1);
         let hb = self.bus.byte_get(self.registers.pc + 2);
-        let addr = (hb as u16) << 8 | lb as u16;
-        self.bus.byte_get(addr)
-    }
-
-    fn lb_hb_set(&mut self, value: u8) {
-        let lb = self.bus.byte_get(self.registers.pc + 1);
-        let hb = self.bus.byte_get(self.registers.pc + 2);
-        let addr = (hb as u16) << 8 | lb as u16;
-        self.bus.byte_set(addr, value);
+        (hb as u16) << 8 | lb as u16
     }
 
     fn execute(&mut self, byte: u8) -> u16 {
@@ -61,6 +53,7 @@ impl CPU {
             (1, 1, 1, 1, 0, 0, 1, 0) => self.op_ldh_a_c(),
             (1, 1, 1, 1, 1, 0, 1, 0) => self.op_ld_a_nn(),
             (1, 0, 0, 0, 0, _, _, _) => self.op_add(byte),
+            (0, 0, _, _, 0, 0, 0, 1) => self.op_ld_rr_nn(byte),
             (0, 0, _, _, 0, 0, 1, 0) => self.op_ld_rp_a(byte),
             (0, 0, _, _, 1, 0, 1, 0) => self.op_ld_a_rp(byte),
             (0, 0, _, _, _, 1, 1, 0) => self.op_ld_r_n(byte),
@@ -91,7 +84,7 @@ impl CPU {
     }
 
     fn op_ld_a_nn(&mut self) -> u16 {
-        self.registers.a = self.lb_hb_get();
+        self.registers.a = self.bus.byte_get(self.lb_hb_get());
         self.registers.pc + 3
     }
 
@@ -115,7 +108,7 @@ impl CPU {
     }
 
     fn op_ld_nn_a(&mut self) -> u16 {
-        self.lb_hb_set(self.registers.a);
+        self.bus.byte_set(self.lb_hb_get(), self.registers.a);
         self.registers.pc + 3
     }
 
@@ -130,8 +123,16 @@ impl CPU {
     }
 
     fn op_ld_rp_a(&mut self, byte: u8) -> u16 {
-        self.register_16_set(byte, self.registers.a);
+        self.register_16_set_addr(byte, self.registers.a);
         self.registers.pc + 1
+    }
+
+    fn op_ld_rr_nn(&mut self, byte: u8) -> u16 {
+        println!("op_ld_rr_nn");
+        let value = self.lb_hb_get();
+        println!("{}", value);
+        self.register_16_set(byte, value);
+        self.registers.pc + 3
     }
 
     fn op_ldh_a_c(&mut self) -> u16 {
@@ -168,7 +169,17 @@ impl CPU {
         }
     }
 
-    fn register_16_set(&mut self, byte: u8, value: u8) {
+    fn register_16_set(&mut self, byte: u8, value: u16) {
+        match byte & 0b110000 {
+            0b000000 => self.registers.bc_set(value),
+            0b010000 => self.registers.de_set(value),
+            0b100000 => self.registers.hl_set(value),
+            0b110000 => self.registers.sp = value,
+            _ => panic!("never reach"),
+        }
+    }
+
+    fn register_16_set_addr(&mut self, byte: u8, value: u8) {
         match byte & 0b110000 {
             0b000000 => self.bus.byte_set(self.registers.bc_get(), value),
             0b010000 => self.bus.byte_set(self.registers.de_get(), value),
