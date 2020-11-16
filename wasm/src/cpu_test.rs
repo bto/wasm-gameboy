@@ -11,6 +11,7 @@ fn test_new() {
 fn test_op_ld_a_hl_dec() {
     let mut cpu = CPU::new();
 
+    // LD A, (HL-)
     cpu.registers.pc = 0x100;
     cpu.registers.h = 2;
     cpu.registers.l = 3;
@@ -25,6 +26,7 @@ fn test_op_ld_a_hl_dec() {
 fn test_op_ld_a_hl_inc() {
     let mut cpu = CPU::new();
 
+    // LD A, (HL+)
     cpu.registers.pc = 0x100;
     cpu.registers.h = 2;
     cpu.registers.l = 3;
@@ -39,6 +41,7 @@ fn test_op_ld_a_hl_inc() {
 fn test_op_ld_a_nn() {
     let mut cpu = CPU::new();
 
+    // LD A, (nn)
     cpu.registers.pc = 0x100;
     cpu.bus.byte_set(0x101, 2);
     cpu.bus.byte_set(0x102, 3);
@@ -72,6 +75,7 @@ fn test_op_ld_a_rp() {
 fn test_op_ld_hl_dec_a() {
     let mut cpu = CPU::new();
 
+    // LD (HL-), A
     cpu.registers.pc = 0x100;
     cpu.registers.a = 1;
     cpu.registers.h = 2;
@@ -86,6 +90,7 @@ fn test_op_ld_hl_dec_a() {
 fn test_op_ld_hl_inc_a() {
     let mut cpu = CPU::new();
 
+    // LD (HL+), A
     cpu.registers.pc = 0x100;
     cpu.registers.a = 1;
     cpu.registers.h = 2;
@@ -100,6 +105,7 @@ fn test_op_ld_hl_inc_a() {
 fn test_op_ld_nn_a() {
     let mut cpu = CPU::new();
 
+    // LD (nn), A
     cpu.registers.pc = 0x100;
     cpu.bus.byte_set(0x101, 2);
     cpu.bus.byte_set(0x102, 3);
@@ -193,6 +199,7 @@ fn test_op_ld_rp_a() {
 fn test_op_ldh_a_c() {
     let mut cpu = CPU::new();
 
+    // LDH A, (C)
     cpu.registers.pc = 0x100;
     cpu.registers.c = 1;
     cpu.bus.byte_set(0xFF01, 2);
@@ -204,6 +211,7 @@ fn test_op_ldh_a_c() {
 fn test_op_ldh_a_n() {
     let mut cpu = CPU::new();
 
+    // LDH A, (n)
     cpu.registers.pc = 0x100;
     cpu.bus.byte_set(0x101, 1);
     cpu.bus.byte_set(0xFF01, 2);
@@ -215,6 +223,7 @@ fn test_op_ldh_a_n() {
 fn test_op_ldh_c_a() {
     let mut cpu = CPU::new();
 
+    // LDH (C), A
     cpu.registers.pc = 0x100;
     cpu.registers.a = 1;
     cpu.registers.c = 2;
@@ -226,6 +235,7 @@ fn test_op_ldh_c_a() {
 fn test_op_ldh_n_a() {
     let mut cpu = CPU::new();
 
+    // LDH (n), A
     cpu.registers.pc = 0x100;
     cpu.registers.a = 1;
     cpu.bus.byte_set(0x101, 2);
