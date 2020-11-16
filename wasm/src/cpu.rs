@@ -50,6 +50,7 @@ impl CPU {
         );
 
         let pc = match bits {
+            (1, 1, 1, 0, 0, 0, 1, 0) => self.op_ldh_c_a(),
             (1, 1, 1, 0, 1, 0, 1, 0) => self.op_ld_nn_a(),
             (1, 1, 1, 1, 0, 0, 1, 0) => self.op_ldh_a_c(),
             (1, 1, 1, 1, 1, 0, 1, 0) => self.op_ld_a_nn(),
@@ -102,6 +103,12 @@ impl CPU {
     fn op_ldh_a_c(&mut self) -> u16 {
         let addr = 0xFF00 | self.registers.c as u16;
         self.registers.a = self.bus.byte_get(addr);
+        self.registers.pc + 1
+    }
+
+    fn op_ldh_c_a(&mut self) -> u16 {
+        let addr = 0xFF00 | self.registers.c as u16;
+        self.bus.byte_set(addr, self.registers.a);
         self.registers.pc + 1
     }
 

@@ -145,6 +145,17 @@ fn test_op_ldh_a_c() {
 }
 
 #[test]
+fn test_op_ldh_c_a() {
+    let mut cpu = CPU::new();
+
+    cpu.registers.pc = 0x100;
+    cpu.registers.a = 1;
+    cpu.registers.c = 2;
+    assert_eq!(cpu.execute(0b11100010), 0x101);
+    assert_eq!(cpu.bus.byte_get(0xFF02), 1);
+}
+
+#[test]
 fn test_register_16_get() {
     let mut cpu = CPU::new();
 
