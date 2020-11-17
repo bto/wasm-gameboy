@@ -19,6 +19,21 @@ fn test_new() {
 }
 
 #[test]
+fn test_op_ld_hl_n() {
+    let mut cpu = CPU::new();
+
+    let pc = cpu.registers.pc;
+    cpu.registers.h = 1;
+    cpu.registers.l = 0;
+    set_inst!(cpu, pc, 0b00_110_110, 1);
+
+    cpu.execute();
+
+    assert_eq!(cpu.registers.pc, pc + 2);
+    assert_eq!(cpu.mmu.byte_get(0x100), 1);
+}
+
+#[test]
 fn test_op_ld_r_n() {
     let mut cpu = CPU::new();
 

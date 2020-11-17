@@ -1,6 +1,13 @@
 use super::mmu::MMU;
 use super::registers::Registers;
 
+macro_rules! op_ld_hl_n {
+    ( $self:ident ) => {{
+        let addr = $self.registers.hl_get();
+        let value = $self.fetch_byte();
+        $self.mmu.byte_set(addr, value);
+    }};
+}
 macro_rules! op_ld_r_n {
     ( $self:ident, $dest:ident ) => {{
         $self.registers.$dest = $self.fetch_byte();
@@ -34,6 +41,7 @@ impl CPU {
             0b00_011_110 => op_ld_r_n!(self, e),
             0b00_100_110 => op_ld_r_n!(self, h),
             0b00_101_110 => op_ld_r_n!(self, l),
+            0b00_110_110 => op_ld_hl_n!(self),
             0b00_111_110 => op_ld_r_n!(self, a),
             0b01_000_000 => op_ld_r_r!(self, b, b),
             0b01_000_001 => op_ld_r_r!(self, b, c),
