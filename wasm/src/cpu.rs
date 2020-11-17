@@ -9,6 +9,14 @@ macro_rules! op_ld_hl_n {
     }};
 }
 
+macro_rules! op_ld_hl_r {
+    ( $self:ident, $src:ident ) => {{
+        let addr = $self.registers.hl_get();
+        let value = $self.registers.$src;
+        $self.mmu.byte_set(addr, value);
+    }};
+}
+
 macro_rules! op_ld_r_hl {
     ( $self:ident, $dest:ident ) => {{
         let addr = $self.registers.hl_get();
@@ -105,6 +113,15 @@ impl CPU {
             0b01_101_101 => op_ld_r_r!(self, l, l),
             0b01_101_110 => op_ld_r_hl!(self, l),
             0b01_101_111 => op_ld_r_r!(self, l, a),
+
+            0b01_110_000 => op_ld_hl_r!(self, b),
+            0b01_110_001 => op_ld_hl_r!(self, c),
+            0b01_110_010 => op_ld_hl_r!(self, d),
+            0b01_110_011 => op_ld_hl_r!(self, e),
+            0b01_110_100 => op_ld_hl_r!(self, h),
+            0b01_110_101 => op_ld_hl_r!(self, l),
+            0b01_110_110 => {}
+            0b01_110_111 => op_ld_hl_r!(self, a),
 
             0b01_111_000 => op_ld_r_r!(self, a, b),
             0b01_111_001 => op_ld_r_r!(self, a, c),
