@@ -44,6 +44,12 @@ macro_rules! op_ld_r_n {
     }};
 }
 
+macro_rules! op_ld_r_nn {
+    ( $self:ident, $dest:ident ) => {{
+        $self.registers.$dest = $self.fetch_load();
+    }};
+}
+
 macro_rules! op_ld_r_r {
     ( $self:ident, $dest:ident, $src:ident ) => {{
         $self.registers.$dest = $self.registers.$src;
@@ -172,6 +178,8 @@ impl CPU {
             0b00_00_0010 => op_ld_rr_r!(self, bc, a),
             0b00_01_0010 => op_ld_rr_r!(self, de, a),
 
+            0b11111010 => op_ld_r_nn!(self, a),
+
             _ => panic!("not implemented instruction"),
         }
     }
@@ -180,6 +188,19 @@ impl CPU {
         let byte = self.mmu.byte_get(self.registers.pc);
         self.registers.pc += 1;
         byte
+    }
+
+    fn fetch_load(&mut self) -> u8 {
+        let value = self.fetch_word();
+        self.mmu.byte_get(value)
+    }
+
+    fn fetch_word(&mut self) -> u16 {
+        let lsb = self.mmu.byte_get(self.registers.pc);
+        self.registers.pc += 1;
+        let msb = self.mmu.byte_get(self.registers.pc);
+        self.registers.pc += 1;
+        (msb as u16) << 8 | lsb as u16
     }
 }
 

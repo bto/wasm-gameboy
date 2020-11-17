@@ -1,13 +1,19 @@
 use super::*;
 
 macro_rules! set_inst {
+    ( $cpu:ident, $pc:ident, $v1:expr ) => {
+        $cpu.mmu.byte_set($pc + 0, $v1);
+    };
+
     ( $cpu:ident, $pc:ident, $v1:expr, $v2:expr ) => {
         $cpu.mmu.byte_set($pc + 0, $v1);
         $cpu.mmu.byte_set($pc + 1, $v2);
     };
 
-    ( $cpu:ident, $pc:ident, $v1:expr ) => {
+    ( $cpu:ident, $pc:ident, $v1:expr, $v2:expr, $v3:expr ) => {
         $cpu.mmu.byte_set($pc + 0, $v1);
+        $cpu.mmu.byte_set($pc + 1, $v2);
+        $cpu.mmu.byte_set($pc + 2, $v3);
     };
 }
 
@@ -20,7 +26,7 @@ fn test_new() {
 
 #[test]
 fn test_op_0b00_DDD_110() {
-    // LD R, n
+    // LD r, n
     let mut cpu = CPU::new();
 
     let opcode_base = 0b00_000_110;
@@ -65,7 +71,7 @@ fn test_op_0b00_110_110() {
 
 #[test]
 fn test_op_0b01_DDD_SSS() {
-    // LD R, R
+    // LD r, r
     let mut cpu = CPU::new();
 
     let opcode_base = 0b01_000_000;
@@ -106,7 +112,7 @@ fn test_op_0b01_DDD_SSS() {
 
 #[test]
 fn test_op_0b01_DDD_110() {
-    // LD R, (HL)
+    // LD r, (HL)
     let mut cpu = CPU::new();
 
     let opcode_base = 0b01_000_110;
@@ -138,7 +144,7 @@ fn test_op_0b01_DDD_110() {
 
 #[test]
 fn test_op_0b01_110_SSS() {
-    // LD (HL), R
+    // LD (HL), r
     let mut cpu = CPU::new();
 
     let opcode_base = 0b01_110_000;
@@ -171,7 +177,7 @@ fn test_op_0b01_110_SSS() {
 
 #[test]
 fn test_op_0b00_RR_1010() {
-    // LD A, (RR)
+    // LD A, (rr)
     let mut cpu = CPU::new();
 
     // LD A, (BC)
@@ -218,4 +224,20 @@ fn test_op_0b00_RR_0010() {
     cpu.execute();
     assert_eq!(cpu.registers.pc, pc + 1);
     assert_eq!(cpu.mmu.byte_get(0x302), 4);
+}
+
+#[test]
+fn test_op_0b11111010() {
+    let mut cpu = CPU::new();
+
+    // LD A, (nn)
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, 0b11111010, 2, 3);
+
+    cpu.mmu.byte_set(0x302, 4);
+
+    cpu.execute();
+
+    assert_eq!(cpu.registers.pc, pc + 3);
+    assert_eq!(cpu.registers.a, 4);
 }
