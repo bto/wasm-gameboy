@@ -2,8 +2,20 @@ use super::mmu::MMU;
 use super::registers::Registers;
 
 macro_rules! op_ld_a_rr {
-    ( $self:ident, $src:ident ) => {{
-        let addr = $self.registers.$src();
+    ( $self:ident, bc ) => {
+        op_ld_a_rr!($self, bc_get)
+    };
+
+    ( $self:ident, de ) => {
+        op_ld_a_rr!($self, de_get)
+    };
+
+    ( $self:ident, hl ) => {
+        op_ld_a_rr!($self, hl_get)
+    };
+
+    ( $self:ident, $method:ident ) => {{
+        let addr = $self.registers.$method();
         let value = $self.mmu.byte_get(addr);
         $self.registers.a = value;
     }};
@@ -59,8 +71,8 @@ impl CPU {
 
     fn execute(&mut self) {
         match self.fetch_byte() {
-            0b00_00_1010 => op_ld_a_rr!(self, bc_get),
-            0b00_01_1010 => op_ld_a_rr!(self, de_get),
+            0b00_00_1010 => op_ld_a_rr!(self, bc),
+            0b00_01_1010 => op_ld_a_rr!(self, de),
 
             0b00_000_110 => op_ld_r_n!(self, b),
             0b00_001_110 => op_ld_r_n!(self, c),
