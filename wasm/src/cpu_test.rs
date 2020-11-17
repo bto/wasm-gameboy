@@ -194,3 +194,28 @@ fn test_op_0b00_RR_1010() {
     assert_eq!(cpu.registers.pc, pc + 1);
     assert_eq!(cpu.mmu.byte_get(0x302), 4);
 }
+
+#[test]
+fn test_op_0b00_RR_0010() {
+    let mut cpu = CPU::new();
+
+    // LD (BC), A
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, 0b00_00_0010);
+    cpu.registers.b = 2;
+    cpu.registers.c = 1;
+    cpu.registers.a = 3;
+    cpu.execute();
+    assert_eq!(cpu.registers.pc, pc + 1);
+    assert_eq!(cpu.mmu.byte_get(0x201), 3);
+
+    // LD (DE), A
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, 0b00_01_0010);
+    cpu.registers.d = 3;
+    cpu.registers.e = 2;
+    cpu.registers.a = 4;
+    cpu.execute();
+    assert_eq!(cpu.registers.pc, pc + 1);
+    assert_eq!(cpu.mmu.byte_get(0x302), 4);
+}
