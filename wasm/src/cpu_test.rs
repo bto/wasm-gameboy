@@ -18,45 +18,22 @@ fn test_new() {
 fn test_op_ld_r_n() {
     let mut cpu = CPU::new();
 
-    // LD B, n
-    let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0x06, 1);
-    cpu.execute();
-    assert_eq!(cpu.registers.pc, pc + 2);
-    assert_eq!(cpu.registers.b, 1);
-
-    // LD C, n
-    let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0x0E, 2);
-    cpu.execute();
-    assert_eq!(cpu.registers.pc, pc + 2);
-    assert_eq!(cpu.registers.c, 2);
-
-    // LD D, n
-    let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0x16, 3);
-    cpu.execute();
-    assert_eq!(cpu.registers.pc, pc + 2);
-    assert_eq!(cpu.registers.d, 3);
-
-    // LD E, n
-    let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0x1E, 4);
-    cpu.execute();
-    assert_eq!(cpu.registers.pc, pc + 2);
-    assert_eq!(cpu.registers.e, 4);
-
-    // LD H, n
-    let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0x26, 5);
-    cpu.execute();
-    assert_eq!(cpu.registers.pc, pc + 2);
-    assert_eq!(cpu.registers.h, 5);
-
-    // LD L, n
-    let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0x2E, 6);
-    cpu.execute();
-    assert_eq!(cpu.registers.pc, pc + 2);
-    assert_eq!(cpu.registers.l, 6);
+    let opcode_base = 0b00_000_110;
+    for i in [0b000, 0b001, 0b010, 0b011, 0b100, 0b101, 0b111].iter() {
+        let pc = cpu.registers.pc;
+        let opcode = opcode_base | (i << 3);
+        set_inst!(cpu, pc, opcode, *i);
+        cpu.execute();
+        assert_eq!(cpu.registers.pc, pc + 2);
+        match i {
+            0b000 => assert_eq!(cpu.registers.b, *i),
+            0b001 => assert_eq!(cpu.registers.c, *i),
+            0b010 => assert_eq!(cpu.registers.d, *i),
+            0b011 => assert_eq!(cpu.registers.e, *i),
+            0b100 => assert_eq!(cpu.registers.h, *i),
+            0b101 => assert_eq!(cpu.registers.l, *i),
+            0b111 => assert_eq!(cpu.registers.a, *i),
+            _ => panic!("never reach"),
+        }
+    }
 }
