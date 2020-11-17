@@ -51,6 +51,7 @@ impl CPU {
             0b00_101_110 => op_ld_r_n!(self, l),
             0b00_110_110 => op_ld_hl_n!(self),
             0b00_111_110 => op_ld_r_n!(self, a),
+
             0b01_000_000 => op_ld_r_r!(self, b, b),
             0b01_000_001 => op_ld_r_r!(self, b, c),
             0b01_000_010 => op_ld_r_r!(self, b, d),
@@ -59,6 +60,7 @@ impl CPU {
             0b01_000_101 => op_ld_r_r!(self, b, l),
             0b01_000_110 => op_ld_r_hl!(self, b),
             0b01_000_111 => op_ld_r_r!(self, b, a),
+
             0b01_001_000 => op_ld_r_r!(self, c, b),
             0b01_001_001 => op_ld_r_r!(self, c, c),
             0b01_001_010 => op_ld_r_r!(self, c, d),
@@ -67,6 +69,7 @@ impl CPU {
             0b01_001_101 => op_ld_r_r!(self, c, l),
             0b01_001_110 => op_ld_r_hl!(self, c),
             0b01_001_111 => op_ld_r_r!(self, c, a),
+
             0b01_010_000 => op_ld_r_r!(self, d, b),
             0b01_010_001 => op_ld_r_r!(self, d, c),
             0b01_010_010 => op_ld_r_r!(self, d, d),
@@ -75,6 +78,7 @@ impl CPU {
             0b01_010_101 => op_ld_r_r!(self, d, l),
             0b01_010_110 => op_ld_r_hl!(self, d),
             0b01_010_111 => op_ld_r_r!(self, d, a),
+
             0b01_011_000 => op_ld_r_r!(self, e, b),
             0b01_011_001 => op_ld_r_r!(self, e, c),
             0b01_011_010 => op_ld_r_r!(self, e, d),
@@ -83,6 +87,7 @@ impl CPU {
             0b01_011_101 => op_ld_r_r!(self, e, l),
             0b01_011_110 => op_ld_r_hl!(self, e),
             0b01_011_111 => op_ld_r_r!(self, e, a),
+
             0b01_100_000 => op_ld_r_r!(self, h, b),
             0b01_100_001 => op_ld_r_r!(self, h, c),
             0b01_100_010 => op_ld_r_r!(self, h, d),
@@ -91,6 +96,7 @@ impl CPU {
             0b01_100_101 => op_ld_r_r!(self, h, l),
             0b01_100_110 => op_ld_r_hl!(self, h),
             0b01_100_111 => op_ld_r_r!(self, h, a),
+
             0b01_101_000 => op_ld_r_r!(self, l, b),
             0b01_101_001 => op_ld_r_r!(self, l, c),
             0b01_101_010 => op_ld_r_r!(self, l, d),
@@ -99,6 +105,7 @@ impl CPU {
             0b01_101_101 => op_ld_r_r!(self, l, l),
             0b01_101_110 => op_ld_r_hl!(self, l),
             0b01_101_111 => op_ld_r_r!(self, l, a),
+
             0b01_111_000 => op_ld_r_r!(self, a, b),
             0b01_111_001 => op_ld_r_r!(self, a, c),
             0b01_111_010 => op_ld_r_r!(self, a, d),
@@ -107,6 +114,7 @@ impl CPU {
             0b01_111_101 => op_ld_r_r!(self, a, l),
             0b01_111_110 => op_ld_r_hl!(self, a),
             0b01_111_111 => op_ld_r_r!(self, a, a),
+
             _ => panic!("not implemented instruction"),
         }
     }
