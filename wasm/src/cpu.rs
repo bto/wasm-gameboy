@@ -38,20 +38,6 @@ macro_rules! register16_store {
     };
 }
 
-macro_rules! op_ld_rr_n {
-    ( $self:ident, $dest:ident ) => {{
-        let value = $self.fetch_byte();
-        register16_store!($self, $dest, value);
-    }};
-}
-
-macro_rules! op_ld_rr_r {
-    ( $self:ident, $dest:ident, $src:ident ) => {{
-        let value = $self.registers.$src;
-        register16_store!($self, $dest, value);
-    }};
-}
-
 macro_rules! op_ld_r_n {
     ( $self:ident, $dest:ident ) => {{
         $self.registers.$dest = $self.fetch_byte();
@@ -67,6 +53,20 @@ macro_rules! op_ld_r_r {
 macro_rules! op_ld_r_rr {
     ( $self:ident, $dest:ident, $src:ident ) => {{
         $self.registers.$dest = register16_load!($self, $src);
+    }};
+}
+
+macro_rules! op_ld_rr_n {
+    ( $self:ident, $dest:ident ) => {{
+        let value = $self.fetch_byte();
+        register16_store!($self, $dest, value);
+    }};
+}
+
+macro_rules! op_ld_rr_r {
+    ( $self:ident, $dest:ident, $src:ident ) => {{
+        let value = $self.registers.$src;
+        register16_store!($self, $dest, value);
     }};
 }
 
