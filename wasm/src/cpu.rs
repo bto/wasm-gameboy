@@ -1,6 +1,14 @@
 use super::mmu::MMU;
 use super::registers::Registers;
 
+macro_rules! op_ld_a_rr {
+    ( $self:ident, $src:ident ) => {{
+        let addr = $self.registers.$src();
+        let value = $self.mmu.byte_get(addr);
+        $self.registers.a = value;
+    }};
+}
+
 macro_rules! op_ld_hl_n {
     ( $self:ident ) => {{
         let addr = $self.registers.hl_get();
@@ -51,6 +59,9 @@ impl CPU {
 
     fn execute(&mut self) {
         match self.fetch_byte() {
+            0b00_00_1010 => op_ld_a_rr!(self, bc_get),
+            0b00_01_1010 => op_ld_a_rr!(self, de_get),
+
             0b00_000_110 => op_ld_r_n!(self, b),
             0b00_001_110 => op_ld_r_n!(self, c),
             0b00_010_110 => op_ld_r_n!(self, d),

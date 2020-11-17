@@ -19,6 +19,31 @@ fn test_new() {
 }
 
 #[test]
+fn test_op_ld_a_rr() {
+    let mut cpu = CPU::new();
+
+    // LD A, (BC)
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, 0b00_00_1010);
+    cpu.registers.b = 2;
+    cpu.registers.c = 1;
+    cpu.mmu.byte_set(0x201, 3);
+    cpu.execute();
+    assert_eq!(cpu.registers.pc, pc + 1);
+    assert_eq!(cpu.mmu.byte_get(0x201), 3);
+
+    // LD A, (DE)
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, 0b00_01_1010);
+    cpu.registers.d = 3;
+    cpu.registers.e = 2;
+    cpu.mmu.byte_set(0x302, 4);
+    cpu.execute();
+    assert_eq!(cpu.registers.pc, pc + 1);
+    assert_eq!(cpu.mmu.byte_get(0x302), 4);
+}
+
+#[test]
 fn test_op_ld_hl_n() {
     let mut cpu = CPU::new();
 
