@@ -1,46 +1,66 @@
 use super::mmu::MMU;
 use super::registers::Registers;
 
-macro_rules! op_ld_a_rr {
+macro_rules! register16_load {
     ( $self:ident, bc ) => {
-        op_ld_a_rr!($self, bc_get)
+        register16_load!($self, bc_get)
     };
 
     ( $self:ident, de ) => {
-        op_ld_a_rr!($self, de_get)
+        register16_load!($self, de_get)
     };
 
     ( $self:ident, hl ) => {
-        op_ld_a_rr!($self, hl_get)
+        register16_load!($self, hl_get)
     };
 
-    ( $self:ident, $method:ident ) => {{
+    ( $self:ident, $method:ident ) => {
+        $self.mmu.byte_get($self.registers.$method())
+    };
+}
+
+macro_rules! register16_store {
+    ( $self:ident, bc, $value:expr ) => {
+        register16_store!($self, bc_get, $value);
+    };
+
+    ( $self:ident, de, $value:expr ) => {
+        register16_store!($self, de_get, $value);
+    };
+
+    ( $self:ident, hl, $value:expr ) => {
+        register16_store!($self, hl_get, $value);
+    };
+
+    ( $self:ident, $method:ident, $value:expr ) => {
         let addr = $self.registers.$method();
-        let value = $self.mmu.byte_get(addr);
-        $self.registers.a = value;
-    }};
+        $self.mmu.byte_set(addr, $value);
+    };
+}
+
+macro_rules! op_ld_a_rr {
+    ( $self:ident, $src:ident ) => {
+        $self.registers.a = register16_load!($self, $src);
+    };
 }
 
 macro_rules! op_ld_hl_n {
     ( $self:ident ) => {{
-        let addr = $self.registers.hl_get();
         let value = $self.fetch_byte();
-        $self.mmu.byte_set(addr, value);
+        register16_store!($self, hl, value);
     }};
 }
 
 macro_rules! op_ld_hl_r {
     ( $self:ident, $src:ident ) => {{
-        let addr = $self.registers.hl_get();
         let value = $self.registers.$src;
-        $self.mmu.byte_set(addr, value);
+        register16_store!($self, hl, value);
     }};
 }
 
 macro_rules! op_ld_r_hl {
     ( $self:ident, $dest:ident ) => {{
-        let addr = $self.registers.hl_get();
-        $self.registers.$dest = $self.mmu.byte_get(addr);
+        $self.registers.$dest = register16_load!($self, hl);
     }};
 }
 
@@ -71,9 +91,6 @@ impl CPU {
 
     fn execute(&mut self) {
         match self.fetch_byte() {
-            0b00_00_1010 => op_ld_a_rr!(self, bc),
-            0b00_01_1010 => op_ld_a_rr!(self, de),
-
             0b00_000_110 => op_ld_r_n!(self, b),
             0b00_001_110 => op_ld_r_n!(self, c),
             0b00_010_110 => op_ld_r_n!(self, d),
@@ -154,6 +171,9 @@ impl CPU {
             0b01_111_101 => op_ld_r_r!(self, a, l),
             0b01_111_110 => op_ld_r_hl!(self, a),
             0b01_111_111 => op_ld_r_r!(self, a, a),
+
+            0b00_00_1010 => op_ld_a_rr!(self, bc),
+            0b00_01_1010 => op_ld_a_rr!(self, de),
 
             _ => panic!("not implemented instruction"),
         }
