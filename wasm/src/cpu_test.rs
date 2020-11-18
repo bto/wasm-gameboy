@@ -396,3 +396,20 @@ fn test_op_0b00_rr_0001() {
         }
     }
 }
+
+#[test]
+fn test_op_0b00001000() {
+    let mut cpu = CPU::new();
+
+    // LD (nn), SP
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, 0b00001000, 2, 3);
+
+    cpu.registers.sp = 0x405;
+
+    cpu.execute();
+
+    assert_eq!(cpu.registers.pc, pc + 3);
+    assert_eq!(cpu.mmu.byte_get(0x302), 5);
+    assert_eq!(cpu.mmu.byte_get(0x303), 4);
+}

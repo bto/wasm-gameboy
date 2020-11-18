@@ -65,6 +65,14 @@ macro_rules! op_ld_nn_r {
     }};
 }
 
+macro_rules! op_ld_nn_rr {
+    ( $self:ident, $src:ident ) => {{
+        let addr = $self.fetch_word();
+        let value = register16_get!($self, $src);
+        $self.mmu.word_set(addr, value)
+    }};
+}
+
 macro_rules! op_ld_r_n {
     ( $self:ident, $dest:ident ) => {{
         $self.registers.$dest = $self.fetch_byte();
@@ -293,6 +301,8 @@ impl CPU {
             0b00_01_0001 => op_ld_rr_nn!(self, de),
             0b00_10_0001 => op_ld_rr_nn!(self, hl),
             0b00_11_0001 => op_ld_rr_nn!(self, sp),
+
+            0b00001000 => op_ld_nn_rr!(self, sp),
 
             _ => panic!("not implemented instruction"),
         }
