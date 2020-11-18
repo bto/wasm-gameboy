@@ -1,41 +1,54 @@
 use super::mmu::MMU;
 use super::registers::Registers;
 
-macro_rules! register16_load {
+macro_rules! register16_get {
     ( $self:ident, bc ) => {
-        register16_load!($self, bc_get)
+        register16_get!($self, bc_get)
     };
 
     ( $self:ident, de ) => {
-        register16_load!($self, de_get)
+        register16_get!($self, de_get)
     };
 
     ( $self:ident, hl ) => {
-        register16_load!($self, hl_get)
+        register16_get!($self, hl_get)
     };
 
     ( $self:ident, $method:ident ) => {
-        $self.mmu.byte_get($self.registers.$method())
+        $self.registers.$method()
     };
 }
 
-macro_rules! register16_store {
+macro_rules! register16_set {
     ( $self:ident, bc, $value:expr ) => {
-        register16_store!($self, bc_get, $value);
+        register16_set!($self, bc_set, $value)
     };
 
     ( $self:ident, de, $value:expr ) => {
-        register16_store!($self, de_get, $value);
+        register16_set!($self, de_set, $value)
     };
 
     ( $self:ident, hl, $value:expr ) => {
-        register16_store!($self, hl_get, $value);
+        register16_set!($self, hl_set, $value)
     };
 
     ( $self:ident, $method:ident, $value:expr ) => {
-        let addr = $self.registers.$method();
-        $self.mmu.byte_set(addr, $value);
+        $self.registers.$method($value)
     };
+}
+
+macro_rules! register16_load {
+    ( $self:ident, $register:ident ) => {{
+        let addr = register16_get!($self, $register);
+        $self.mmu.byte_get(addr)
+    }};
+}
+
+macro_rules! register16_store {
+    ( $self:ident, $register:ident, $value:expr ) => {{
+        let addr = register16_get!($self, $register);
+        $self.mmu.byte_set(addr, $value);
+    }};
 }
 
 macro_rules! op_ld_nn_r {
@@ -79,6 +92,14 @@ macro_rules! op_ld_rr_r {
     ( $self:ident, $dest:ident, $src:ident ) => {{
         let value = $self.registers.$src;
         register16_store!($self, $dest, value);
+    }};
+}
+
+macro_rules! op_ldd_r_rr {
+    ( $self:ident, $dest:ident, $src:ident ) => {{
+        let addr = register16_get!($self, $src);
+        $self.registers.$dest = $self.mmu.byte_get(addr);
+        register16_set!($self, $src, addr - 1);
     }};
 }
 
@@ -195,6 +216,7 @@ impl CPU {
 
             0b00_00_1010 => op_ld_r_rr!(self, a, bc),
             0b00_01_1010 => op_ld_r_rr!(self, a, de),
+            0b00_10_1010 => op_ldd_r_rr!(self, a, hl),
 
             0b00_00_0010 => op_ld_rr_r!(self, bc, a),
             0b00_01_0010 => op_ld_rr_r!(self, de, a),
