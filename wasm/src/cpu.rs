@@ -110,6 +110,14 @@ macro_rules! op_ldh_r_rh {
     }};
 }
 
+macro_rules! op_ldi_r_rr {
+    ( $self:ident, $dest:ident, $src:ident ) => {{
+        let addr = register16_get!($self, $src);
+        $self.registers.$dest = $self.mmu.byte_get(addr);
+        register16_set!($self, $src, addr + 1);
+    }};
+}
+
 macro_rules! op_ldh_rh_r {
     ( $self:ident, $dest:ident, $src:ident ) => {{
         let addr = 0xFF00 | $self.registers.$dest as u16;
@@ -216,7 +224,8 @@ impl CPU {
 
             0b00_00_1010 => op_ld_r_rr!(self, a, bc),
             0b00_01_1010 => op_ld_r_rr!(self, a, de),
-            0b00_10_1010 => op_ldd_r_rr!(self, a, hl),
+            0b00_10_1010 => op_ldi_r_rr!(self, a, hl),
+            0b00_11_1010 => op_ldd_r_rr!(self, a, hl),
 
             0b00_00_0010 => op_ld_rr_r!(self, bc, a),
             0b00_01_0010 => op_ld_rr_r!(self, de, a),
