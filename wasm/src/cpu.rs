@@ -118,6 +118,13 @@ macro_rules! op_ld_rr_r {
     }};
 }
 
+macro_rules! op_ld_rr_rr {
+    ( $self:ident, $dest:ident, $src:ident ) => {{
+        let value = register16_get!($self, $src);
+        register16_set!($self, $dest, value);
+    }};
+}
+
 macro_rules! op_ldd_r_rr {
     ( $self:ident, $dest:ident, $src:ident ) => {{
         let addr = register16_get!($self, $src);
@@ -303,6 +310,8 @@ impl CPU {
             0b00_11_0001 => op_ld_rr_nn!(self, sp),
 
             0b00001000 => op_ld_nn_rr!(self, sp),
+
+            0b11111001 => op_ld_rr_rr!(self, sp, hl),
 
             _ => panic!("not implemented instruction"),
         }

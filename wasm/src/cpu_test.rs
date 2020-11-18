@@ -413,3 +413,20 @@ fn test_op_0b00001000() {
     assert_eq!(cpu.mmu.byte_get(0x302), 5);
     assert_eq!(cpu.mmu.byte_get(0x303), 4);
 }
+
+#[test]
+fn test_op_0b11111001() {
+    let mut cpu = CPU::new();
+
+    // LD SP, HL
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, 0b11111001);
+
+    cpu.registers.h = 1;
+    cpu.registers.l = 2;
+
+    cpu.execute();
+
+    assert_eq!(cpu.registers.pc, pc + 1);
+    assert_eq!(cpu.registers.sp, 0x102);
+}
