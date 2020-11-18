@@ -34,6 +34,29 @@ impl Registers {
         }
     }
 
+    pub fn f_get(&self) -> u8 {
+        (self.carry as u8) << 4
+            | (self.half_carry as u8) << 5
+            | (self.subtraction as u8) << 6
+            | (self.zero as u8) << 7
+    }
+
+    pub fn f_set(&mut self, value: u8) {
+        self.carry = (value >> 4 & 1) != 0;
+        self.half_carry = (value >> 5 & 1) != 0;
+        self.subtraction = (value >> 6 & 1) != 0;
+        self.zero = (value >> 7) != 0;
+    }
+
+    pub fn af_get(&self) -> u16 {
+        (self.a as u16) << 8 | self.f_get() as u16
+    }
+
+    pub fn af_set(&mut self, value: u16) {
+        self.a = (value >> 8) as u8;
+        self.f_set((value & 0xFF) as u8);
+    }
+
     pub fn bc_get(&self) -> u16 {
         (self.b as u16) << 8 | self.c as u16
     }

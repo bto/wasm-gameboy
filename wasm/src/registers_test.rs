@@ -19,6 +19,51 @@ fn test_new() {
 }
 
 #[test]
+fn test_f() {
+    let mut registers = Registers::new();
+    assert_eq!(registers.f_get(), 0);
+
+    registers.f_set(0b1111_1111);
+    assert_eq!(registers.f_get(), 0b1111_0000);
+    assert_eq!(registers.carry, true);
+    assert_eq!(registers.half_carry, true);
+    assert_eq!(registers.subtraction, true);
+    assert_eq!(registers.zero, true);
+
+    registers.carry = false;
+    assert_eq!(registers.f_get(), 0b1110_0000);
+
+    registers.half_carry = false;
+    assert_eq!(registers.f_get(), 0b1100_0000);
+
+    registers.subtraction = false;
+    assert_eq!(registers.f_get(), 0b1000_0000);
+
+    registers.zero = false;
+    assert_eq!(registers.f_get(), 0b0000_0000);
+}
+
+#[test]
+fn test_af() {
+    let mut registers = Registers::new();
+    assert_eq!(registers.af_get(), 0);
+
+    registers.af_set(0x01FF);
+    assert_eq!(registers.af_get(), 0x01F0);
+    assert_eq!(registers.a, 1);
+    assert_eq!(registers.carry, true);
+    assert_eq!(registers.half_carry, true);
+    assert_eq!(registers.subtraction, true);
+    assert_eq!(registers.zero, true);
+
+    registers.a = 2;
+    assert_eq!(registers.af_get(), 0x02F0);
+
+    registers.carry = false;
+    assert_eq!(registers.af_get(), 0x02E0);
+}
+
+#[test]
 fn test_bc() {
     let mut registers = Registers::new();
     assert_eq!(registers.bc_get(), 0);
