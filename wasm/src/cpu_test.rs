@@ -315,3 +315,35 @@ fn test_op_0b11110010() {
     assert_eq!(cpu.registers.pc, pc + 1);
     assert_eq!(cpu.registers.a, 2);
 }
+
+#[test]
+fn test_op_0b11100000() {
+    let mut cpu = CPU::new();
+
+    // LDH (n), A
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, 0b11100000, 1);
+
+    cpu.registers.a = 2;
+
+    cpu.execute();
+
+    assert_eq!(cpu.registers.pc, pc + 2);
+    assert_eq!(cpu.mmu.byte_get(0xFF01), 2);
+}
+
+#[test]
+fn test_op_0b11110000() {
+    let mut cpu = CPU::new();
+
+    // LDH A, (n)
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, 0b11110000, 1);
+
+    cpu.mmu.byte_set(0xFF01, 2);
+
+    cpu.execute();
+
+    assert_eq!(cpu.registers.pc, pc + 2);
+    assert_eq!(cpu.registers.a, 2);
+}

@@ -103,6 +103,13 @@ macro_rules! op_ldd_r_rr {
     }};
 }
 
+macro_rules! op_ldh_r_nh {
+    ( $self:ident, $dest:ident ) => {{
+        let addr = 0xFF00 | $self.fetch_byte() as u16;
+        $self.registers.$dest = $self.mmu.byte_get(addr);
+    }};
+}
+
 macro_rules! op_ldh_r_rh {
     ( $self:ident, $dest:ident, $src:ident ) => {{
         let addr = 0xFF00 | $self.registers.$src as u16;
@@ -110,11 +117,11 @@ macro_rules! op_ldh_r_rh {
     }};
 }
 
-macro_rules! op_ldi_r_rr {
-    ( $self:ident, $dest:ident, $src:ident ) => {{
-        let addr = register16_get!($self, $src);
-        $self.registers.$dest = $self.mmu.byte_get(addr);
-        register16_set!($self, $src, addr + 1);
+macro_rules! op_ldh_nh_r {
+    ( $self:ident, $src:ident ) => {{
+        let addr = 0xFF00 | $self.fetch_byte() as u16;
+        let value = $self.registers.$src;
+        $self.mmu.byte_set(addr, value);
     }};
 }
 
@@ -123,6 +130,14 @@ macro_rules! op_ldh_rh_r {
         let addr = 0xFF00 | $self.registers.$dest as u16;
         let value = $self.registers.$src;
         $self.mmu.byte_set(addr, value);
+    }};
+}
+
+macro_rules! op_ldi_r_rr {
+    ( $self:ident, $dest:ident, $src:ident ) => {{
+        let addr = register16_get!($self, $src);
+        $self.registers.$dest = $self.mmu.byte_get(addr);
+        register16_set!($self, $src, addr + 1);
     }};
 }
 
@@ -235,6 +250,9 @@ impl CPU {
 
             0b11100010 => op_ldh_rh_r!(self, c, a),
             0b11110010 => op_ldh_r_rh!(self, a, c),
+
+            0b11100000 => op_ldh_nh_r!(self, a),
+            0b11110000 => op_ldh_r_nh!(self, a),
 
             _ => panic!("not implemented instruction"),
         }
