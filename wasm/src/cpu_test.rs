@@ -251,22 +251,6 @@ fn test_op_0b00_rr_0010() {
 }
 
 #[test]
-fn test_op_0b11111010() {
-    let mut cpu = CPU::new();
-
-    // LD A, (nn)
-    let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0b11111010, 2, 3);
-
-    cpu.mmu.byte_set(0x302, 4);
-
-    cpu.execute();
-
-    assert_eq!(cpu.registers.pc, pc + 3);
-    assert_eq!(cpu.registers.a, 4);
-}
-
-#[test]
 fn test_op_0b11101010() {
     let mut cpu = CPU::new();
 
@@ -283,20 +267,19 @@ fn test_op_0b11101010() {
 }
 
 #[test]
-fn test_op_0b11110010() {
+fn test_op_0b11111010() {
     let mut cpu = CPU::new();
 
-    // LDH A, (C)
+    // LD A, (nn)
     let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0b11110010);
+    set_inst!(cpu, pc, 0b11111010, 2, 3);
 
-    cpu.registers.c = 1;
-    cpu.mmu.byte_set(0xFF01, 2);
+    cpu.mmu.byte_set(0x302, 4);
 
     cpu.execute();
 
-    assert_eq!(cpu.registers.pc, pc + 1);
-    assert_eq!(cpu.registers.a, 2);
+    assert_eq!(cpu.registers.pc, pc + 3);
+    assert_eq!(cpu.registers.a, 4);
 }
 
 #[test]
@@ -314,4 +297,21 @@ fn test_0b11100010() {
 
     assert_eq!(cpu.registers.pc, pc + 1);
     assert_eq!(cpu.mmu.byte_get(0xFF02), 1);
+}
+
+#[test]
+fn test_op_0b11110010() {
+    let mut cpu = CPU::new();
+
+    // LDH A, (C)
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, 0b11110010);
+
+    cpu.registers.c = 1;
+    cpu.mmu.byte_set(0xFF01, 2);
+
+    cpu.execute();
+
+    assert_eq!(cpu.registers.pc, pc + 1);
+    assert_eq!(cpu.registers.a, 2);
 }

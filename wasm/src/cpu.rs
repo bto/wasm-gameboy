@@ -230,11 +230,11 @@ impl CPU {
             0b00_00_0010 => op_ld_rr_r!(self, bc, a),
             0b00_01_0010 => op_ld_rr_r!(self, de, a),
 
-            0b11111010 => op_ld_r_nn!(self, a),
             0b11101010 => op_ld_nn_r!(self, a),
+            0b11111010 => op_ld_r_nn!(self, a),
 
-            0b11110010 => op_ldh_r_rh!(self, a, c),
             0b11100010 => op_ldh_rh_r!(self, c, a),
+            0b11110010 => op_ldh_r_rh!(self, a, c),
 
             _ => panic!("not implemented instruction"),
         }
