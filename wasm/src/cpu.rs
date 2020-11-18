@@ -2,6 +2,10 @@ use super::mmu::MMU;
 use super::registers::Registers;
 
 macro_rules! register16_get {
+    ( $self:ident, af ) => {
+        register16_get!($self, af_get)
+    };
+
     ( $self:ident, bc ) => {
         register16_get!($self, bc_get)
     };
@@ -24,6 +28,10 @@ macro_rules! register16_get {
 }
 
 macro_rules! register16_set {
+    ( $self:ident, af, $value:expr ) => {
+        register16_set!($self, af_set, $value)
+    };
+
     ( $self:ident, bc, $value:expr ) => {
         register16_set!($self, bc_set, $value)
     };
@@ -189,6 +197,16 @@ macro_rules! op_ldi_rr_r {
     }};
 }
 
+macro_rules! op_push_rr {
+    ( $self:ident, $src:ident ) => {{
+        let value = register16_get!($self, $src);
+        $self.registers.sp -= 1;
+        $self.mmu.byte_set($self.registers.sp, (value >> 8) as u8);
+        $self.registers.sp -= 1;
+        $self.mmu.byte_set($self.registers.sp, (value & 0xFF) as u8);
+    }};
+}
+
 struct CPU {
     mmu: MMU,
     registers: Registers,
@@ -312,6 +330,11 @@ impl CPU {
             0b00001000 => op_ld_nn_rr!(self, sp),
 
             0b11111001 => op_ld_rr_rr!(self, sp, hl),
+
+            0b11_00_0101 => op_push_rr!(self, bc),
+            0b11_01_0101 => op_push_rr!(self, de),
+            0b11_10_0101 => op_push_rr!(self, hl),
+            0b11_11_0101 => op_push_rr!(self, af),
 
             _ => panic!("not implemented instruction"),
         }
