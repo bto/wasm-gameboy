@@ -82,6 +82,13 @@ macro_rules! op_ld_rr_r {
     }};
 }
 
+macro_rules! op_ldh_r_r {
+    ( $self:ident, $dest:ident, $src:ident ) => {{
+        let addr = 0xFF00 | $self.registers.$src as u16;
+        $self.registers.$dest = $self.mmu.byte_get(addr);
+    }};
+}
+
 struct CPU {
     mmu: MMU,
     registers: Registers,
@@ -186,6 +193,8 @@ impl CPU {
 
             0b11111010 => op_ld_r_nn!(self, a),
             0b11101010 => op_ld_nn_r!(self, a),
+
+            0b11110010 => op_ldh_r_r!(self, a, c),
 
             _ => panic!("not implemented instruction"),
         }
