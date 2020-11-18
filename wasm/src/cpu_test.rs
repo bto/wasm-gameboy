@@ -25,7 +25,7 @@ fn test_new() {
 }
 
 #[test]
-fn test_op_0b00_DDD_110() {
+fn test_op_0b00_ddd_110() {
     // LD r, n
     let mut cpu = CPU::new();
 
@@ -70,7 +70,7 @@ fn test_op_0b00_110_110() {
 }
 
 #[test]
-fn test_op_0b01_DDD_SSS() {
+fn test_op_0b01_ddd_sss() {
     // LD r, r
     let mut cpu = CPU::new();
 
@@ -111,7 +111,7 @@ fn test_op_0b01_DDD_SSS() {
 }
 
 #[test]
-fn test_op_0b01_DDD_110() {
+fn test_op_0b01_ddd_110() {
     // LD r, (HL)
     let mut cpu = CPU::new();
 
@@ -143,7 +143,7 @@ fn test_op_0b01_DDD_110() {
 }
 
 #[test]
-fn test_op_0b01_110_SSS() {
+fn test_op_0b01_110_sss() {
     // LD (HL), r
     let mut cpu = CPU::new();
 
@@ -176,7 +176,7 @@ fn test_op_0b01_110_SSS() {
 }
 
 #[test]
-fn test_op_0b00_RR_1010() {
+fn test_op_0b00_rr_1010() {
     // LD A, (rr)
     let mut cpu = CPU::new();
 
@@ -226,7 +226,7 @@ fn test_op_0b00_RR_1010() {
 }
 
 #[test]
-fn test_op_0b00_RR_0010() {
+fn test_op_0b00_rr_0010() {
     let mut cpu = CPU::new();
 
     // LD (BC), A
