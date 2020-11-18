@@ -14,6 +14,10 @@ macro_rules! register16_get {
         register16_get!($self, hl_get)
     };
 
+    ( $self:ident, sp ) => {
+        $self.registers.sp
+    };
+
     ( $self:ident, $method:ident ) => {
         $self.registers.$method()
     };
@@ -30,6 +34,10 @@ macro_rules! register16_set {
 
     ( $self:ident, hl, $value:expr ) => {
         register16_set!($self, hl_set, $value)
+    };
+
+    ( $self:ident, sp, $value:expr ) => {
+        $self.registers.sp = $value
     };
 
     ( $self:ident, $method:ident, $value:expr ) => {
@@ -85,6 +93,13 @@ macro_rules! op_ld_rr_n {
     ( $self:ident, $dest:ident ) => {{
         let value = $self.fetch_byte();
         register16_store!($self, $dest, value);
+    }};
+}
+
+macro_rules! op_ld_rr_nn {
+    ( $self:ident, $dest:ident ) => {{
+        let value = $self.fetch_word();
+        register16_set!($self, $dest, value);
     }};
 }
 
@@ -273,6 +288,11 @@ impl CPU {
 
             0b11100000 => op_ldh_nh_r!(self, a),
             0b11110000 => op_ldh_r_nh!(self, a),
+
+            0b00_00_0001 => op_ld_rr_nn!(self, bc),
+            0b00_01_0001 => op_ld_rr_nn!(self, de),
+            0b00_10_0001 => op_ld_rr_nn!(self, hl),
+            0b00_11_0001 => op_ld_rr_nn!(self, sp),
 
             _ => panic!("not implemented instruction"),
         }
