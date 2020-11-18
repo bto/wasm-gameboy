@@ -197,6 +197,14 @@ macro_rules! op_ldi_rr_r {
     }};
 }
 
+macro_rules! op_pop_rr {
+    ( $self:ident, $src:ident ) => {{
+        let value = $self.mmu.word_get($self.registers.sp);
+        $self.registers.sp += 2;
+        register16_set!($self, $src, value)
+    }};
+}
+
 macro_rules! op_push_rr {
     ( $self:ident, $src:ident ) => {{
         let value = register16_get!($self, $src);
@@ -335,6 +343,11 @@ impl CPU {
             0b11_01_0101 => op_push_rr!(self, de),
             0b11_10_0101 => op_push_rr!(self, hl),
             0b11_11_0101 => op_push_rr!(self, af),
+
+            0b11_00_0001 => op_pop_rr!(self, bc),
+            0b11_01_0001 => op_pop_rr!(self, de),
+            0b11_10_0001 => op_pop_rr!(self, hl),
+            0b11_11_0001 => op_pop_rr!(self, af),
 
             _ => panic!("not implemented instruction"),
         }
