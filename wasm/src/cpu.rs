@@ -103,6 +103,15 @@ macro_rules! op_ldd_r_rr {
     }};
 }
 
+macro_rules! op_ldd_rr_r {
+    ( $self:ident, $dest:ident, $src:ident ) => {{
+        let addr = register16_get!($self, $dest);
+        let value = $self.registers.$src;
+        $self.mmu.byte_set(addr, value);
+        register16_set!($self, $dest, addr - 1);
+    }};
+}
+
 macro_rules! op_ldh_r_nh {
     ( $self:ident, $dest:ident ) => {{
         let addr = 0xFF00 | $self.fetch_byte() as u16;
@@ -138,6 +147,15 @@ macro_rules! op_ldi_r_rr {
         let addr = register16_get!($self, $src);
         $self.registers.$dest = $self.mmu.byte_get(addr);
         register16_set!($self, $src, addr + 1);
+    }};
+}
+
+macro_rules! op_ldi_rr_r {
+    ( $self:ident, $dest:ident, $src:ident ) => {{
+        let addr = register16_get!($self, $dest);
+        let value = $self.registers.$src;
+        $self.mmu.byte_set(addr, value);
+        register16_set!($self, $dest, addr + 1);
     }};
 }
 
@@ -244,6 +262,8 @@ impl CPU {
 
             0b00_00_0010 => op_ld_rr_r!(self, bc, a),
             0b00_01_0010 => op_ld_rr_r!(self, de, a),
+            0b00_10_0010 => op_ldi_rr_r!(self, hl, a),
+            0b00_11_0010 => op_ldd_rr_r!(self, hl, a),
 
             0b11101010 => op_ld_nn_r!(self, a),
             0b11111010 => op_ld_r_nn!(self, a),
