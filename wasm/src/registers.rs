@@ -9,10 +9,10 @@ pub struct Registers {
     pub l: u8,
     pub pc: u16,
     pub sp: u16,
-    carry: bool,
-    half_carry: bool,
-    subtraction: bool,
-    zero: bool,
+    pub carry: bool,
+    pub half_carry: bool,
+    pub subtraction: bool,
+    pub zero: bool,
 }
 
 impl Registers {
