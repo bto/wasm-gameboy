@@ -67,6 +67,34 @@ macro_rules! register16_store {
     }};
 }
 
+macro_rules! op_adc_r {
+    ( $self:ident, $dest:ident, $value:expr ) => {{
+        let x = $self.registers.$dest as u16;
+        let y = $value;
+        let c = $self.registers.carry as u16;
+        let r = x + y + c;
+        $self.registers.$dest = r as u8;
+        $self.registers.carry = r > 0xFF;
+        $self.registers.half_carry = (x & 0xF) + (y & 0xF) + c > 0xF;
+        $self.registers.subtraction = false;
+        $self.registers.zero = $self.registers.$dest == 0;
+    }};
+}
+
+macro_rules! op_adc_r_r {
+    ( $self:ident, $dest:ident, $src:ident ) => {{
+        let value = $self.registers.$src as u16;
+        op_adc_r!($self, $dest, value)
+    }};
+}
+
+macro_rules! op_adc_r_rr {
+    ( $self:ident, $dest:ident, $src:ident ) => {{
+        let value = register16_load!($self, $src) as u16;
+        op_adc_r!($self, $dest, value)
+    }};
+}
+
 macro_rules! op_add_r {
     ( $self:ident, $dest:ident, $value:expr ) => {{
         let x = $self.registers.$dest as u16;
@@ -384,6 +412,15 @@ impl CPU {
             0b10000_101 => op_add_r_r!(self, a, l),
             0b10000_110 => op_add_r_rr!(self, a, hl),
             0b10000_111 => op_add_r_r!(self, a, a),
+
+            0b10001_000 => op_adc_r_r!(self, a, b),
+            0b10001_001 => op_adc_r_r!(self, a, c),
+            0b10001_010 => op_adc_r_r!(self, a, d),
+            0b10001_011 => op_adc_r_r!(self, a, e),
+            0b10001_100 => op_adc_r_r!(self, a, h),
+            0b10001_101 => op_adc_r_r!(self, a, l),
+            0b10001_110 => op_adc_r_rr!(self, a, hl),
+            0b10001_111 => op_adc_r_r!(self, a, a),
 
             _ => panic!("not implemented instruction"),
         }
