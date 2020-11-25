@@ -294,7 +294,7 @@ impl CPU {
             0b00_110_110 => op_ld_rr_n!(self, hl),
             0b00_111_110 => op_ld_r_n!(self, a),
 
-            0b01_000_000 => op_ld_r_r!(self, b, b),
+            0b01_000_000 => {}
             0b01_000_001 => op_ld_r_r!(self, b, c),
             0b01_000_010 => op_ld_r_r!(self, b, d),
             0b01_000_011 => op_ld_r_r!(self, b, e),
@@ -304,7 +304,7 @@ impl CPU {
             0b01_000_111 => op_ld_r_r!(self, b, a),
 
             0b01_001_000 => op_ld_r_r!(self, c, b),
-            0b01_001_001 => op_ld_r_r!(self, c, c),
+            0b01_001_001 => {}
             0b01_001_010 => op_ld_r_r!(self, c, d),
             0b01_001_011 => op_ld_r_r!(self, c, e),
             0b01_001_100 => op_ld_r_r!(self, c, h),
@@ -314,7 +314,7 @@ impl CPU {
 
             0b01_010_000 => op_ld_r_r!(self, d, b),
             0b01_010_001 => op_ld_r_r!(self, d, c),
-            0b01_010_010 => op_ld_r_r!(self, d, d),
+            0b01_010_010 => {}
             0b01_010_011 => op_ld_r_r!(self, d, e),
             0b01_010_100 => op_ld_r_r!(self, d, h),
             0b01_010_101 => op_ld_r_r!(self, d, l),
@@ -324,7 +324,7 @@ impl CPU {
             0b01_011_000 => op_ld_r_r!(self, e, b),
             0b01_011_001 => op_ld_r_r!(self, e, c),
             0b01_011_010 => op_ld_r_r!(self, e, d),
-            0b01_011_011 => op_ld_r_r!(self, e, e),
+            0b01_011_011 => {}
             0b01_011_100 => op_ld_r_r!(self, e, h),
             0b01_011_101 => op_ld_r_r!(self, e, l),
             0b01_011_110 => op_ld_r_rr!(self, e, hl),
@@ -334,7 +334,7 @@ impl CPU {
             0b01_100_001 => op_ld_r_r!(self, h, c),
             0b01_100_010 => op_ld_r_r!(self, h, d),
             0b01_100_011 => op_ld_r_r!(self, h, e),
-            0b01_100_100 => op_ld_r_r!(self, h, h),
+            0b01_100_100 => {}
             0b01_100_101 => op_ld_r_r!(self, h, l),
             0b01_100_110 => op_ld_r_rr!(self, h, hl),
             0b01_100_111 => op_ld_r_r!(self, h, a),
@@ -344,7 +344,7 @@ impl CPU {
             0b01_101_010 => op_ld_r_r!(self, l, d),
             0b01_101_011 => op_ld_r_r!(self, l, e),
             0b01_101_100 => op_ld_r_r!(self, l, h),
-            0b01_101_101 => op_ld_r_r!(self, l, l),
+            0b01_101_101 => {}
             0b01_101_110 => op_ld_r_rr!(self, l, hl),
             0b01_101_111 => op_ld_r_r!(self, l, a),
 
@@ -364,7 +364,7 @@ impl CPU {
             0b01_111_100 => op_ld_r_r!(self, a, h),
             0b01_111_101 => op_ld_r_r!(self, a, l),
             0b01_111_110 => op_ld_r_rr!(self, a, hl),
-            0b01_111_111 => op_ld_r_r!(self, a, a),
+            0b01_111_111 => {}
 
             0b00_00_1010 => op_ld_r_rr!(self, a, bc),
             0b00_01_1010 => op_ld_r_rr!(self, a, de),
