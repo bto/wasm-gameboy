@@ -276,6 +276,30 @@ macro_rules! op_ldi_rr_r {
     }};
 }
 
+macro_rules! op_or_r {
+    ( $self:ident, $dest:ident, $value:expr ) => {{
+        $self.registers.$dest = $self.registers.$dest | $value;
+        $self.registers.carry = false;
+        $self.registers.half_carry = false;
+        $self.registers.subtraction = false;
+        $self.registers.zero = $self.registers.$dest == 0;
+    }};
+}
+
+macro_rules! op_or_r_r {
+    ( $self:ident, $dest:ident, $src:ident ) => {{
+        let value = $self.registers.$src;
+        op_or_r!($self, $dest, value)
+    }};
+}
+
+macro_rules! op_or_r_rr {
+    ( $self:ident, $dest:ident, $src:ident ) => {{
+        let value = register16_load!($self, $src);
+        op_or_r!($self, $dest, value)
+    }};
+}
+
 macro_rules! op_pop_rr {
     ( $self:ident, $src:ident ) => {{
         let value = $self.mmu.word_get($self.registers.sp);
@@ -527,6 +551,15 @@ impl CPU {
             0b10100_101 => op_and_r_r!(self, a, l),
             0b10100_110 => op_and_r_rr!(self, a, hl),
             0b10100_111 => op_and_r_r!(self, a, a),
+
+            0b10110_000 => op_or_r_r!(self, a, b),
+            0b10110_001 => op_or_r_r!(self, a, c),
+            0b10110_010 => op_or_r_r!(self, a, d),
+            0b10110_011 => op_or_r_r!(self, a, e),
+            0b10110_100 => op_or_r_r!(self, a, h),
+            0b10110_101 => op_or_r_r!(self, a, l),
+            0b10110_110 => op_or_r_rr!(self, a, hl),
+            0b10110_111 => op_or_r_r!(self, a, a),
 
             _ => panic!("not implemented instruction"),
         }
