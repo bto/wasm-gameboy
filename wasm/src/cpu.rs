@@ -146,6 +146,32 @@ macro_rules! op_and_r_rr {
     }};
 }
 
+macro_rules! op_cp_r {
+    ( $self:ident, $dest:ident, $value:expr ) => {{
+        let x = $self.registers.$dest as u16;
+        let y = $value;
+        let r = x.wrapping_sub(y);
+        $self.registers.carry = r > 0xFF;
+        $self.registers.half_carry = (x & 0xF) < (y & 0xF);
+        $self.registers.subtraction = true;
+        $self.registers.zero = $self.registers.$dest == 0;
+    }};
+}
+
+macro_rules! op_cp_r_r {
+    ( $self:ident, $dest:ident, $src:ident ) => {{
+        let value = $self.registers.$src as u16;
+        op_cp_r!($self, $dest, value)
+    }};
+}
+
+macro_rules! op_cp_r_rr {
+    ( $self:ident, $dest:ident, $src:ident ) => {{
+        let value = register16_load!($self, $src) as u16;
+        op_cp_r!($self, $dest, value)
+    }};
+}
+
 macro_rules! op_ld_nn_r {
     ( $self:ident, $src:ident ) => {{
         $self.fetch_store($self.registers.$src)
@@ -593,6 +619,15 @@ impl CPU {
             0b10101_101 => op_xor_r_r!(self, a, l),
             0b10101_110 => op_xor_r_rr!(self, a, hl),
             0b10101_111 => op_xor_r_r!(self, a, a),
+
+            0b10111_000 => op_cp_r_r!(self, a, b),
+            0b10111_001 => op_cp_r_r!(self, a, c),
+            0b10111_010 => op_cp_r_r!(self, a, d),
+            0b10111_011 => op_cp_r_r!(self, a, e),
+            0b10111_100 => op_cp_r_r!(self, a, h),
+            0b10111_101 => op_cp_r_r!(self, a, l),
+            0b10111_110 => op_cp_r_rr!(self, a, hl),
+            0b10111_111 => op_cp_r_r!(self, a, a),
 
             _ => panic!("not implemented instruction"),
         }
