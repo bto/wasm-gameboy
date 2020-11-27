@@ -423,6 +423,30 @@ macro_rules! op_cp_r_rr {
     }};
 }
 
+macro_rules! op_inc {
+    ( $self:ident, $value:expr ) => {{
+        let r = $value.wrapping_add(1);
+        $self.registers.half_carry = (($value & 0xF) + 1) > 0xF;
+        $self.registers.subtraction = false;
+        $self.registers.zero = r == 0;
+        r
+    }};
+}
+
+macro_rules! op_inc_r {
+    ( $self:ident, $dest:ident ) => {{
+        $self.registers.$dest = op_inc!($self, $self.registers.$dest)
+    }};
+}
+
+macro_rules! op_inc_rr {
+    ( $self:ident, $dest:ident ) => {{
+        let value = register16_load!($self, $dest);
+        let r = op_inc!($self, value);
+        register16_store!($self, $dest, r)
+    }};
+}
+
 struct CPU {
     mmu: MMU,
     registers: Registers,
@@ -628,6 +652,15 @@ impl CPU {
             0b10111_101 => op_cp_r_r!(self, a, l),
             0b10111_110 => op_cp_r_rr!(self, a, hl),
             0b10111_111 => op_cp_r_r!(self, a, a),
+
+            0b00_000_100 => op_inc_r!(self, b),
+            0b00_001_100 => op_inc_r!(self, c),
+            0b00_010_100 => op_inc_r!(self, d),
+            0b00_011_100 => op_inc_r!(self, e),
+            0b00_100_100 => op_inc_r!(self, h),
+            0b00_101_100 => op_inc_r!(self, l),
+            0b00_110_100 => op_inc_rr!(self, hl),
+            0b00_111_100 => op_inc_r!(self, a),
 
             _ => panic!("not implemented instruction"),
         }
