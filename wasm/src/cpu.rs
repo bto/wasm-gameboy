@@ -373,6 +373,30 @@ macro_rules! op_sub_r_rr {
     }};
 }
 
+macro_rules! op_xor_r {
+    ( $self:ident, $dest:ident, $value:expr ) => {{
+        $self.registers.$dest = $self.registers.$dest ^ $value;
+        $self.registers.carry = false;
+        $self.registers.half_carry = false;
+        $self.registers.subtraction = false;
+        $self.registers.zero = $self.registers.$dest == 0;
+    }};
+}
+
+macro_rules! op_xor_r_r {
+    ( $self:ident, $dest:ident, $src:ident ) => {{
+        let value = $self.registers.$src;
+        op_xor_r!($self, $dest, value)
+    }};
+}
+
+macro_rules! op_xor_r_rr {
+    ( $self:ident, $dest:ident, $src:ident ) => {{
+        let value = register16_load!($self, $src);
+        op_xor_r!($self, $dest, value)
+    }};
+}
+
 struct CPU {
     mmu: MMU,
     registers: Registers,
@@ -560,6 +584,15 @@ impl CPU {
             0b10110_101 => op_or_r_r!(self, a, l),
             0b10110_110 => op_or_r_rr!(self, a, hl),
             0b10110_111 => op_or_r_r!(self, a, a),
+
+            0b10101_000 => op_xor_r_r!(self, a, b),
+            0b10101_001 => op_xor_r_r!(self, a, c),
+            0b10101_010 => op_xor_r_r!(self, a, d),
+            0b10101_011 => op_xor_r_r!(self, a, e),
+            0b10101_100 => op_xor_r_r!(self, a, h),
+            0b10101_101 => op_xor_r_r!(self, a, l),
+            0b10101_110 => op_xor_r_rr!(self, a, hl),
+            0b10101_111 => op_xor_r_r!(self, a, a),
 
             _ => panic!("not implemented instruction"),
         }
