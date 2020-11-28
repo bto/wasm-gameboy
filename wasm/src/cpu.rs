@@ -471,6 +471,26 @@ macro_rules! op_dec_rr {
     }};
 }
 
+macro_rules! op_add_rr {
+    ( $self:ident, $dest:ident, $value:expr ) => {{
+        let x = register16_get!($self, $dest);
+        let y = $value;
+        let (r, c) = x.overflowing_add(y);
+        register16_set!($self, $dest, r);
+        $self.registers.carry = c;
+        $self.registers.half_carry = ((x & 0x7FF) + (y & 0x7FF)) > 0x7FF;
+        $self.registers.subtraction = false;
+        $self.registers.zero = r == 0;
+    }};
+}
+
+macro_rules! op_add_rr_rr {
+    ( $self:ident, $dest:ident, $src:ident ) => {{
+        let value = register16_get!($self, $src);
+        op_add_rr!($self, $dest, value)
+    }};
+}
+
 struct CPU {
     mmu: MMU,
     registers: Registers,
@@ -694,6 +714,11 @@ impl CPU {
             0b00_101_101 => op_dec_r!(self, l),
             0b00_110_101 => op_dec_rr!(self, hl),
             0b00_111_101 => op_dec_r!(self, a),
+
+            0b00_00_1001 => op_add_rr_rr!(self, hl, bc),
+            0b00_01_1001 => op_add_rr_rr!(self, hl, de),
+            0b00_10_1001 => op_add_rr_rr!(self, hl, hl),
+            0b00_11_1001 => op_add_rr_rr!(self, hl, sp),
 
             _ => panic!("not implemented instruction"),
         }
