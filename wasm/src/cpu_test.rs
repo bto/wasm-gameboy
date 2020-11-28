@@ -1251,7 +1251,7 @@ fn test_op_cp_r_r() {
         assert_eq!(cpu.registers.zero, false);
     }
 
-    // SUB A, A
+    // CP A, A
     let opcode = 0b10111_111;
     let pc = cpu.registers.pc;
     set_inst!(cpu, pc, opcode);
@@ -1262,7 +1262,7 @@ fn test_op_cp_r_r() {
     assert_eq!(cpu.registers.carry, false);
     assert_eq!(cpu.registers.half_carry, false);
     assert_eq!(cpu.registers.subtraction, true);
-    assert_eq!(cpu.registers.zero, false);
+    assert_eq!(cpu.registers.zero, true);
 }
 
 #[test]

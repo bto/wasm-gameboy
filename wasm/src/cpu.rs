@@ -217,27 +217,27 @@ macro_rules! op_push_rr {
 
 macro_rules! op_add_r {
     ( $self:ident, $dest:ident, $value:expr ) => {{
-        let x = $self.registers.$dest as u16;
+        let x = $self.registers.$dest;
         let y = $value;
-        let r = x + y;
-        $self.registers.$dest = r as u8;
-        $self.registers.carry = r > 0xFF;
+        let (r, c) = x.overflowing_add(y);
+        $self.registers.$dest = r;
+        $self.registers.carry = c;
         $self.registers.half_carry = ((x & 0xF) + (y & 0xF)) > 0xF;
         $self.registers.subtraction = false;
-        $self.registers.zero = $self.registers.$dest == 0;
+        $self.registers.zero = r == 0;
     }};
 }
 
 macro_rules! op_add_r_r {
     ( $self:ident, $dest:ident, $src:ident ) => {{
-        let value = $self.registers.$src as u16;
+        let value = $self.registers.$src;
         op_add_r!($self, $dest, value)
     }};
 }
 
 macro_rules! op_add_r_rr {
     ( $self:ident, $dest:ident, $src:ident ) => {{
-        let value = register16_load!($self, $src) as u16;
+        let value = register16_load!($self, $src);
         op_add_r!($self, $dest, value)
     }};
 }
@@ -245,54 +245,54 @@ macro_rules! op_add_r_rr {
 macro_rules! op_adc_r {
     ( $self:ident, $dest:ident, $value:expr ) => {{
         let x = $self.registers.$dest as u16;
-        let y = $value;
+        let y = $value as u16;
         let c = $self.registers.carry as u16;
         let r = x + y + c;
         $self.registers.$dest = r as u8;
         $self.registers.carry = r > 0xFF;
         $self.registers.half_carry = (x & 0xF) + (y & 0xF) + c > 0xF;
         $self.registers.subtraction = false;
-        $self.registers.zero = $self.registers.$dest == 0;
+        $self.registers.zero = (r as u8) == 0;
     }};
 }
 
 macro_rules! op_adc_r_r {
     ( $self:ident, $dest:ident, $src:ident ) => {{
-        let value = $self.registers.$src as u16;
+        let value = $self.registers.$src;
         op_adc_r!($self, $dest, value)
     }};
 }
 
 macro_rules! op_adc_r_rr {
     ( $self:ident, $dest:ident, $src:ident ) => {{
-        let value = register16_load!($self, $src) as u16;
+        let value = register16_load!($self, $src);
         op_adc_r!($self, $dest, value)
     }};
 }
 
 macro_rules! op_sub_r {
     ( $self:ident, $dest:ident, $value:expr ) => {{
-        let x = $self.registers.$dest as u16;
+        let x = $self.registers.$dest;
         let y = $value;
-        let r = x.wrapping_sub(y);
-        $self.registers.$dest = r as u8;
-        $self.registers.carry = r > 0xFF;
+        let (r, c) = x.overflowing_sub(y);
+        $self.registers.$dest = r;
+        $self.registers.carry = c;
         $self.registers.half_carry = (x & 0xF) < (y & 0xF);
         $self.registers.subtraction = true;
-        $self.registers.zero = $self.registers.$dest == 0;
+        $self.registers.zero = r == 0;
     }};
 }
 
 macro_rules! op_sub_r_r {
     ( $self:ident, $dest:ident, $src:ident ) => {{
-        let value = $self.registers.$src as u16;
+        let value = $self.registers.$src;
         op_sub_r!($self, $dest, value)
     }};
 }
 
 macro_rules! op_sub_r_rr {
     ( $self:ident, $dest:ident, $src:ident ) => {{
-        let value = register16_load!($self, $src) as u16;
+        let value = register16_load!($self, $src);
         op_sub_r!($self, $dest, value)
     }};
 }
@@ -300,27 +300,27 @@ macro_rules! op_sub_r_rr {
 macro_rules! op_sbc_r {
     ( $self:ident, $dest:ident, $value:expr ) => {{
         let x = $self.registers.$dest as u16;
-        let y = $value;
+        let y = $value as u16;
         let c = $self.registers.carry as u16;
         let r = x.wrapping_sub(y).wrapping_sub(c);
         $self.registers.$dest = r as u8;
         $self.registers.carry = r > 0xFF;
         $self.registers.half_carry = (x & 0xF) < (y & 0xF) + c;
         $self.registers.subtraction = true;
-        $self.registers.zero = $self.registers.$dest == 0;
+        $self.registers.zero = (r as u8) == 0;
     }};
 }
 
 macro_rules! op_sbc_r_r {
     ( $self:ident, $dest:ident, $src:ident ) => {{
-        let value = $self.registers.$src as u16;
+        let value = $self.registers.$src;
         op_sbc_r!($self, $dest, value)
     }};
 }
 
 macro_rules! op_sbc_r_rr {
     ( $self:ident, $dest:ident, $src:ident ) => {{
-        let value = register16_load!($self, $src) as u16;
+        let value = register16_load!($self, $src);
         op_sbc_r!($self, $dest, value)
     }};
 }
@@ -399,26 +399,26 @@ macro_rules! op_or_r_rr {
 
 macro_rules! op_cp_r {
     ( $self:ident, $dest:ident, $value:expr ) => {{
-        let x = $self.registers.$dest as u16;
+        let x = $self.registers.$dest;
         let y = $value;
-        let r = x.wrapping_sub(y);
-        $self.registers.carry = r > 0xFF;
+        let (r, c) = x.overflowing_sub(y);
+        $self.registers.carry = c;
         $self.registers.half_carry = (x & 0xF) < (y & 0xF);
         $self.registers.subtraction = true;
-        $self.registers.zero = $self.registers.$dest == 0;
+        $self.registers.zero = r == 0;
     }};
 }
 
 macro_rules! op_cp_r_r {
     ( $self:ident, $dest:ident, $src:ident ) => {{
-        let value = $self.registers.$src as u16;
+        let value = $self.registers.$src;
         op_cp_r!($self, $dest, value)
     }};
 }
 
 macro_rules! op_cp_r_rr {
     ( $self:ident, $dest:ident, $src:ident ) => {{
-        let value = register16_load!($self, $src) as u16;
+        let value = register16_load!($self, $src);
         op_cp_r!($self, $dest, value)
     }};
 }
