@@ -113,14 +113,14 @@ impl CPU {
             0b00_10_0010 => op_ldi_rr_r!(self, hl, a),
             0b00_11_0010 => op_ldd_rr_r!(self, hl, a),
 
-            0b11101010 => op_ld_nn_r!(self, a),
-            0b11111010 => op_ld_r_nn!(self, a),
+            0b111_0_1010 => op_ld_nn_r!(self, a),
+            0b111_1_1010 => op_ld_r_nn!(self, a),
 
-            0b11100010 => op_ldh_rh_r!(self, c, a),
-            0b11110010 => op_ldh_r_rh!(self, a, c),
+            0b111_0_0010 => op_ldh_rh_r!(self, c, a),
+            0b111_1_0010 => op_ldh_r_rh!(self, a, c),
 
-            0b11100000 => op_ldh_nh_r!(self, a),
-            0b11110000 => op_ldh_r_nh!(self, a),
+            0b111_0_0000 => op_ldh_nh_r!(self, a),
+            0b111_1_0000 => op_ldh_r_nh!(self, a),
 
             0b00_00_0001 => op_ld_rr_nn!(self, bc),
             0b00_01_0001 => op_ld_rr_nn!(self, de),
