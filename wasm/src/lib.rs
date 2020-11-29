@@ -27,6 +27,7 @@ impl Default for GameBoy {
 #[wasm_bindgen]
 impl GameBoy {
     pub fn new() -> Self {
+        utils::set_panic_hook();
         Self { cpu: CPU::new() }
     }
 
