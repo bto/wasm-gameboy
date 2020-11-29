@@ -8,7 +8,6 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 mod cpu;
 mod mmu;
-mod registers;
 mod utils;
 
 use cpu::*;

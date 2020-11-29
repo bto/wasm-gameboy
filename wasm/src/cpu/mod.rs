@@ -1,5 +1,7 @@
 use super::mmu::MMU;
-use super::registers::Registers;
+
+mod registers;
+use registers::Registers;
 
 macro_rules! register16_get {
     ( $self:ident, af ) => {
@@ -815,5 +817,5 @@ impl CPU {
     }
 }
 
-#[path = "./cpu_test.rs"]
+#[path = "./mod_test.rs"]
 mod tests;
