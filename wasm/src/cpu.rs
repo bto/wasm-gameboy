@@ -228,6 +228,13 @@ macro_rules! op_add_r {
     }};
 }
 
+macro_rules! op_add_r_n {
+    ( $self:ident, $dest:ident ) => {{
+        let value = $self.fetch_byte();
+        op_add_r!($self, $dest, value)
+    }};
+}
+
 macro_rules! op_add_r_r {
     ( $self:ident, $dest:ident, $src:ident ) => {{
         let value = $self.registers.$src;
@@ -256,6 +263,13 @@ macro_rules! op_adc_r {
     }};
 }
 
+macro_rules! op_adc_r_n {
+    ( $self:ident, $dest:ident ) => {{
+        let value = $self.fetch_byte();
+        op_adc_r!($self, $dest, value)
+    }};
+}
+
 macro_rules! op_adc_r_r {
     ( $self:ident, $dest:ident, $src:ident ) => {{
         let value = $self.registers.$src;
@@ -280,6 +294,13 @@ macro_rules! op_sub_r {
         $self.registers.half_carry = (x & 0xF) < (y & 0xF);
         $self.registers.subtraction = true;
         $self.registers.zero = r == 0;
+    }};
+}
+
+macro_rules! op_sub_r_n {
+    ( $self:ident, $dest:ident ) => {{
+        let value = $self.fetch_byte();
+        op_sub_r!($self, $dest, value)
     }};
 }
 
@@ -311,6 +332,13 @@ macro_rules! op_sbc_r {
     }};
 }
 
+macro_rules! op_sbc_r_n {
+    ( $self:ident, $dest:ident ) => {{
+        let value = $self.fetch_byte();
+        op_sbc_r!($self, $dest, value)
+    }};
+}
+
 macro_rules! op_sbc_r_r {
     ( $self:ident, $dest:ident, $src:ident ) => {{
         let value = $self.registers.$src;
@@ -332,6 +360,13 @@ macro_rules! op_and_r {
         $self.registers.half_carry = true;
         $self.registers.subtraction = false;
         $self.registers.zero = $self.registers.$dest == 0;
+    }};
+}
+
+macro_rules! op_and_r_n {
+    ( $self:ident, $dest:ident ) => {{
+        let value = $self.fetch_byte();
+        op_and_r!($self, $dest, value)
     }};
 }
 
@@ -359,6 +394,13 @@ macro_rules! op_xor_r {
     }};
 }
 
+macro_rules! op_xor_r_n {
+    ( $self:ident, $dest:ident ) => {{
+        let value = $self.fetch_byte();
+        op_xor_r!($self, $dest, value)
+    }};
+}
+
 macro_rules! op_xor_r_r {
     ( $self:ident, $dest:ident, $src:ident ) => {{
         let value = $self.registers.$src;
@@ -380,6 +422,13 @@ macro_rules! op_or_r {
         $self.registers.half_carry = false;
         $self.registers.subtraction = false;
         $self.registers.zero = $self.registers.$dest == 0;
+    }};
+}
+
+macro_rules! op_or_r_n {
+    ( $self:ident, $dest:ident ) => {{
+        let value = $self.fetch_byte();
+        op_or_r!($self, $dest, value)
     }};
 }
 
@@ -406,6 +455,13 @@ macro_rules! op_cp_r {
         $self.registers.half_carry = (x & 0xF) < (y & 0xF);
         $self.registers.subtraction = true;
         $self.registers.zero = r == 0;
+    }};
+}
+
+macro_rules! op_cp_r_n {
+    ( $self:ident, $dest:ident ) => {{
+        let value = $self.fetch_byte();
+        op_cp_r!($self, $dest, value)
     }};
 }
 
@@ -714,6 +770,15 @@ impl CPU {
             0b00_101_101 => op_dec_r!(self, l),
             0b00_110_101 => op_dec_rr!(self, hl),
             0b00_111_101 => op_dec_r!(self, a),
+
+            0b11_000_110 => op_add_r_n!(self, a),
+            0b11_001_110 => op_adc_r_n!(self, a),
+            0b11_010_110 => op_sub_r_n!(self, a),
+            0b11_011_110 => op_sbc_r_n!(self, a),
+            0b11_100_110 => op_and_r_n!(self, a),
+            0b11_101_110 => op_xor_r_n!(self, a),
+            0b11_110_110 => op_or_r_n!(self, a),
+            0b11_111_110 => op_cp_r_n!(self, a),
 
             0b00_00_1001 => op_add_rr_rr!(self, hl, bc),
             0b00_01_1001 => op_add_rr_rr!(self, hl, de),
