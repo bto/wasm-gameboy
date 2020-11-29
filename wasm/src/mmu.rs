@@ -30,5 +30,6 @@ impl MMU {
     }
 }
 
-#[path = "./mmu_test.rs"]
+#[path = "./mmu_tests.rs"]
+#[cfg(test)]
 mod tests;

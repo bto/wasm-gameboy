@@ -1,7 +1,5 @@
-#[allow(unused_imports)]
 use super::*;
 
-#[allow(unused_macros)]
 macro_rules! set_inst {
     ( $cpu:ident, $pc:ident, $v1:expr ) => {{
         $cpu.mmu.byte_set($pc + 0, $v1)

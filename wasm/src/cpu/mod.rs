@@ -274,5 +274,6 @@ impl CPU {
     }
 }
 
-#[path = "./mod_test.rs"]
+#[path = "./mod_tests.rs"]
+#[cfg(test)]
 mod tests;
