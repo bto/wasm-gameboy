@@ -355,7 +355,7 @@ macro_rules! op_sbc_r_rr {
 
 macro_rules! op_and_r {
     ( $self:ident, $dest:ident, $value:expr ) => {{
-        $self.registers.$dest = $self.registers.$dest & $value;
+        $self.registers.$dest &= $value;
         $self.registers.carry = false;
         $self.registers.half_carry = true;
         $self.registers.subtraction = false;
@@ -386,7 +386,7 @@ macro_rules! op_and_r_rr {
 
 macro_rules! op_xor_r {
     ( $self:ident, $dest:ident, $value:expr ) => {{
-        $self.registers.$dest = $self.registers.$dest ^ $value;
+        $self.registers.$dest ^= $value;
         $self.registers.carry = false;
         $self.registers.half_carry = false;
         $self.registers.subtraction = false;
@@ -417,7 +417,7 @@ macro_rules! op_xor_r_rr {
 
 macro_rules! op_or_r {
     ( $self:ident, $dest:ident, $value:expr ) => {{
-        $self.registers.$dest = $self.registers.$dest | $value;
+        $self.registers.$dest |= $value;
         $self.registers.carry = false;
         $self.registers.half_carry = false;
         $self.registers.subtraction = false;
@@ -561,6 +561,7 @@ impl CPU {
     }
 
     pub fn execute(&mut self) {
+        #[allow(clippy::inconsistent_digit_grouping)]
         match self.fetch_byte() {
             0b00_000_110 => op_ld_r_n!(self, b),
             0b00_001_110 => op_ld_r_n!(self, c),
