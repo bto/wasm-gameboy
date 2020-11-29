@@ -547,7 +547,7 @@ macro_rules! op_add_rr_rr {
     }};
 }
 
-struct CPU {
+pub struct CPU {
     mmu: MMU,
     registers: Registers,
 }
@@ -560,7 +560,7 @@ impl CPU {
         }
     }
 
-    fn execute(&mut self) {
+    pub fn execute(&mut self) {
         match self.fetch_byte() {
             0b00_000_110 => op_ld_r_n!(self, b),
             0b00_001_110 => op_ld_r_n!(self, c),

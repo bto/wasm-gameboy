@@ -10,3 +10,27 @@ mod cpu;
 mod mmu;
 mod registers;
 mod utils;
+
+use cpu::*;
+
+#[wasm_bindgen]
+pub struct GameBoy {
+    cpu: CPU,
+}
+
+impl Default for GameBoy {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+#[wasm_bindgen]
+impl GameBoy {
+    pub fn new() -> Self {
+        Self { cpu: CPU::new() }
+    }
+
+    pub fn step(&mut self) {
+        self.cpu.execute();
+    }
+}
