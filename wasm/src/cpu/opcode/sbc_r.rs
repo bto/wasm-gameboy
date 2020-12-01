@@ -26,7 +26,7 @@ macro_rules! op_sbc_r_r {
     }};
 }
 
-macro_rules! op_sbc_r_rr {
+macro_rules! op_sbc_r_rrn {
     ( $self:ident, $dest:ident, $src:ident ) => {{
         let value = register16_load!($self, $src);
         op_sbc_r!($self, $dest, value)

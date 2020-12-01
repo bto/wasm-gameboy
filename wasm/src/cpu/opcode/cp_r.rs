@@ -24,7 +24,7 @@ macro_rules! op_cp_r_r {
     }};
 }
 
-macro_rules! op_cp_r_rr {
+macro_rules! op_cp_r_rrn {
     ( $self:ident, $dest:ident, $src:ident ) => {{
         let value = register16_load!($self, $src);
         op_cp_r!($self, $dest, value)

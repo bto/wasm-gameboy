@@ -25,7 +25,7 @@ macro_rules! op_add_r_r {
     }};
 }
 
-macro_rules! op_add_r_rr {
+macro_rules! op_add_r_rrn {
     ( $self:ident, $dest:ident, $src:ident ) => {{
         let value = register16_load!($self, $src);
         op_add_r!($self, $dest, value)

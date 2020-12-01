@@ -32,6 +32,9 @@ mod ld_r;
 mod ld_rr;
 
 #[macro_use]
+mod ld_rrn;
+
+#[macro_use]
 mod lddi_r;
 
 #[macro_use]

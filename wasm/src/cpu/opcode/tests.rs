@@ -44,6 +44,10 @@ mod ld_r;
 #[cfg(test)]
 mod ld_rr;
 
+#[path = "./ld_rrn_tests.rs"]
+#[cfg(test)]
+mod ld_rrn;
+
 #[path = "./lddi_r_tests.rs"]
 #[cfg(test)]
 mod lddi_r;

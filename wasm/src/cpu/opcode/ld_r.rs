@@ -16,7 +16,7 @@ macro_rules! op_ld_r_r {
     }};
 }
 
-macro_rules! op_ld_r_rr {
+macro_rules! op_ld_r_rrn {
     ( $self:ident, $dest:ident, $src:ident ) => {{
         $self.registers.$dest = register16_load!($self, $src);
     }};

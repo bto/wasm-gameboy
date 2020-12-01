@@ -14,7 +14,7 @@ macro_rules! op_dec_r {
     }};
 }
 
-macro_rules! op_dec_rr {
+macro_rules! op_dec_rrn {
     ( $self:ident, $dest:ident ) => {{
         let value = register16_load!($self, $dest);
         let r = op_dec!($self, value);
