@@ -50,10 +50,10 @@ mod or_r;
 mod register16;
 
 #[macro_use]
-mod stack;
+mod sbc_r;
 
 #[macro_use]
-mod sbc_r;
+mod stack;
 
 #[macro_use]
 mod sub_r;

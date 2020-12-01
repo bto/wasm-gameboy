@@ -64,13 +64,13 @@ mod ldh;
 #[cfg(test)]
 mod or_r;
 
-#[path = "./stack_tests.rs"]
-#[cfg(test)]
-mod stack;
-
 #[path = "./sbc_r_tests.rs"]
 #[cfg(test)]
 mod sbc_r;
+
+#[path = "./stack_tests.rs"]
+#[cfg(test)]
+mod stack;
 
 #[path = "./sub_r_tests.rs"]
 #[cfg(test)]
