@@ -4,7 +4,7 @@ use super::*;
 mod tests_macro;
 
 #[test]
-fn test_op_ld_r_n() {
+fn op_ld_r_n() {
     // LD r, n
     let mut cpu = CPU::new();
 
@@ -32,7 +32,7 @@ fn test_op_ld_r_n() {
 }
 
 #[test]
-fn test_op_ld_r_nn() {
+fn op_ld_r_nn() {
     let mut cpu = CPU::new();
 
     // LD A, (nn)
@@ -48,7 +48,7 @@ fn test_op_ld_r_nn() {
 }
 
 #[test]
-fn test_op_ld_r_r() {
+fn op_ld_r_r() {
     // LD r, r
     let mut cpu = CPU::new();
 
@@ -89,7 +89,7 @@ fn test_op_ld_r_r() {
 }
 
 #[test]
-fn test_op_ld_r_rr() {
+fn op_ld_r_rr() {
     // LD A, (rr)
     let mut cpu = CPU::new();
 

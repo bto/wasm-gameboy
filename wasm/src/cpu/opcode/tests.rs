@@ -8,7 +8,7 @@ mod ld_r;
 mod tests_macro;
 
 #[test]
-fn test_op_ld_rr_n() {
+fn op_ld_rr_n() {
     // LD (HL), n
     let mut cpu = CPU::new();
 
@@ -25,7 +25,7 @@ fn test_op_ld_rr_n() {
 }
 
 #[test]
-fn test_op_ld_r_hl() {
+fn op_ld_r_hl() {
     // LD r, (HL)
     let mut cpu = CPU::new();
 
@@ -57,7 +57,7 @@ fn test_op_ld_r_hl() {
 }
 
 #[test]
-fn test_op_ld_hl_r() {
+fn op_ld_hl_r() {
     // LD (HL), r
     let mut cpu = CPU::new();
 
@@ -90,7 +90,7 @@ fn test_op_ld_hl_r() {
 }
 
 #[test]
-fn test_op_ld_rr_r() {
+fn op_ld_rr_r() {
     let mut cpu = CPU::new();
 
     // LD (BC), A
@@ -137,7 +137,7 @@ fn test_op_ld_rr_r() {
 }
 
 #[test]
-fn test_op_ld_nn_r() {
+fn op_ld_nn_r() {
     let mut cpu = CPU::new();
 
     // LD (nn), A
@@ -153,7 +153,7 @@ fn test_op_ld_nn_r() {
 }
 
 #[test]
-fn test_op_ldh_rh_r() {
+fn op_ldh_rh_r() {
     let mut cpu = CPU::new();
 
     // LDH (C), A
@@ -170,7 +170,7 @@ fn test_op_ldh_rh_r() {
 }
 
 #[test]
-fn test_op_ldh_r_rh() {
+fn op_ldh_r_rh() {
     let mut cpu = CPU::new();
 
     // LDH A, (C)
@@ -187,7 +187,7 @@ fn test_op_ldh_r_rh() {
 }
 
 #[test]
-fn test_op_ldh_nh_r() {
+fn op_ldh_nh_r() {
     let mut cpu = CPU::new();
 
     // LDH (n), A
@@ -203,7 +203,7 @@ fn test_op_ldh_nh_r() {
 }
 
 #[test]
-fn test_op_ldh_r_nh() {
+fn op_ldh_r_nh() {
     let mut cpu = CPU::new();
 
     // LDH A, (n)
@@ -219,7 +219,7 @@ fn test_op_ldh_r_nh() {
 }
 
 #[test]
-fn test_op_ld_rr_nn() {
+fn op_ld_rr_nn() {
     let mut cpu = CPU::new();
 
     // LD rr, nn
@@ -246,7 +246,7 @@ fn test_op_ld_rr_nn() {
 }
 
 #[test]
-fn test_op_ld_nn_rr() {
+fn op_ld_nn_rr() {
     let mut cpu = CPU::new();
 
     // LD (nn), SP
@@ -263,7 +263,7 @@ fn test_op_ld_nn_rr() {
 }
 
 #[test]
-fn test_op_ld_rr_rr() {
+fn op_ld_rr_rr() {
     let mut cpu = CPU::new();
 
     // LD SP, HL
@@ -280,7 +280,7 @@ fn test_op_ld_rr_rr() {
 }
 
 #[test]
-fn test_op_push_rr() {
+fn op_push_rr() {
     let mut cpu = CPU::new();
 
     cpu.registers.bc_set(0x102);
@@ -311,7 +311,7 @@ fn test_op_push_rr() {
 }
 
 #[test]
-fn test_op_pop_rr() {
+fn op_pop_rr() {
     let mut cpu = CPU::new();
 
     cpu.mmu.word_set(0x200, 0x102);
@@ -336,7 +336,7 @@ fn test_op_pop_rr() {
 }
 
 #[test]
-fn test_op_add_r_n() {
+fn op_add_r_n() {
     let mut cpu = CPU::new();
     let opcode = 0b11_000_110;
 
@@ -366,7 +366,7 @@ fn test_op_add_r_n() {
 }
 
 #[test]
-fn test_op_add_r_r() {
+fn op_add_r_r() {
     let mut cpu = CPU::new();
 
     let opcode_base = 0b10000_000;
@@ -420,7 +420,7 @@ fn test_op_add_r_r() {
 }
 
 #[test]
-fn test_op_add_r_rr() {
+fn op_add_r_rr() {
     let mut cpu = CPU::new();
     let opcode = 0b10000_110;
 
@@ -456,7 +456,7 @@ fn test_op_add_r_rr() {
 }
 
 #[test]
-fn test_op_adc_r_n() {
+fn op_adc_r_n() {
     let mut cpu = CPU::new();
     let opcode = 0b11_001_110;
 
@@ -488,7 +488,7 @@ fn test_op_adc_r_n() {
 }
 
 #[test]
-fn test_op_adc_r_r() {
+fn op_adc_r_r() {
     let mut cpu = CPU::new();
 
     let opcode_base = 0b10001_000;
@@ -544,7 +544,7 @@ fn test_op_adc_r_r() {
 }
 
 #[test]
-fn test_op_adc_r_rr() {
+fn op_adc_r_rr() {
     let mut cpu = CPU::new();
     let opcode = 0b10001_110;
 
@@ -582,7 +582,7 @@ fn test_op_adc_r_rr() {
 }
 
 #[test]
-fn test_op_sub_r_n() {
+fn op_sub_r_n() {
     let mut cpu = CPU::new();
     let opcode = 0b11_010_110;
 
@@ -612,7 +612,7 @@ fn test_op_sub_r_n() {
 }
 
 #[test]
-fn test_op_sub_r_r() {
+fn op_sub_r_r() {
     let mut cpu = CPU::new();
 
     let opcode_base = 0b10010_000;
@@ -679,7 +679,7 @@ fn test_op_sub_r_r() {
 }
 
 #[test]
-fn test_op_sub_r_rr() {
+fn op_sub_r_rr() {
     let mut cpu = CPU::new();
     let opcode = 0b10010_110;
 
@@ -715,7 +715,7 @@ fn test_op_sub_r_rr() {
 }
 
 #[test]
-fn test_op_sbc_r_n() {
+fn op_sbc_r_n() {
     let mut cpu = CPU::new();
     let opcode = 0b11_011_110;
 
@@ -747,7 +747,7 @@ fn test_op_sbc_r_n() {
 }
 
 #[test]
-fn test_op_sbc_r_r() {
+fn op_sbc_r_r() {
     let mut cpu = CPU::new();
 
     let opcode_base = 0b10011_000;
@@ -831,7 +831,7 @@ fn test_op_sbc_r_r() {
 }
 
 #[test]
-fn test_op_sbc_r_rr() {
+fn op_sbc_r_rr() {
     let mut cpu = CPU::new();
     let opcode = 0b10011_110;
 
@@ -869,7 +869,7 @@ fn test_op_sbc_r_rr() {
 }
 
 #[test]
-fn test_op_and_r_n() {
+fn op_and_r_n() {
     let mut cpu = CPU::new();
     let opcode = 0b11_100_110;
 
@@ -899,7 +899,7 @@ fn test_op_and_r_n() {
 }
 
 #[test]
-fn test_op_and_r_r() {
+fn op_and_r_r() {
     let mut cpu = CPU::new();
 
     let opcode_base = 0b10100_000;
@@ -979,7 +979,7 @@ fn test_op_and_r_r() {
 }
 
 #[test]
-fn test_op_and_r_rr() {
+fn op_and_r_rr() {
     let mut cpu = CPU::new();
     let opcode = 0b10100_110;
 
@@ -1015,7 +1015,7 @@ fn test_op_and_r_rr() {
 }
 
 #[test]
-fn test_op_xor_r_n() {
+fn op_xor_r_n() {
     let mut cpu = CPU::new();
     let opcode = 0b11_101_110;
 
@@ -1045,7 +1045,7 @@ fn test_op_xor_r_n() {
 }
 
 #[test]
-fn test_op_xor_r_r() {
+fn op_xor_r_r() {
     let mut cpu = CPU::new();
 
     let opcode_base = 0b10101_000;
@@ -1112,7 +1112,7 @@ fn test_op_xor_r_r() {
 }
 
 #[test]
-fn test_op_xor_r_rr() {
+fn op_xor_r_rr() {
     let mut cpu = CPU::new();
     let opcode = 0b10101_110;
 
@@ -1148,7 +1148,7 @@ fn test_op_xor_r_rr() {
 }
 
 #[test]
-fn test_op_or_r_n() {
+fn op_or_r_n() {
     let mut cpu = CPU::new();
     let opcode = 0b11_110_110;
 
@@ -1178,7 +1178,7 @@ fn test_op_or_r_n() {
 }
 
 #[test]
-fn test_op_or_r_r() {
+fn op_or_r_r() {
     let mut cpu = CPU::new();
 
     let opcode_base = 0b10110_000;
@@ -1258,7 +1258,7 @@ fn test_op_or_r_r() {
 }
 
 #[test]
-fn test_op_or_r_rr() {
+fn op_or_r_rr() {
     let mut cpu = CPU::new();
     let opcode = 0b10110_110;
 
@@ -1294,7 +1294,7 @@ fn test_op_or_r_rr() {
 }
 
 #[test]
-fn test_op_cp_r_n() {
+fn op_cp_r_n() {
     let mut cpu = CPU::new();
     let opcode = 0b11_111_110;
 
@@ -1324,7 +1324,7 @@ fn test_op_cp_r_n() {
 }
 
 #[test]
-fn test_op_cp_r_r() {
+fn op_cp_r_r() {
     let mut cpu = CPU::new();
 
     let opcode_base = 0b10111_000;
@@ -1391,7 +1391,7 @@ fn test_op_cp_r_r() {
 }
 
 #[test]
-fn test_op_cp_r_rr() {
+fn op_cp_r_rr() {
     let mut cpu = CPU::new();
     let opcode = 0b10111_110;
 
@@ -1427,7 +1427,7 @@ fn test_op_cp_r_rr() {
 }
 
 #[test]
-fn test_op_inc_r() {
+fn op_inc_r() {
     let mut cpu = CPU::new();
 
     let opcode_base = 0b00_000_100;
@@ -1497,7 +1497,7 @@ fn test_op_inc_r() {
 }
 
 #[test]
-fn test_op_inc_rr() {
+fn op_inc_rr() {
     let mut cpu = CPU::new();
     let opcode = 0b00_110_100;
 
@@ -1531,7 +1531,7 @@ fn test_op_inc_rr() {
 }
 
 #[test]
-fn test_op_dec_r() {
+fn op_dec_r() {
     let mut cpu = CPU::new();
 
     let opcode_base = 0b00_000_101;
@@ -1601,7 +1601,7 @@ fn test_op_dec_r() {
 }
 
 #[test]
-fn test_op_dec_rr() {
+fn op_dec_rr() {
     let mut cpu = CPU::new();
     let opcode = 0b00_110_101;
 
@@ -1635,7 +1635,7 @@ fn test_op_dec_rr() {
 }
 
 #[test]
-fn test_op_add_rr_rr() {
+fn op_add_rr_rr() {
     let mut cpu = CPU::new();
 
     let opcode_base = 0b00_00_1001;

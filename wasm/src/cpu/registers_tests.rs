@@ -1,7 +1,7 @@
 use super::*;
 
 #[test]
-fn test_new() {
+fn new() {
     let registers = Registers::new();
     assert_eq!(registers.a, 0);
     assert_eq!(registers.b, 0);
@@ -19,7 +19,7 @@ fn test_new() {
 }
 
 #[test]
-fn test_f() {
+fn f() {
     let mut registers = Registers::new();
     assert_eq!(registers.f_get(), 0);
 
@@ -44,7 +44,7 @@ fn test_f() {
 }
 
 #[test]
-fn test_af() {
+fn af() {
     let mut registers = Registers::new();
     assert_eq!(registers.af_get(), 0);
 
@@ -64,7 +64,7 @@ fn test_af() {
 }
 
 #[test]
-fn test_bc() {
+fn bc() {
     let mut registers = Registers::new();
     assert_eq!(registers.bc_get(), 0);
 
@@ -81,7 +81,7 @@ fn test_bc() {
 }
 
 #[test]
-fn test_de() {
+fn de() {
     let mut registers = Registers::new();
     assert_eq!(registers.de_get(), 0);
 
@@ -98,7 +98,7 @@ fn test_de() {
 }
 
 #[test]
-fn test_hl() {
+fn hl() {
     let mut registers = Registers::new();
     assert_eq!(registers.hl_get(), 0);
 

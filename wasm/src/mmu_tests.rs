@@ -1,13 +1,13 @@
 use super::*;
 
 #[test]
-fn test_new() {
+fn new() {
     let mmu = MMU::new();
     assert_eq!(mmu.memory[0], 0);
 }
 
 #[test]
-fn test_byte() {
+fn byte() {
     let mut mmu = MMU::new();
     assert_eq!(mmu.byte_get(0x100), 0);
 
@@ -16,7 +16,7 @@ fn test_byte() {
 }
 
 #[test]
-fn test_word() {
+fn word() {
     let mut mmu = MMU::new();
     assert_eq!(mmu.word_get(0x100), 0);
 
