@@ -120,7 +120,7 @@ fn op_sbc_r_r() {
 }
 
 #[test]
-fn op_sbc_r_rr() {
+fn op_sbc_r_rrn() {
     let mut cpu = CPU::new();
     let opcode = 0b10011_110;
 

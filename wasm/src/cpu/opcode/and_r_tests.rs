@@ -114,7 +114,7 @@ fn op_and_r_r() {
 }
 
 #[test]
-fn op_and_r_rr() {
+fn op_and_r_rrn() {
     let mut cpu = CPU::new();
     let opcode = 0b10100_110;
 

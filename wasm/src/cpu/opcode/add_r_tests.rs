@@ -88,7 +88,7 @@ fn op_add_r_r() {
 }
 
 #[test]
-fn op_add_r_rr() {
+fn op_add_r_rrn() {
     let mut cpu = CPU::new();
     let opcode = 0b10000_110;
 

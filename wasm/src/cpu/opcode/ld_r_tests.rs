@@ -89,7 +89,7 @@ fn op_ld_r_r() {
 }
 
 #[test]
-fn op_ld_r_hl() {
+fn op_ld_r_hln() {
     // LD r, (HL)
     let mut cpu = CPU::new();
 
@@ -121,7 +121,7 @@ fn op_ld_r_hl() {
 }
 
 #[test]
-fn op_ld_r_rr() {
+fn op_ld_r_rrn() {
     // LD A, (rr)
     let mut cpu = CPU::new();
 

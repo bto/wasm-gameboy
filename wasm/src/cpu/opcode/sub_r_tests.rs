@@ -101,7 +101,7 @@ fn op_sub_r_r() {
 }
 
 #[test]
-fn op_sub_r_rr() {
+fn op_sub_r_rrn() {
     let mut cpu = CPU::new();
     let opcode = 0b10010_110;
 

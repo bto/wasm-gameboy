@@ -74,7 +74,7 @@ fn op_dec_r() {
 }
 
 #[test]
-fn op_dec_rr() {
+fn op_dec_rrn() {
     let mut cpu = CPU::new();
     let opcode = 0b00_110_101;
 
