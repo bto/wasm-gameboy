@@ -89,6 +89,38 @@ fn op_ld_r_r() {
 }
 
 #[test]
+fn op_ld_r_hl() {
+    // LD r, (HL)
+    let mut cpu = CPU::new();
+
+    let opcode_base = 0b01_000_110;
+    for i in [0b000, 0b001, 0b010, 0b011, 0b100, 0b101, 0b111].iter() {
+        let pc = cpu.registers.pc;
+        let opcode = opcode_base | (i << 3);
+        set_inst!(cpu, pc, opcode);
+
+        let v = *i + 10;
+        cpu.registers.h = 2;
+        cpu.registers.l = *i;
+        cpu.mmu.byte_set(cpu.registers.hl_get(), v);
+
+        cpu.execute();
+
+        assert_eq!(cpu.registers.pc, pc + 1);
+        match i {
+            0b000 => assert_eq!(cpu.registers.b, v),
+            0b001 => assert_eq!(cpu.registers.c, v),
+            0b010 => assert_eq!(cpu.registers.d, v),
+            0b011 => assert_eq!(cpu.registers.e, v),
+            0b100 => assert_eq!(cpu.registers.h, v),
+            0b101 => assert_eq!(cpu.registers.l, v),
+            0b111 => assert_eq!(cpu.registers.a, v),
+            _ => panic!("never reach"),
+        }
+    }
+}
+
+#[test]
 fn op_ld_r_rr() {
     // LD A, (rr)
     let mut cpu = CPU::new();
@@ -112,28 +144,4 @@ fn op_ld_r_rr() {
     cpu.execute();
     assert_eq!(cpu.registers.pc, pc + 1);
     assert_eq!(cpu.mmu.byte_get(0x302), 4);
-
-    // LDI A, (HL)
-    let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0b00_10_1010);
-    cpu.registers.h = 4;
-    cpu.registers.l = 2;
-    cpu.mmu.byte_set(0x402, 5);
-    cpu.execute();
-    assert_eq!(cpu.registers.pc, pc + 1);
-    assert_eq!(cpu.registers.a, 5);
-    assert_eq!(cpu.registers.h, 4);
-    assert_eq!(cpu.registers.l, 3);
-
-    // LDD A, (HL)
-    let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0b00_11_1010);
-    cpu.registers.h = 5;
-    cpu.registers.l = 4;
-    cpu.mmu.byte_set(0x504, 6);
-    cpu.execute();
-    assert_eq!(cpu.registers.pc, pc + 1);
-    assert_eq!(cpu.registers.a, 6);
-    assert_eq!(cpu.registers.h, 5);
-    assert_eq!(cpu.registers.l, 3);
 }
