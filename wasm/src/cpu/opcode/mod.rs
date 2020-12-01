@@ -59,4 +59,7 @@ mod stack;
 mod sub_r;
 
 #[macro_use]
+mod swap;
+
+#[macro_use]
 mod xor_r;

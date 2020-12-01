@@ -257,6 +257,24 @@ impl CPU {
             0b00_10_1011 => op_dec_rr!(self, hl),
             0b00_11_1011 => op_dec_rr!(self, sp),
 
+            0xCB => self.execute_cb(),
+
+            _ => panic!("not implemented instruction"),
+        }
+    }
+
+    fn execute_cb(&mut self) {
+        #[allow(clippy::inconsistent_digit_grouping)]
+        match self.fetch_byte() {
+            0b00110_000 => op_swap_r!(self, b),
+            0b00110_001 => op_swap_r!(self, c),
+            0b00110_010 => op_swap_r!(self, d),
+            0b00110_011 => op_swap_r!(self, e),
+            0b00110_100 => op_swap_r!(self, h),
+            0b00110_101 => op_swap_r!(self, l),
+            0b00110_110 => op_swap_rrn!(self, hl),
+            0b00110_111 => op_swap_r!(self, a),
+
             _ => panic!("not implemented instruction"),
         }
     }

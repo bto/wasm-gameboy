@@ -76,6 +76,10 @@ mod stack;
 #[cfg(test)]
 mod sub_r;
 
+#[path = "./swap_tests.rs"]
+#[cfg(test)]
+mod swap;
+
 #[path = "./xor_r_tests.rs"]
 #[cfg(test)]
 mod xor_r;
