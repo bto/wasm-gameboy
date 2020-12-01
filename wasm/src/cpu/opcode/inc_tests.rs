@@ -76,6 +76,35 @@ fn op_inc_r() {
 #[test]
 fn op_inc_rr() {
     let mut cpu = CPU::new();
+
+    let opcode_base = 0b00_00_0011;
+    for i in [0b00, 0b01, 0b10, 0b11].iter() {
+        let opcode = opcode_base | (i << 4);
+        let pc = cpu.registers.pc;
+        set_inst!(cpu, pc, opcode);
+        let v = *i as u16;
+        match i {
+            0b00 => cpu.registers.bc_set(v),
+            0b01 => cpu.registers.de_set(v),
+            0b10 => cpu.registers.hl_set(v),
+            0b11 => cpu.registers.sp = v,
+            _ => panic!("never reach"),
+        }
+        cpu.execute();
+        assert_eq!(cpu.registers.pc, pc + 1);
+        match i {
+            0b00 => assert_eq!(cpu.registers.bc_get(), v + 1),
+            0b01 => assert_eq!(cpu.registers.de_get(), v + 1),
+            0b10 => assert_eq!(cpu.registers.hl_get(), v + 1),
+            0b11 => assert_eq!(cpu.registers.sp, v + 1),
+            _ => panic!("never reach"),
+        }
+    }
+}
+
+#[test]
+fn op_inc_rrn() {
+    let mut cpu = CPU::new();
     let opcode = 0b00_110_100;
 
     // not overflow

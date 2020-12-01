@@ -247,6 +247,11 @@ impl CPU {
 
             0b11101000 => op_add_sp_n!(self),
 
+            0b00_00_0011 => op_inc_rr!(self, bc),
+            0b00_01_0011 => op_inc_rr!(self, de),
+            0b00_10_0011 => op_inc_rr!(self, hl),
+            0b00_11_0011 => op_inc_rr!(self, sp),
+
             _ => panic!("not implemented instruction"),
         }
     }
