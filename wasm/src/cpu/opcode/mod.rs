@@ -17,6 +17,9 @@ mod and_r;
 mod cp_r;
 
 #[macro_use]
+mod daa;
+
+#[macro_use]
 mod dec;
 
 #[macro_use]

@@ -257,6 +257,8 @@ impl CPU {
             0b00_10_1011 => op_dec_rr!(self, hl),
             0b00_11_1011 => op_dec_rr!(self, sp),
 
+            0b00100111 => op_daa!(self),
+
             0xCB => self.execute_cb(),
 
             _ => panic!("not implemented instruction"),
