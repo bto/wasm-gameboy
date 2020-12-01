@@ -8,6 +8,9 @@ mod add_r;
 mod add_rr;
 
 #[macro_use]
+mod add_sp;
+
+#[macro_use]
 mod and_r;
 
 #[macro_use]
