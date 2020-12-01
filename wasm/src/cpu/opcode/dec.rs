@@ -14,6 +14,14 @@ macro_rules! op_dec_r {
     }};
 }
 
+macro_rules! op_dec_rr {
+    ( $self:ident, $dest:ident ) => {{
+        let v = register16_get!($self, $dest);
+        let r = v.wrapping_sub(1);
+        register16_set!($self, $dest, r)
+    }};
+}
+
 macro_rules! op_dec_rrn {
     ( $self:ident, $dest:ident ) => {{
         let value = register16_load!($self, $dest);

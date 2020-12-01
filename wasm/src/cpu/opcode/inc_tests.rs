@@ -93,10 +93,10 @@ fn op_inc_rr() {
         cpu.execute();
         assert_eq!(cpu.registers.pc, pc + 1);
         match i {
-            0b00 => assert_eq!(cpu.registers.bc_get(), v + 1),
-            0b01 => assert_eq!(cpu.registers.de_get(), v + 1),
-            0b10 => assert_eq!(cpu.registers.hl_get(), v + 1),
-            0b11 => assert_eq!(cpu.registers.sp, v + 1),
+            0b00 => assert_eq!(cpu.registers.bc_get(), v.wrapping_add(1)),
+            0b01 => assert_eq!(cpu.registers.de_get(), v.wrapping_add(1)),
+            0b10 => assert_eq!(cpu.registers.hl_get(), v.wrapping_add(1)),
+            0b11 => assert_eq!(cpu.registers.sp, v.wrapping_add(1)),
             _ => panic!("never reach"),
         }
     }
