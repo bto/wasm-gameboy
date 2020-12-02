@@ -58,6 +58,14 @@ macro_rules! op_daa_r {
     }};
 }
 
+macro_rules! op_scf {
+    ( $self:ident ) => {{
+        $self.registers.carry = true;
+        $self.registers.half_carry = false;
+        $self.registers.subtraction = false;
+    }};
+}
+
 macro_rules! op_swap {
     ( $self:ident, $value:expr ) => {{
         let r = ($value >> 4) | ($value << 4);

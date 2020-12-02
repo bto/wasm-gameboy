@@ -260,6 +260,7 @@ impl CPU {
             0b00100111 => op_daa_r!(self, a),
             0b00101111 => op_cpl_r!(self, a),
             0b00111111 => op_ccf!(self),
+            0b00110111 => op_scf!(self),
 
             0xCB => self.execute_cb(),
 
