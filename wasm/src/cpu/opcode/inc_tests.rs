@@ -80,25 +80,62 @@ fn op_inc_rr() {
     let opcode_base = 0b00_00_0011;
     for i in [0b00, 0b01, 0b10, 0b11].iter() {
         let opcode = opcode_base | (i << 4);
+
+        // not overflow
         let pc = cpu.registers.pc;
         set_inst!(cpu, pc, opcode);
-        let v = *i as u16;
         match i {
-            0b00 => cpu.registers.bc_set(v),
-            0b01 => cpu.registers.de_set(v),
-            0b10 => cpu.registers.hl_set(v),
-            0b11 => cpu.registers.sp = v,
+            0b00 => cpu.registers.bc_set(1),
+            0b01 => cpu.registers.de_set(2),
+            0b10 => cpu.registers.hl_set(3),
+            0b11 => cpu.registers.sp = 4,
             _ => panic!("never reach"),
         }
+        cpu.registers.carry = true;
+        cpu.registers.half_carry = true;
+        cpu.registers.subtraction = true;
+        cpu.registers.zero = true;
         cpu.execute();
         assert_eq!(cpu.registers.pc, pc + 1);
         match i {
-            0b00 => assert_eq!(cpu.registers.bc_get(), v.wrapping_add(1)),
-            0b01 => assert_eq!(cpu.registers.de_get(), v.wrapping_add(1)),
-            0b10 => assert_eq!(cpu.registers.hl_get(), v.wrapping_add(1)),
-            0b11 => assert_eq!(cpu.registers.sp, v.wrapping_add(1)),
+            0b00 => assert_eq!(cpu.registers.bc_get(), 2),
+            0b01 => assert_eq!(cpu.registers.de_get(), 3),
+            0b10 => assert_eq!(cpu.registers.hl_get(), 4),
+            0b11 => assert_eq!(cpu.registers.sp, 5),
             _ => panic!("never reach"),
         }
+        assert_eq!(cpu.registers.carry, true);
+        assert_eq!(cpu.registers.half_carry, true);
+        assert_eq!(cpu.registers.subtraction, true);
+        assert_eq!(cpu.registers.zero, true);
+
+        // overflow
+        let pc = cpu.registers.pc;
+        set_inst!(cpu, pc, opcode);
+        match i {
+            0b00 => cpu.registers.bc_set(0xFFFF),
+            0b01 => cpu.registers.de_set(0xFFFF),
+            0b10 => cpu.registers.hl_set(0xFFFF),
+            0b11 => cpu.registers.sp = 0xFFFF,
+            _ => panic!("never reach"),
+        }
+        cpu.registers.carry = false;
+        cpu.registers.half_carry = false;
+        cpu.registers.subtraction = false;
+        cpu.registers.zero = false;
+        cpu.execute();
+        assert_eq!(cpu.registers.pc, pc + 1);
+        match i {
+            0b00 => assert_eq!(cpu.registers.bc_get(), 0),
+            0b01 => assert_eq!(cpu.registers.de_get(), 0),
+            0b10 => assert_eq!(cpu.registers.hl_get(), 0),
+            0b11 => assert_eq!(cpu.registers.sp, 0),
+            _ => panic!("never reach"),
+        }
+        assert_eq!(cpu.registers.carry, false);
+        assert_eq!(cpu.registers.half_carry, false);
+        assert_eq!(cpu.registers.subtraction, false);
+        assert_eq!(cpu.registers.zero, false);
     }
 }
 
