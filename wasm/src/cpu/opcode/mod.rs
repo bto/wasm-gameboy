@@ -47,6 +47,9 @@ mod lddi_rr;
 mod ldh;
 
 #[macro_use]
+mod misc;
+
+#[macro_use]
 mod or_r;
 
 #[macro_use]

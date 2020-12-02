@@ -64,6 +64,10 @@ mod lddi_rr;
 #[cfg(test)]
 mod ldh;
 
+#[path = "./misc_tests.rs"]
+#[cfg(test)]
+mod misc;
+
 #[path = "./or_r_tests.rs"]
 #[cfg(test)]
 mod or_r;
