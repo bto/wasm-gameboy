@@ -1,3 +1,11 @@
+macro_rules! op_ccf {
+    ( $self:ident ) => {{
+        $self.registers.carry = !$self.registers.carry;
+        $self.registers.half_carry = false;
+        $self.registers.subtraction = false;
+    }};
+}
+
 macro_rules! op_cpl {
     ( $self:ident, $value:expr ) => {{
         let r = !$value;
@@ -43,6 +51,7 @@ macro_rules! op_daa {
         r
     }};
 }
+
 macro_rules! op_daa_r {
     ( $self:ident, $dest:ident ) => {{
         $self.registers.$dest = op_daa!($self, $self.registers.$dest)
