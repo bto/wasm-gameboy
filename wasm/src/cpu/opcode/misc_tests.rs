@@ -150,6 +150,28 @@ fn op_daa_r() {
 }
 
 #[test]
+fn op_halt() {
+    let mut cpu = CPU::new();
+    let opcode = 0x76;
+
+    // true -> true
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, opcode);
+    cpu.halt = true;
+    cpu.execute();
+    assert_eq!(cpu.registers.pc, pc + 1);
+    assert_eq!(cpu.halt, true);
+
+    // false -> true
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, opcode);
+    cpu.halt = false;
+    cpu.execute();
+    assert_eq!(cpu.registers.pc, pc + 1);
+    assert_eq!(cpu.halt, true);
+}
+
+#[test]
 fn op_scf() {
     let mut cpu = CPU::new();
     let opcode = 0b00110111;

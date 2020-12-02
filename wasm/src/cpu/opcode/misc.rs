@@ -58,6 +58,12 @@ macro_rules! op_daa_r {
     }};
 }
 
+macro_rules! op_halt {
+    ( $self:ident ) => {{
+        $self.halt = true;
+    }};
+}
+
 macro_rules! op_scf {
     ( $self:ident ) => {{
         $self.registers.carry = true;

@@ -7,6 +7,7 @@ use registers::Registers;
 mod opcode;
 
 pub struct CPU {
+    halt: bool,
     mmu: MMU,
     registers: Registers,
 }
@@ -14,6 +15,7 @@ pub struct CPU {
 impl CPU {
     pub fn new() -> Self {
         Self {
+            halt: false,
             mmu: MMU::new(),
             registers: Registers::new(),
         }
@@ -91,7 +93,6 @@ impl CPU {
             0b01_110_011 => op_ld_rrn_r!(self, hl, e),
             0b01_110_100 => op_ld_rrn_r!(self, hl, h),
             0b01_110_101 => op_ld_rrn_r!(self, hl, l),
-            0b01_110_110 => {}
             0b01_110_111 => op_ld_rrn_r!(self, hl, a),
 
             0b01_111_000 => op_ld_r_r!(self, a, b),
@@ -261,6 +262,8 @@ impl CPU {
             0b00101111 => op_cpl_r!(self, a),
             0b00111111 => op_ccf!(self),
             0b00110111 => op_scf!(self),
+            0b00000000 => {} // NOP
+            0b01110110 => op_halt!(self),
 
             0xCB => self.execute_cb(),
 
