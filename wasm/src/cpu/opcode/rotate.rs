@@ -7,13 +7,29 @@ macro_rules! set_rotate_flags {
     }};
 }
 
+macro_rules! op_rl {
+    ( $self:ident, $value:ident ) => {{
+        let x = $value;
+        let c = x & 0x80 == 0x80;
+        let r = x << 1 | $self.registers.carry as u8;
+        set_rotate_flags!($self, r, c);
+        r
+    }};
+}
+
 macro_rules! op_rl_r {
     ( $self:ident, $dest:ident ) => {{
         let x = $self.registers.$dest;
-        let c = x & 0x80 == 0x80;
-        let r = x << 1 | $self.registers.carry as u8;
+        let r = op_rl!($self, x);
         $self.registers.$dest = r;
-        set_rotate_flags!($self, r, c);
+    }};
+}
+
+macro_rules! op_rl_rrn {
+    ( $self:ident, $dest:ident ) => {{
+        let x = register16_load!($self, $dest);
+        let r = op_rl!($self, x);
+        register16_store!($self, $dest, r);
     }};
 }
 
