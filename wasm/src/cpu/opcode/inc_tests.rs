@@ -24,9 +24,13 @@ fn op_inc_r() {
             0b111 => cpu.registers.a = 0,
             _ => panic!("never reach"),
         }
+        cpu.registers.carry = true;
+        cpu.registers.half_carry = true;
+        cpu.registers.subtraction = true;
+        cpu.registers.zero = true;
         cpu.execute();
         assert_eq!(cpu.registers.pc, pc + 1);
-        assert_eq!(cpu.registers.carry, false);
+        assert_eq!(cpu.registers.carry, true);
         assert_eq!(cpu.registers.half_carry, false);
         assert_eq!(cpu.registers.subtraction, false);
         assert_eq!(cpu.registers.zero, false);
@@ -54,6 +58,10 @@ fn op_inc_r() {
             0b111 => cpu.registers.a = 0xFF,
             _ => panic!("never reach"),
         }
+        cpu.registers.carry = false;
+        cpu.registers.half_carry = false;
+        cpu.registers.subtraction = true;
+        cpu.registers.zero = false;
         cpu.execute();
         assert_eq!(cpu.registers.pc, pc + 1);
         assert_eq!(cpu.registers.carry, false);
