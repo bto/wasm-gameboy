@@ -72,6 +72,12 @@ macro_rules! op_scf {
     }};
 }
 
+macro_rules! op_stop {
+    ( $self:ident ) => {{
+        $self.stop = true;
+    }};
+}
+
 macro_rules! op_swap {
     ( $self:ident, $value:expr ) => {{
         let r = ($value >> 4) | ($value << 4);

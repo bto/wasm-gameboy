@@ -206,6 +206,28 @@ fn op_scf() {
 }
 
 #[test]
+fn op_stop() {
+    let mut cpu = CPU::new();
+    let opcode = 0x10;
+
+    // true -> true
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, opcode);
+    cpu.stop = true;
+    cpu.execute();
+    assert_eq!(cpu.registers.pc, pc + 1);
+    assert_eq!(cpu.stop, true);
+
+    // false -> true
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, opcode);
+    cpu.stop = false;
+    cpu.execute();
+    assert_eq!(cpu.registers.pc, pc + 1);
+    assert_eq!(cpu.stop, true);
+}
+
+#[test]
 fn op_swap_r() {
     let mut cpu = CPU::new();
 

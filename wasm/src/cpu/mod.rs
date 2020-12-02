@@ -10,6 +10,7 @@ pub struct CPU {
     halt: bool,
     mmu: MMU,
     registers: Registers,
+    stop: bool,
 }
 
 impl CPU {
@@ -18,6 +19,7 @@ impl CPU {
             halt: false,
             mmu: MMU::new(),
             registers: Registers::new(),
+            stop: false,
         }
     }
 
@@ -265,6 +267,7 @@ impl CPU {
             0b00110111 => op_scf!(self),
             0b00000000 => {} // NOP
             0b01110110 => op_halt!(self),
+            0b00010000 => op_stop!(self),
 
             0xCB => self.execute_cb(),
 
