@@ -12,34 +12,67 @@ fn op_ccf() {
     let pc = cpu.registers.pc;
     set_inst!(cpu, pc, opcode);
     cpu.registers.carry = true;
+    cpu.registers.half_carry = true;
+    cpu.registers.subtraction = true;
+    cpu.registers.zero = true;
     cpu.execute();
     assert_eq!(cpu.registers.pc, pc + 1);
     assert_eq!(cpu.registers.carry, false);
     assert_eq!(cpu.registers.half_carry, false);
     assert_eq!(cpu.registers.subtraction, false);
+    assert_eq!(cpu.registers.zero, true);
 
     // false -> true
     let pc = cpu.registers.pc;
     set_inst!(cpu, pc, opcode);
     cpu.registers.carry = false;
+    cpu.registers.half_carry = false;
+    cpu.registers.subtraction = false;
+    cpu.registers.zero = false;
     cpu.execute();
     assert_eq!(cpu.registers.pc, pc + 1);
     assert_eq!(cpu.registers.carry, true);
     assert_eq!(cpu.registers.half_carry, false);
     assert_eq!(cpu.registers.subtraction, false);
+    assert_eq!(cpu.registers.zero, false);
 }
 
 #[test]
 fn op_cpl_r() {
     let mut cpu = CPU::new();
+    let opcode = 0b00101111;
+
+    // 0b10010110
     let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0b00101111);
+    set_inst!(cpu, pc, opcode);
     cpu.registers.a = 0b10010110;
+    cpu.registers.carry = true;
+    cpu.registers.half_carry = true;
+    cpu.registers.subtraction = true;
+    cpu.registers.zero = true;
     cpu.execute();
     assert_eq!(cpu.registers.pc, pc + 1);
     assert_eq!(cpu.registers.a, 0b01101001);
+    assert_eq!(cpu.registers.carry, true);
     assert_eq!(cpu.registers.half_carry, true);
     assert_eq!(cpu.registers.subtraction, true);
+    assert_eq!(cpu.registers.zero, true);
+
+    // 0b01101001
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, opcode);
+    cpu.registers.a = 0b01101001;
+    cpu.registers.carry = false;
+    cpu.registers.half_carry = false;
+    cpu.registers.subtraction = false;
+    cpu.registers.zero = false;
+    cpu.execute();
+    assert_eq!(cpu.registers.pc, pc + 1);
+    assert_eq!(cpu.registers.a, 0b10010110);
+    assert_eq!(cpu.registers.carry, false);
+    assert_eq!(cpu.registers.half_carry, true);
+    assert_eq!(cpu.registers.subtraction, true);
+    assert_eq!(cpu.registers.zero, false);
 }
 
 #[test]
@@ -61,6 +94,7 @@ fn op_daa_r() {
     assert_eq!(cpu.registers.a, 0x46);
     assert_eq!(cpu.registers.carry, false);
     assert_eq!(cpu.registers.half_carry, false);
+    assert_eq!(cpu.registers.subtraction, false);
     assert_eq!(cpu.registers.zero, false);
 
     // 0x55 + 0x45
@@ -77,6 +111,7 @@ fn op_daa_r() {
     assert_eq!(cpu.registers.a, 0);
     assert_eq!(cpu.registers.carry, true);
     assert_eq!(cpu.registers.half_carry, false);
+    assert_eq!(cpu.registers.subtraction, false);
     assert_eq!(cpu.registers.zero, true);
 
     // 0x55 - 0x58
@@ -93,6 +128,7 @@ fn op_daa_r() {
     assert_eq!(cpu.registers.a, 0x97);
     assert_eq!(cpu.registers.carry, true);
     assert_eq!(cpu.registers.half_carry, false);
+    assert_eq!(cpu.registers.subtraction, true);
     assert_eq!(cpu.registers.zero, false);
 
     // 0x55 - 0x55
@@ -109,6 +145,7 @@ fn op_daa_r() {
     assert_eq!(cpu.registers.a, 0);
     assert_eq!(cpu.registers.carry, false);
     assert_eq!(cpu.registers.half_carry, false);
+    assert_eq!(cpu.registers.subtraction, true);
     assert_eq!(cpu.registers.zero, true);
 }
 
@@ -167,6 +204,10 @@ fn op_swap_r() {
             0b111 => cpu.registers.a = 0b1010_0101,
             _ => panic!("never reach"),
         }
+        cpu.registers.carry = true;
+        cpu.registers.half_carry = true;
+        cpu.registers.subtraction = true;
+        cpu.registers.zero = true;
         cpu.execute();
         assert_eq!(cpu.registers.pc, pc + 2);
         assert_eq!(cpu.registers.carry, false);
@@ -197,6 +238,10 @@ fn op_swap_r() {
             0b111 => cpu.registers.a = 0,
             _ => panic!("never reach"),
         }
+        cpu.registers.carry = true;
+        cpu.registers.half_carry = true;
+        cpu.registers.subtraction = true;
+        cpu.registers.zero = false;
         cpu.execute();
         assert_eq!(cpu.registers.pc, pc + 2);
         assert_eq!(cpu.registers.carry, false);
@@ -227,6 +272,10 @@ fn op_swap_rrn() {
     cpu.registers.h = 3;
     cpu.registers.l = 2;
     cpu.mmu.byte_set(0x302, 0b1010_0101);
+    cpu.registers.carry = true;
+    cpu.registers.half_carry = true;
+    cpu.registers.subtraction = true;
+    cpu.registers.zero = true;
     cpu.execute();
     assert_eq!(cpu.registers.pc, pc + 2);
     assert_eq!(cpu.mmu.byte_get(0x302), 0b0101_1010);
@@ -241,6 +290,10 @@ fn op_swap_rrn() {
     cpu.registers.h = 4;
     cpu.registers.l = 3;
     cpu.mmu.byte_set(0x403, 0);
+    cpu.registers.carry = true;
+    cpu.registers.half_carry = true;
+    cpu.registers.subtraction = true;
+    cpu.registers.zero = false;
     cpu.execute();
     assert_eq!(cpu.registers.pc, pc + 2);
     assert_eq!(cpu.mmu.byte_get(0x403), 0);
