@@ -2,7 +2,7 @@ macro_rules! op_rl_r {
     ( $self:ident, $dest:ident ) => {{
         let x = $self.registers.$dest;
         let c = x & 0x80 == 0x80;
-        let r = x << 1;
+        let r = x << 1 | $self.registers.carry as u8;
         $self.registers.$dest = r;
         $self.registers.carry = c;
         $self.registers.half_carry = false;
@@ -15,7 +15,7 @@ macro_rules! op_rlc_r {
     ( $self:ident, $dest:ident ) => {{
         let x = $self.registers.$dest;
         let c = x & 0x80 == 0x80;
-        let r = x << 1 | $self.registers.carry as u8;
+        let r = x << 1 | c as u8;
         $self.registers.$dest = r;
         $self.registers.carry = c;
         $self.registers.half_carry = false;
