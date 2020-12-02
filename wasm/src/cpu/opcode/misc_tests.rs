@@ -172,6 +172,50 @@ fn op_halt() {
 }
 
 #[test]
+fn op_int_disable() {
+    let mut cpu = CPU::new();
+    let opcode = 0xF3;
+
+    // true -> true
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, opcode);
+    cpu.int_disable = true;
+    cpu.execute();
+    assert_eq!(cpu.registers.pc, pc + 1);
+    assert_eq!(cpu.int_disable, true);
+
+    // false -> true
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, opcode);
+    cpu.int_disable = false;
+    cpu.execute();
+    assert_eq!(cpu.registers.pc, pc + 1);
+    assert_eq!(cpu.int_disable, true);
+}
+
+#[test]
+fn op_int_enable() {
+    let mut cpu = CPU::new();
+    let opcode = 0xFB;
+
+    // true -> true
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, opcode);
+    cpu.int_enable = true;
+    cpu.execute();
+    assert_eq!(cpu.registers.pc, pc + 1);
+    assert_eq!(cpu.int_enable, true);
+
+    // false -> true
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, opcode);
+    cpu.int_enable = false;
+    cpu.execute();
+    assert_eq!(cpu.registers.pc, pc + 1);
+    assert_eq!(cpu.int_enable, true);
+}
+
+#[test]
 fn op_scf() {
     let mut cpu = CPU::new();
     let opcode = 0x37;

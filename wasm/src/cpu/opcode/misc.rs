@@ -64,6 +64,18 @@ macro_rules! op_halt {
     }};
 }
 
+macro_rules! op_int_disable {
+    ( $self:ident ) => {{
+        $self.int_disable = true;
+    }};
+}
+
+macro_rules! op_int_enable {
+    ( $self:ident ) => {{
+        $self.int_enable = true;
+    }};
+}
+
 macro_rules! op_scf {
     ( $self:ident ) => {{
         $self.registers.carry = true;

@@ -8,6 +8,8 @@ mod opcode;
 
 pub struct CPU {
     halt: bool,
+    int_disable: bool,
+    int_enable: bool,
     mmu: MMU,
     registers: Registers,
     stop: bool,
@@ -17,6 +19,8 @@ impl CPU {
     pub fn new() -> Self {
         Self {
             halt: false,
+            int_disable: false,
+            int_enable: false,
             mmu: MMU::new(),
             registers: Registers::new(),
             stop: false,
@@ -268,6 +272,8 @@ impl CPU {
             0b00000000 => {} // NOP
             0b01110110 => op_halt!(self),
             0b00010000 => op_stop!(self),
+            0b11110011 => op_int_disable!(self),
+            0b11111011 => op_int_enable!(self),
 
             0xCB => self.execute_cb(),
 
