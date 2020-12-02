@@ -22,13 +22,17 @@ fn op_add_rr_rr() {
             0b11 => cpu.registers.sp = 0x8000,
             _ => panic!("never reach"),
         }
+        cpu.registers.carry = false;
+        cpu.registers.half_carry = true;
+        cpu.registers.subtraction = true;
+        cpu.registers.zero = false;
         cpu.execute();
         assert_eq!(cpu.registers.pc, pc + 1);
         assert_eq!(cpu.registers.hl_get(), 0);
         assert_eq!(cpu.registers.carry, true);
         assert_eq!(cpu.registers.half_carry, false);
         assert_eq!(cpu.registers.subtraction, false);
-        assert_eq!(cpu.registers.zero, true);
+        assert_eq!(cpu.registers.zero, false);
 
         // 0b00000100_00000000 + 0b00000100_00000000
         let pc = cpu.registers.pc;
@@ -41,12 +45,16 @@ fn op_add_rr_rr() {
             0b11 => cpu.registers.sp = 0b00000100_00000000,
             _ => panic!("never reach"),
         }
+        cpu.registers.carry = true;
+        cpu.registers.half_carry = false;
+        cpu.registers.subtraction = false;
+        cpu.registers.zero = true;
         cpu.execute();
         assert_eq!(cpu.registers.pc, pc + 1);
         assert_eq!(cpu.registers.hl_get(), 0b00001000_00000000);
         assert_eq!(cpu.registers.carry, false);
         assert_eq!(cpu.registers.half_carry, true);
         assert_eq!(cpu.registers.subtraction, false);
-        assert_eq!(cpu.registers.zero, false);
+        assert_eq!(cpu.registers.zero, true);
     }
 }

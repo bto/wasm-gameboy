@@ -7,7 +7,6 @@ macro_rules! op_add_rr {
         $self.registers.carry = c;
         $self.registers.half_carry = ((x & 0x7FF) + (y & 0x7FF)) > 0x7FF;
         $self.registers.subtraction = false;
-        $self.registers.zero = r == 0;
     }};
 }
 
