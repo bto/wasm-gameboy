@@ -155,3 +155,37 @@ fn op_swap_r() {
         }
     }
 }
+
+#[test]
+fn op_swap_rrn() {
+    let mut cpu = CPU::new();
+    let opcode = 0b00110_110;
+
+    // SWAP 0b1010_0101
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, 0xCB, opcode);
+    cpu.registers.h = 3;
+    cpu.registers.l = 2;
+    cpu.mmu.byte_set(0x302, 0b1010_0101);
+    cpu.execute();
+    assert_eq!(cpu.registers.pc, pc + 2);
+    assert_eq!(cpu.mmu.byte_get(0x302), 0b0101_1010);
+    assert_eq!(cpu.registers.carry, false);
+    assert_eq!(cpu.registers.half_carry, false);
+    assert_eq!(cpu.registers.subtraction, false);
+    assert_eq!(cpu.registers.zero, false);
+
+    // SWAP 0
+    let pc = cpu.registers.pc;
+    set_inst!(cpu, pc, 0xCB, opcode);
+    cpu.registers.h = 4;
+    cpu.registers.l = 3;
+    cpu.mmu.byte_set(0x403, 0);
+    cpu.execute();
+    assert_eq!(cpu.registers.pc, pc + 2);
+    assert_eq!(cpu.mmu.byte_get(0x403), 0);
+    assert_eq!(cpu.registers.carry, false);
+    assert_eq!(cpu.registers.half_carry, false);
+    assert_eq!(cpu.registers.subtraction, false);
+    assert_eq!(cpu.registers.zero, true);
+}
