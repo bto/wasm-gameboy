@@ -17,9 +17,6 @@ mod and_r;
 mod cp_r;
 
 #[macro_use]
-mod daa;
-
-#[macro_use]
 mod dec;
 
 #[macro_use]
@@ -63,9 +60,6 @@ mod stack;
 
 #[macro_use]
 mod sub_r;
-
-#[macro_use]
-mod swap;
 
 #[macro_use]
 mod xor_r;
