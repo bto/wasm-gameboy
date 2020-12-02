@@ -134,9 +134,8 @@ impl CPU {
             0b00_10_0001 => op_ld_rr_nn!(self, hl),
             0b00_11_0001 => op_ld_rr_nn!(self, sp),
 
-            0b00001000 => op_ld_nn_rr!(self, sp),
-
-            0b11111001 => op_ld_rr_rr!(self, sp, hl),
+            0b0000_1000 => op_ld_nn_rr!(self, sp),
+            0b1111_1001 => op_ld_rr_rr!(self, sp, hl),
 
             0b11_00_0101 => op_push_rr!(self, bc),
             0b11_01_0101 => op_push_rr!(self, de),
@@ -252,8 +251,8 @@ impl CPU {
             0b00_10_1001 => op_add_rr_rr!(self, hl, hl),
             0b00_11_1001 => op_add_rr_rr!(self, hl, sp),
 
-            0b11101000 => op_add_rr_rr_n!(self, sp, sp),
-            0b11111000 => op_add_rr_rr_n!(self, hl, sp),
+            0b1110_1000 => op_add_rr_rr_n!(self, sp, sp),
+            0b1111_1000 => op_add_rr_rr_n!(self, hl, sp),
 
             0b00_00_0011 => op_inc_rr!(self, bc),
             0b00_01_0011 => op_inc_rr!(self, de),
@@ -265,15 +264,15 @@ impl CPU {
             0b00_10_1011 => op_dec_rr!(self, hl),
             0b00_11_1011 => op_dec_rr!(self, sp),
 
-            0b00100111 => op_daa_r!(self, a),
-            0b00101111 => op_cpl_r!(self, a),
-            0b00111111 => op_ccf!(self),
-            0b00110111 => op_scf!(self),
-            0b00000000 => {} // NOP
-            0b01110110 => op_halt!(self),
-            0b00010000 => op_stop!(self),
-            0b11110011 => op_int_disable!(self),
-            0b11111011 => op_int_enable!(self),
+            0b0010_0111 => op_daa_r!(self, a),
+            0b0010_1111 => op_cpl_r!(self, a),
+            0b0011_1111 => op_ccf!(self),
+            0b0011_0111 => op_scf!(self),
+            0b0000_0000 => {} // NOP
+            0b0111_0110 => op_halt!(self),
+            0b0001_0000 => op_stop!(self),
+            0b1111_0011 => op_int_disable!(self),
+            0b1111_1011 => op_int_enable!(self),
 
             0xCB => self.execute_cb(),
 
