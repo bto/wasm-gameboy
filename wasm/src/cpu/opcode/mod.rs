@@ -50,10 +50,7 @@ mod or_r;
 mod register16;
 
 #[macro_use]
-mod rl_r;
-
-#[macro_use]
-mod rlc_r;
+mod rotate;
 
 #[macro_use]
 mod sbc_r;
