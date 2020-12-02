@@ -158,9 +158,13 @@ fn op_inc_rrn() {
     cpu.registers.h = 1;
     cpu.registers.l = 2;
     cpu.mmu.byte_set(0x102, 0);
+    cpu.registers.carry = true;
+    cpu.registers.half_carry = true;
+    cpu.registers.subtraction = true;
+    cpu.registers.zero = true;
     cpu.execute();
     assert_eq!(cpu.registers.pc, pc + 1);
-    assert_eq!(cpu.registers.carry, false);
+    assert_eq!(cpu.registers.carry, true);
     assert_eq!(cpu.registers.half_carry, false);
     assert_eq!(cpu.registers.subtraction, false);
     assert_eq!(cpu.registers.zero, false);
@@ -172,6 +176,10 @@ fn op_inc_rrn() {
     cpu.registers.h = 2;
     cpu.registers.l = 3;
     cpu.mmu.byte_set(0x203, 0xFF);
+    cpu.registers.carry = false;
+    cpu.registers.half_carry = false;
+    cpu.registers.subtraction = true;
+    cpu.registers.zero = false;
     cpu.execute();
     assert_eq!(cpu.registers.pc, pc + 1);
     assert_eq!(cpu.registers.carry, false);
