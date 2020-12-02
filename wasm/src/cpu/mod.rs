@@ -274,6 +274,8 @@ impl CPU {
             0b1111_0011 => op_int_disable!(self),
             0b1111_1011 => op_int_enable!(self),
 
+            0b0000_0111 => op_rlc_r!(self, a),
+
             0xCB => self.execute_cb(),
 
             _ => panic!("not implemented instruction"),
