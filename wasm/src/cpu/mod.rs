@@ -275,6 +275,7 @@ impl CPU {
             0b1111_1011 => op_int_enable!(self),
 
             0b0000_0111 => op_rlc_r!(self, a),
+            0b0001_0111 => op_rl_r!(self, a),
 
             0xCB => self.execute_cb(),
 

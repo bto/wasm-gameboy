@@ -64,6 +64,10 @@ mod misc;
 #[cfg(test)]
 mod or_r;
 
+#[path = "./rl_r_tests.rs"]
+#[cfg(test)]
+mod rl_r;
+
 #[path = "./rlc_r_tests.rs"]
 #[cfg(test)]
 mod rlc_r;
