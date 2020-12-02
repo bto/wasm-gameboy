@@ -276,6 +276,8 @@ impl CPU {
 
             0b0000_0111 => op_rlc_r!(self, a),
             0b0001_0111 => op_rl_r!(self, a),
+            0b0000_1111 => op_rrc_r!(self, a),
+            0b0001_1111 => op_rr_r!(self, a),
 
             0xCB => self.execute_cb(),
 
