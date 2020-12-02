@@ -9,7 +9,7 @@ fn op_lddi_rr_r() {
 
     // LDI (HL), A
     let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0b00_10_0010);
+    set_inst!(cpu, pc, 0x22);
     cpu.registers.h = 4;
     cpu.registers.l = 2;
     cpu.registers.a = 5;
@@ -20,7 +20,7 @@ fn op_lddi_rr_r() {
 
     // LDD (HL), A
     let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0b00_11_0010);
+    set_inst!(cpu, pc, 0x32);
     cpu.registers.h = 5;
     cpu.registers.l = 4;
     cpu.registers.a = 6;

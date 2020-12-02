@@ -36,7 +36,7 @@ fn op_ld_rr_rr() {
 
     // LD SP, HL
     let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0b11111001);
+    set_inst!(cpu, pc, 0xF9);
 
     cpu.registers.h = 1;
     cpu.registers.l = 2;

@@ -6,8 +6,7 @@ mod tests_macro;
 #[test]
 fn op_add_sp_n() {
     let mut cpu = CPU::new();
-
-    let opcode = 0b11101000;
+    let opcode = 0xE8;
 
     // 0x88 + 0x88
     let pc = cpu.registers.pc;

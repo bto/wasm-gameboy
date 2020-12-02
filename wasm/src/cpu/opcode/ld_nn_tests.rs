@@ -9,7 +9,7 @@ fn op_ld_nn_r() {
 
     // LD (nn), A
     let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0b11101010, 2, 3);
+    set_inst!(cpu, pc, 0xEA, 2, 3);
 
     cpu.registers.a = 4;
 
@@ -25,7 +25,7 @@ fn op_ld_nn_rr() {
 
     // LD (nn), SP
     let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0b00001000, 2, 3);
+    set_inst!(cpu, pc, 0x08, 2, 3);
 
     cpu.registers.sp = 0x405;
 

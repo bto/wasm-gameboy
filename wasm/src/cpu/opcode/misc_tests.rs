@@ -6,7 +6,7 @@ mod tests_macro;
 #[test]
 fn op_ccf() {
     let mut cpu = CPU::new();
-    let opcode = 0b00111111;
+    let opcode = 0x3F;
 
     // true -> false
     let pc = cpu.registers.pc;
@@ -40,7 +40,7 @@ fn op_ccf() {
 #[test]
 fn op_cpl_r() {
     let mut cpu = CPU::new();
-    let opcode = 0b00101111;
+    let opcode = 0x2F;
 
     // 0b10010110
     let pc = cpu.registers.pc;
@@ -78,7 +78,7 @@ fn op_cpl_r() {
 #[test]
 fn op_daa_r() {
     let mut cpu = CPU::new();
-    let opcode = 0b00100111;
+    let opcode = 0x27;
 
     // 0x12 + 0x34
     let pc = cpu.registers.pc;
@@ -174,7 +174,7 @@ fn op_halt() {
 #[test]
 fn op_scf() {
     let mut cpu = CPU::new();
-    let opcode = 0b00110111;
+    let opcode = 0x37;
 
     // true -> true
     let pc = cpu.registers.pc;

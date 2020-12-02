@@ -9,7 +9,7 @@ fn op_ldh_rh_r() {
 
     // LDH (C), A
     let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0b11100010);
+    set_inst!(cpu, pc, 0xE2);
 
     cpu.registers.a = 1;
     cpu.registers.c = 2;
@@ -26,7 +26,7 @@ fn op_ldh_r_rh() {
 
     // LDH A, (C)
     let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0b11110010);
+    set_inst!(cpu, pc, 0xF2);
 
     cpu.registers.c = 1;
     cpu.mmu.byte_set(0xFF01, 2);
@@ -43,7 +43,7 @@ fn op_ldh_nh_r() {
 
     // LDH (n), A
     let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0b11100000, 1);
+    set_inst!(cpu, pc, 0xE0, 1);
 
     cpu.registers.a = 2;
 
@@ -59,7 +59,7 @@ fn op_ldh_r_nh() {
 
     // LDH A, (n)
     let pc = cpu.registers.pc;
-    set_inst!(cpu, pc, 0b11110000, 1);
+    set_inst!(cpu, pc, 0xF0, 1);
 
     cpu.mmu.byte_set(0xFF01, 2);
 
