@@ -12,10 +12,6 @@ mod add_r;
 #[cfg(test)]
 mod add_rr;
 
-#[path = "./add_sp_tests.rs"]
-#[cfg(test)]
-mod add_sp;
-
 #[path = "./and_r_tests.rs"]
 #[cfg(test)]
 mod and_r;

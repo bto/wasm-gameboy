@@ -16,3 +16,15 @@ macro_rules! op_add_rr_rr {
         op_add_rr!($self, $dest, value)
     }};
 }
+
+macro_rules! op_add_rr_rr_n {
+    ( $self:ident, $dest:ident, $src:ident ) => {{
+        let x = register16_get!($self, $src);
+        let y = $self.fetch_byte() as u16;
+        register16_set!($self, $dest, x.wrapping_add(y));
+        $self.registers.carry = ((x & 0xFF) + (y & 0xFF)) > 0xFF;
+        $self.registers.half_carry = ((x & 0xF) + (y & 0xF)) > 0xF;
+        $self.registers.subtraction = false;
+        $self.registers.zero = false;
+    }};
+}

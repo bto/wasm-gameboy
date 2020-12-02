@@ -246,7 +246,7 @@ impl CPU {
             0b00_10_1001 => op_add_rr_rr!(self, hl, hl),
             0b00_11_1001 => op_add_rr_rr!(self, hl, sp),
 
-            0b11101000 => op_add_sp_n!(self),
+            0b11101000 => op_add_rr_rr_n!(self, sp, sp),
 
             0b00_00_0011 => op_inc_rr!(self, bc),
             0b00_01_0011 => op_inc_rr!(self, de),
