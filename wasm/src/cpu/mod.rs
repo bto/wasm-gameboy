@@ -297,6 +297,15 @@ impl CPU {
             0b00110_110 => op_swap_rrn!(self, hl),
             0b00110_111 => op_swap_r!(self, a),
 
+            0b00000_000 => op_rlc_r!(self, b),
+            0b00000_001 => op_rlc_r!(self, c),
+            0b00000_010 => op_rlc_r!(self, d),
+            0b00000_011 => op_rlc_r!(self, e),
+            0b00000_100 => op_rlc_r!(self, h),
+            0b00000_101 => op_rlc_r!(self, l),
+            0b00000_110 => op_rlc_rrn!(self, hl),
+            0b00000_111 => op_rlc_r!(self, a),
+
             _ => panic!("not implemented instruction"),
         }
     }
