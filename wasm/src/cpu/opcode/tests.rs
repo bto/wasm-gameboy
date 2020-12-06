@@ -72,6 +72,10 @@ mod rotate;
 #[cfg(test)]
 mod sbc_r;
 
+#[path = "./shift_tests.rs"]
+#[cfg(test)]
+mod shift;
+
 #[path = "./stack_tests.rs"]
 #[cfg(test)]
 mod stack;
