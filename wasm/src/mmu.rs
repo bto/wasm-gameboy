@@ -25,8 +25,8 @@ impl MMU {
     }
 
     pub fn word_set(&mut self, addr: u16, value: u16) {
-        self.memory[addr as usize] = (value & 0xFF) as u8;
-        self.memory[(addr + 1) as usize] = ((value & 0xFF00) >> 8) as u8;
+        self.memory[addr as usize] = value as u8;
+        self.memory[(addr + 1) as usize] = (value >> 8) as u8;
     }
 }
 

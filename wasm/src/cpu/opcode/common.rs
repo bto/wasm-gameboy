@@ -89,10 +89,7 @@ macro_rules! stack_pop {
 
 macro_rules! stack_push {
     ( $self:ident, $addr:expr ) => {{
-        let addr = $addr;
-        $self.registers.sp -= 1;
-        $self.mmu.byte_set($self.registers.sp, (addr >> 8) as u8);
-        $self.registers.sp -= 1;
-        $self.mmu.byte_set($self.registers.sp, (addr & 0xFF) as u8);
+        $self.registers.sp -= 2;
+        $self.mmu.word_set($self.registers.sp, $addr);
     }};
 }
