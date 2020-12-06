@@ -287,6 +287,8 @@ impl CPU {
             0b1101_0010 => op_jp_nn_nc!(self),
             0b1101_1010 => op_jp_nn_c!(self),
 
+            0b00011000 => op_jr_n!(self),
+
             0xCB => self.execute_cb(),
 
             _ => panic!("not implemented instruction"),

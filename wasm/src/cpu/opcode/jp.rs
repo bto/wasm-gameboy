@@ -55,3 +55,10 @@ macro_rules! op_jp_rr {
         op_jp!($self, register16_get!($self, $src));
     }};
 }
+
+macro_rules! op_jr_n {
+    ( $self:ident ) => {{
+        let n = $self.fetch_byte() as u16;
+        op_jp!($self, $self.registers.pc + n);
+    }};
+}
