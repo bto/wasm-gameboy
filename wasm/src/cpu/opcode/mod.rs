@@ -59,6 +59,9 @@ mod rotate;
 mod sbc_r;
 
 #[macro_use]
+mod set;
+
+#[macro_use]
 mod shift;
 
 #[macro_use]
