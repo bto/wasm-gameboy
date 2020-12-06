@@ -7,7 +7,7 @@ macro_rules! set_shift_flags {
     }};
 }
 
-macro_rules! op_sl {
+macro_rules! op_sla {
     ( $self:ident, $value:expr ) => {{
         let x = $value;
         let c = x & 0x80 == 0x80;
@@ -17,44 +17,44 @@ macro_rules! op_sl {
     }};
 }
 
-macro_rules! op_sl_r {
+macro_rules! op_sla_r {
     ( $self:ident, $dest:ident ) => {{
         let x = $self.registers.$dest;
-        let r = op_sl!($self, x);
+        let r = op_sla!($self, x);
         $self.registers.$dest = r;
     }};
 }
 
-macro_rules! op_sl_rrn {
+macro_rules! op_sla_rrn {
     ( $self:ident, $dest:ident ) => {{
         let x = register16_load!($self, $dest);
-        let r = op_sl!($self, x);
+        let r = op_sla!($self, x);
         register16_store!($self, $dest, r);
     }};
 }
 
-macro_rules! op_sr {
+macro_rules! op_sra {
     ( $self:ident, $value:expr ) => {{
         let x = $value;
         let c = x & 0x01 == 0x01;
-        let r = x >> 1;
+        let r = x >> 1 | x & 0x80;
         set_shift_flags!($self, r, c);
         r
     }};
 }
 
-macro_rules! op_sr_r {
+macro_rules! op_sra_r {
     ( $self:ident, $dest:ident ) => {{
         let x = $self.registers.$dest;
-        let r = op_sr!($self, x);
+        let r = op_sra!($self, x);
         $self.registers.$dest = r;
     }};
 }
 
-macro_rules! op_sr_rrn {
+macro_rules! op_sra_rrn {
     ( $self:ident, $dest:ident ) => {{
         let x = register16_load!($self, $dest);
-        let r = op_sr!($self, x);
+        let r = op_sra!($self, x);
         register16_store!($self, $dest, r);
     }};
 }

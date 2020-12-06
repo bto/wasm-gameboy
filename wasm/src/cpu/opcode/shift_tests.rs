@@ -4,7 +4,7 @@ use super::*;
 mod tests_macro;
 
 #[test]
-fn op_sl_r() {
+fn op_sla_r() {
     let mut cpu = CPU::new();
 
     let opcode_base = 0b00100_000;
@@ -82,7 +82,7 @@ fn op_sl_r() {
 }
 
 #[test]
-fn op_sl_rrn() {
+fn op_sla_rrn() {
     let mut cpu = CPU::new();
     let opcode = 0x26;
 
@@ -124,7 +124,7 @@ fn op_sl_rrn() {
 }
 
 #[test]
-fn op_sr_r() {
+fn op_sra_r() {
     let mut cpu = CPU::new();
 
     let opcode_base = 0b00101_000;
@@ -178,7 +178,7 @@ fn op_sr_r() {
             0b111 => cpu.registers.a = 0b1001_0110,
             _ => panic!("never reach"),
         }
-        cpu.registers.carry = true;
+        cpu.registers.carry = false;
         cpu.registers.half_carry = true;
         cpu.registers.subtraction = true;
         cpu.registers.zero = true;
@@ -189,20 +189,20 @@ fn op_sr_r() {
         assert_eq!(cpu.registers.subtraction, false);
         assert_eq!(cpu.registers.zero, false);
         match i {
-            0b000 => assert_eq!(cpu.registers.b, 0b0100_1011),
-            0b001 => assert_eq!(cpu.registers.c, 0b0100_1011),
-            0b010 => assert_eq!(cpu.registers.d, 0b0100_1011),
-            0b011 => assert_eq!(cpu.registers.e, 0b0100_1011),
-            0b100 => assert_eq!(cpu.registers.h, 0b0100_1011),
-            0b101 => assert_eq!(cpu.registers.l, 0b0100_1011),
-            0b111 => assert_eq!(cpu.registers.a, 0b0100_1011),
+            0b000 => assert_eq!(cpu.registers.b, 0b1100_1011),
+            0b001 => assert_eq!(cpu.registers.c, 0b1100_1011),
+            0b010 => assert_eq!(cpu.registers.d, 0b1100_1011),
+            0b011 => assert_eq!(cpu.registers.e, 0b1100_1011),
+            0b100 => assert_eq!(cpu.registers.h, 0b1100_1011),
+            0b101 => assert_eq!(cpu.registers.l, 0b1100_1011),
+            0b111 => assert_eq!(cpu.registers.a, 0b1100_1011),
             _ => panic!("never reach"),
         }
     }
 }
 
 #[test]
-fn op_sr_rrn() {
+fn op_sra_rrn() {
     let mut cpu = CPU::new();
     let opcode = 0x2E;
 
@@ -230,13 +230,13 @@ fn op_sr_rrn() {
     cpu.registers.h = 4;
     cpu.registers.l = 3;
     cpu.mmu.byte_set(0x403, 0b1001_0110);
-    cpu.registers.carry = true;
+    cpu.registers.carry = false;
     cpu.registers.half_carry = true;
     cpu.registers.subtraction = true;
     cpu.registers.zero = true;
     cpu.execute();
     assert_eq!(cpu.registers.pc, pc + 2);
-    assert_eq!(cpu.mmu.byte_get(0x403), 0b0100_1011);
+    assert_eq!(cpu.mmu.byte_get(0x403), 0b1100_1011);
     assert_eq!(cpu.registers.carry, false);
     assert_eq!(cpu.registers.half_carry, false);
     assert_eq!(cpu.registers.subtraction, false);
