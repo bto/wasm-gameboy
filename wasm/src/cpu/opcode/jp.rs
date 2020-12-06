@@ -49,3 +49,9 @@ macro_rules! op_jp_nn_nz {
         }
     }};
 }
+
+macro_rules! op_jp_rr {
+    ( $self:ident, $src:ident ) => {{
+        op_jp!($self, register16_get!($self, $src));
+    }};
+}

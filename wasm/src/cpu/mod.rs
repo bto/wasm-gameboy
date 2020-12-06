@@ -280,6 +280,7 @@ impl CPU {
             0b0001_1111 => op_rr_r!(self, a),
 
             0b11000011 => op_jp_nn!(self),
+            0b11101001 => op_jp_rr!(self, hl),
 
             0b1100_0010 => op_jp_nn_nz!(self),
             0b1100_1010 => op_jp_nn_z!(self),
