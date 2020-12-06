@@ -68,6 +68,10 @@ mod misc;
 #[cfg(test)]
 mod or_r;
 
+#[path = "./res_tests.rs"]
+#[cfg(test)]
+mod res;
+
 #[path = "./rotate_tests.rs"]
 #[cfg(test)]
 mod rotate;

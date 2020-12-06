@@ -53,6 +53,9 @@ mod or_r;
 mod register16;
 
 #[macro_use]
+mod res;
+
+#[macro_use]
 mod rotate;
 
 #[macro_use]
