@@ -282,12 +282,17 @@ impl CPU {
             0b11000011 => op_jp_nn!(self),
             0b11101001 => op_jp_rr!(self, hl),
 
-            0b1100_0010 => op_jp_nn_nz!(self),
-            0b1100_1010 => op_jp_nn_z!(self),
-            0b1101_0010 => op_jp_nn_nc!(self),
-            0b1101_1010 => op_jp_nn_c!(self),
+            0b110_00_010 => op_jp_nn_nz!(self),
+            0b110_01_010 => op_jp_nn_z!(self),
+            0b110_10_010 => op_jp_nn_nc!(self),
+            0b110_11_010 => op_jp_nn_c!(self),
 
             0b00011000 => op_jr_n!(self),
+
+            0b001_00_000 => op_jr_n_nz!(self),
+            0b001_01_000 => op_jr_n_z!(self),
+            0b001_10_000 => op_jr_n_nc!(self),
+            0b001_11_000 => op_jr_n_c!(self),
 
             0xCB => self.execute_cb(),
 
