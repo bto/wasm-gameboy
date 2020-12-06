@@ -16,6 +16,10 @@ mod add_rr;
 #[cfg(test)]
 mod and_r;
 
+#[path = "./bit_tests.rs"]
+#[cfg(test)]
+mod bit;
+
 #[path = "./cp_r_tests.rs"]
 #[cfg(test)]
 mod cp_r;

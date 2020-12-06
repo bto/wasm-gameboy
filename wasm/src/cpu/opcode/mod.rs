@@ -11,6 +11,9 @@ mod add_rr;
 mod and_r;
 
 #[macro_use]
+mod bit;
+
+#[macro_use]
 mod cp_r;
 
 #[macro_use]
