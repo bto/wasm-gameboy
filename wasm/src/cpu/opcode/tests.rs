@@ -36,6 +36,10 @@ mod inc;
 #[cfg(test)]
 mod jp;
 
+#[path = "./jr_tests.rs"]
+#[cfg(test)]
+mod jr;
+
 #[path = "./ld_nn_tests.rs"]
 #[cfg(test)]
 mod ld_nn;

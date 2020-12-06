@@ -29,6 +29,9 @@ mod inc;
 mod jp;
 
 #[macro_use]
+mod jr;
+
+#[macro_use]
 mod ld_nn;
 
 #[macro_use]

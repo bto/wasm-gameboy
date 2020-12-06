@@ -1,3 +1,9 @@
+macro_rules! jump {
+    ( $self:ident, $addr:expr ) => {{
+        $self.registers.pc = $addr;
+    }};
+}
+
 macro_rules! register16_get {
     ( $self:ident, af ) => {
         register16_get!($self, af_get)
