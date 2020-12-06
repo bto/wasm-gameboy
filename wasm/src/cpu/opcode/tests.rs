@@ -76,9 +76,13 @@ mod or_r;
 #[cfg(test)]
 mod res;
 
-#[path = "./rotate_tests.rs"]
+#[path = "./rl_tests.rs"]
 #[cfg(test)]
-mod rotate;
+mod rl;
+
+#[path = "./rr_tests.rs"]
+#[cfg(test)]
+mod rr;
 
 #[path = "./sbc_r_tests.rs"]
 #[cfg(test)]
@@ -88,9 +92,13 @@ mod sbc_r;
 #[cfg(test)]
 mod set;
 
-#[path = "./shift_tests.rs"]
+#[path = "./sl_tests.rs"]
 #[cfg(test)]
-mod shift;
+mod sl;
+
+#[path = "./sr_tests.rs"]
+#[cfg(test)]
+mod sr;
 
 #[path = "./stack_tests.rs"]
 #[cfg(test)]

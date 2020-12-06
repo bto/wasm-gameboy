@@ -63,3 +63,12 @@ macro_rules! register16_store {
         $self.mmu.byte_set(addr, $value);
     }};
 }
+
+macro_rules! set_rotate_shift_flags {
+    ( $self:ident, $result:expr, $carry:expr ) => {{
+        $self.registers.carry = $carry;
+        $self.registers.half_carry = false;
+        $self.registers.subtraction = false;
+        $self.registers.zero = $result == 0;
+    }};
+}

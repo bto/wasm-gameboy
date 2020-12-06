@@ -14,6 +14,9 @@ mod and_r;
 mod bit;
 
 #[macro_use]
+mod common;
+
+#[macro_use]
 mod cp_r;
 
 #[macro_use]
@@ -53,13 +56,13 @@ mod misc;
 mod or_r;
 
 #[macro_use]
-mod register16;
-
-#[macro_use]
 mod res;
 
 #[macro_use]
-mod rotate;
+mod rl;
+
+#[macro_use]
+mod rr;
 
 #[macro_use]
 mod sbc_r;
@@ -68,7 +71,10 @@ mod sbc_r;
 mod set;
 
 #[macro_use]
-mod shift;
+mod sl;
+
+#[macro_use]
+mod sr;
 
 #[macro_use]
 mod stack;
