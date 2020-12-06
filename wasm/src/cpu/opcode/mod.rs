@@ -23,6 +23,9 @@ mod dec;
 mod inc;
 
 #[macro_use]
+mod jp;
+
+#[macro_use]
 mod ld_nn;
 
 #[macro_use]

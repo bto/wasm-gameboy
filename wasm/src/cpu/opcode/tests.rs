@@ -28,13 +28,17 @@ mod cp_r;
 #[cfg(test)]
 mod dec;
 
-#[path = "./ld_nn_tests.rs"]
-#[cfg(test)]
-mod ld_nn;
-
 #[path = "./inc_tests.rs"]
 #[cfg(test)]
 mod inc;
+
+#[path = "./jp_tests.rs"]
+#[cfg(test)]
+mod jp;
+
+#[path = "./ld_nn_tests.rs"]
+#[cfg(test)]
+mod ld_nn;
 
 #[path = "./ld_r_tests.rs"]
 #[cfg(test)]
