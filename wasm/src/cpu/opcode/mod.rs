@@ -14,6 +14,9 @@ mod and_r;
 mod bit;
 
 #[macro_use]
+mod call;
+
+#[macro_use]
 mod common;
 
 #[macro_use]

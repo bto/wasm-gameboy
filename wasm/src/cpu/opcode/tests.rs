@@ -20,6 +20,10 @@ mod and_r;
 #[cfg(test)]
 mod bit;
 
+#[path = "./call_tests.rs"]
+#[cfg(test)]
+mod call;
+
 #[path = "./cp_r_tests.rs"]
 #[cfg(test)]
 mod cp_r;

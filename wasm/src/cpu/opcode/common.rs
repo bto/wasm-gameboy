@@ -78,3 +78,21 @@ macro_rules! set_rotate_shift_flags {
         $self.registers.zero = $result == 0;
     }};
 }
+
+macro_rules! stack_pop {
+    ( $self:ident ) => {{
+        let addr = $self.mmu.word_get($self.registers.sp);
+        $self.registers.sp += 2;
+        addr
+    }};
+}
+
+macro_rules! stack_push {
+    ( $self:ident, $addr:expr ) => {{
+        let addr = $addr;
+        $self.registers.sp -= 1;
+        $self.mmu.byte_set($self.registers.sp, (addr >> 8) as u8);
+        $self.registers.sp -= 1;
+        $self.mmu.byte_set($self.registers.sp, (addr & 0xFF) as u8);
+    }};
+}
