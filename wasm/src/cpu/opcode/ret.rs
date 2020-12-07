@@ -35,3 +35,10 @@ macro_rules! op_ret_nz {
         }
     }};
 }
+
+macro_rules! op_reti {
+    ( $self:ident ) => {{
+        jump!($self, stack_pop!($self));
+        op_int_enable!($self);
+    }};
+}

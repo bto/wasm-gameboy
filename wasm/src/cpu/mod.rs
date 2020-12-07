@@ -311,6 +311,7 @@ impl CPU {
             0b11_111_111 => op_rst!(self, 0x38),
 
             0b11001001 => op_ret!(self),
+            0b11011001 => op_reti!(self),
 
             0b110_00_000 => op_ret_nz!(self),
             0b110_01_000 => op_ret_z!(self),
