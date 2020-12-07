@@ -1,7 +1,7 @@
 macro_rules! op_call_nn {
     ( $self:ident ) => {{
+        stack_push!($self, $self.registers.pc + 2);
         jump!($self, $self.fetch_word());
-        stack_push!($self, $self.registers.pc);
     }};
 }
 
