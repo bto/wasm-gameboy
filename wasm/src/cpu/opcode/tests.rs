@@ -84,6 +84,10 @@ mod or_r;
 #[cfg(test)]
 mod res;
 
+#[path = "./ret_tests.rs"]
+#[cfg(test)]
+mod ret;
+
 #[path = "./rl_tests.rs"]
 #[cfg(test)]
 mod rl;

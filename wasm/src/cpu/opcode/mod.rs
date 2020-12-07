@@ -65,6 +65,9 @@ mod or_r;
 mod res;
 
 #[macro_use]
+mod ret;
+
+#[macro_use]
 mod rl;
 
 #[macro_use]
