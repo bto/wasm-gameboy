@@ -312,6 +312,11 @@ impl CPU {
 
             0b11001001 => op_ret!(self),
 
+            0b110_00_000 => op_ret_nz!(self),
+            0b110_01_000 => op_ret_z!(self),
+            0b110_10_000 => op_ret_nc!(self),
+            0b110_11_000 => op_ret_c!(self),
+
             0xCB => self.execute_cb(),
 
             _ => panic!("not implemented instruction"),
