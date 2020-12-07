@@ -71,6 +71,9 @@ mod rl;
 mod rr;
 
 #[macro_use]
+mod rst;
+
+#[macro_use]
 mod sbc_r;
 
 #[macro_use]

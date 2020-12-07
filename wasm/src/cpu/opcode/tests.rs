@@ -92,6 +92,10 @@ mod rl;
 #[cfg(test)]
 mod rr;
 
+#[path = "./rst_tests.rs"]
+#[cfg(test)]
+mod rst;
+
 #[path = "./sbc_r_tests.rs"]
 #[cfg(test)]
 mod sbc_r;

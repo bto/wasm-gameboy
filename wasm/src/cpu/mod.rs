@@ -301,6 +301,15 @@ impl CPU {
             0b110_10_100 => op_call_nn_nc!(self),
             0b110_11_100 => op_call_nn_c!(self),
 
+            0b11_000_111 => op_rst!(self, 0x00),
+            0b11_001_111 => op_rst!(self, 0x08),
+            0b11_010_111 => op_rst!(self, 0x10),
+            0b11_011_111 => op_rst!(self, 0x18),
+            0b11_100_111 => op_rst!(self, 0x20),
+            0b11_101_111 => op_rst!(self, 0x28),
+            0b11_110_111 => op_rst!(self, 0x30),
+            0b11_111_111 => op_rst!(self, 0x38),
+
             0xCB => self.execute_cb(),
 
             _ => panic!("not implemented instruction"),
