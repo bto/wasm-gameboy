@@ -34,3 +34,7 @@ impl GameBoy {
         self.cpu.execute();
     }
 }
+
+#[path = "./lib_tests.rs"]
+#[cfg(test)]
+mod tests;

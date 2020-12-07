@@ -6,6 +6,7 @@ use registers::Registers;
 #[macro_use]
 mod opcode;
 
+#[derive(Debug, PartialEq)]
 pub struct CPU {
     halt: bool,
     int_disable: bool,
