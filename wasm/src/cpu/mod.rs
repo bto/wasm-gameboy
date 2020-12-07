@@ -320,7 +320,7 @@ impl CPU {
 
             0xCB => self.execute_cb(),
 
-            _ => panic!("not implemented instruction"),
+            inst => panic!("Instruction {:2X} is not a valid instruction", inst),
         }
     }
 
