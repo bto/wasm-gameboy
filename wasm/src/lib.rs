@@ -7,6 +7,7 @@ use wasm_bindgen::prelude::*;
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 mod cpu;
+mod gpu;
 mod mmu;
 mod utils;
 
