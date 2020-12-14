@@ -3,7 +3,7 @@ use super::*;
 #[test]
 fn new() {
     let mmu = MMU::new();
-    assert_eq!(mmu.memory[0], 0);
+    assert_eq!(mmu.ram[0], 0);
 }
 
 #[test]
@@ -12,23 +12,23 @@ fn byte() {
 
     mmu.byte_set(0x7FFF, 12);
     assert_eq!(mmu.byte_get(0x7FFF), 12);
-    assert_eq!(mmu.memory[0x7FFF], 12);
+    assert_eq!(mmu.ram[0x7FFF], 12);
 
     // GPU start
     mmu.byte_set(0x8000, 23);
     assert_eq!(mmu.byte_get(0x8000), 23);
-    assert_eq!(mmu.memory[0x8000], 0);
+    assert_eq!(mmu.ram[0x8000], 0);
     assert_eq!(mmu.gpu.byte_get(0x8000), 23);
 
     // GPU end
     mmu.byte_set(0x9FFF, 34);
     assert_eq!(mmu.byte_get(0x9FFF), 34);
-    assert_eq!(mmu.memory[0x9FFF], 0);
+    assert_eq!(mmu.ram[0x9FFF], 0);
     assert_eq!(mmu.gpu.byte_get(0x9FFF), 34);
 
     mmu.byte_set(0xA000, 45);
     assert_eq!(mmu.byte_get(0xA000), 45);
-    assert_eq!(mmu.memory[0xA000], 45);
+    assert_eq!(mmu.ram[0xA000], 45);
 }
 
 #[test]

@@ -3,28 +3,28 @@ use super::gpu::GPU;
 #[derive(Debug, PartialEq)]
 pub struct MMU {
     gpu: GPU,
-    memory: [u8; 0xFFFF],
+    ram: [u8; 0xFFFF],
 }
 
 impl MMU {
     pub fn new() -> Self {
         Self {
             gpu: GPU::new(),
-            memory: [0u8; 0xFFFF],
+            ram: [0u8; 0xFFFF],
         }
     }
 
     pub fn byte_get(&self, addr: u16) -> u8 {
         match addr {
             0x8000..=0x9FFF => self.gpu.byte_get(addr),
-            _ => self.memory[addr as usize],
+            _ => self.ram[addr as usize],
         }
     }
 
     pub fn byte_set(&mut self, addr: u16, value: u8) {
         match addr {
             0x8000..=0x9FFF => self.gpu.byte_set(addr, value),
-            _ => self.memory[addr as usize] = value,
+            _ => self.ram[addr as usize] = value,
         }
     }
 
